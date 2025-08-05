@@ -1,2 +1,2 @@
-PACK("./src", "build.zip", {"*.zip"})
+PACK("./src/main", "build.zip", {})
 print("BUILD COMPLETE!")

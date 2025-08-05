@@ -1,0 +1,5 @@
+{
+    "shared": [ "config/shared/*.lua", "shared/**/*.lua", "locale/*.lua" ],
+    "server": [ "config/server/*.lua", "server/**/*.lua" ],
+    "client": [ "client/**/*.lua" ]
+}
