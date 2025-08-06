@@ -46,6 +46,57 @@ function DBSC:init()
     return Database.Execute(sql, {})
 end
 
+---Inserts the object into the database.
+---@nodiscard
+---@return boolean success whether the insert was successful
+function DBSC:insert()
+    local sql = "INSERT INTO " .. self.__meta.name .. " ("
+    local values = {}
+
+    local thisVals = {}
+
+    for i, key in ipairs(self.__meta.columns) do
+        if key.auto_increment then
+            goto continue
+        end
+        sql = sql .. key.name
+        if i < #self.__meta.columns then
+            sql = sql .. ", "
+        end
+        table.insert(values, "?")
+        table.insert(thisVals, self[key.name])
+        ::continue::
+    end
+    sql = sql .. ") VALUES (" .. table.concat(values, ", ") .. ")"
+
+    return Database.Execute(sql, thisVals)
+end
+
+
+---Updates the object in the database.
+---@nodiscard
+---@return boolean success whether the update was successful
+function DBSC:update()
+    local sql = "UPDATE " .. self.__meta.name .. " SET "
+    local values = {}
+    local conditions = {}
+
+    for i, key in ipairs(self.__meta.columns) do
+        if key.primary_key then
+            table.insert(conditions, key.name .. " = ?")
+        else
+            sql = sql .. key.name .. " = ?"
+            table.insert(values, self[key.name])
+            if i < #self.__meta.columns then
+                sql = sql .. ", "
+            end
+        end
+    end
+
+    sql = sql .. " WHERE " .. table.concat(conditions, " AND ")
+    return Database.Execute(sql, values)
+end
+
 ---Loads an object by its primary keys
 ---@param primary_keys table<string, any> the values of the primary keys
 ---@return DBSC? object The loaded object or nil if not found
@@ -77,25 +128,21 @@ function DBSC:get(primary_keys)
     return nil
 end
 
-function DBSC:insert()
-    local sql = "INSERT INTO " .. self.__meta.name .. " ("
+---Deletes the object from the database.
+---@nodiscard
+---@return boolean success whether the delete was successful
+function DBSC:delete()
+    local sql = "DELETE FROM " .. self.__meta.name .. " WHERE "
     local values = {}
+    local conditions = {}
 
-    local thisVals = {}
-
-    for i, key in ipairs(self.__meta.columns) do
-        if key.auto_increment then
-            goto continue
+    for _, key in ipairs(self.__meta.columns) do
+        if key.primary_key then
+            table.insert(conditions, key.name .. " = ?")
+            table.insert(values, self[key.name])
         end
-        sql = sql .. key.name
-        if i < #self.__meta.columns then
-            sql = sql .. ", "
-        end
-        table.insert(values, "?")
-        table.insert(thisVals, self[key.name])
-        ::continue::
     end
-    sql = sql .. ") VALUES (" .. table.concat(values, ", ") .. ")"
 
-    return Database.Execute(sql, thisVals)
+    sql = sql .. table.concat(conditions, " AND ")
+    return Database.Execute(sql, values)
 end
