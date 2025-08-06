@@ -13,7 +13,9 @@ StringUtils = {}
 ---@return string formatted the formatted string
 function StringUtils.format(str, values)
     str = str:gsub("$(.-)$", function(lua)
-        return tostring(load("return " .. lua)())
+        local fn = assert(load("return " .. string.sub(lua, 1, -2) .. ""))
+        local _, result = pcall(fn)
+        return tostring(result)
     end)
     if not values then
         return str
