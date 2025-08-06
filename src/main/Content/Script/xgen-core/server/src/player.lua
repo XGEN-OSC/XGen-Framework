@@ -1,5 +1,5 @@
 ---@class XPlayer : DBSC
----@field id integer the unique identifier for the player
+---@field age number the age of the player
 ---@field name string the name of the player
 XPlayer = DBSC:new({
     name = "xgen_player",

@@ -13,9 +13,15 @@ StringUtils = {}
 ---@return string formatted the formatted string
 function StringUtils.format(str, values)
     str = str:gsub("$(.-)$", function(lua)
-        local fn = assert(load("return " .. string.sub(lua, 1, -2) .. ""))
-        local _, result = pcall(fn)
-        return tostring(result)
+        local ok, result = pcall(function (...)
+            local fn = assert(load("return " .. string.sub(lua, 1, -2) .. ""))
+            local ok, result = pcall(fn)
+            return tostring(result)
+        end)
+        if not ok then
+            return "$" .. lua
+        end
+        return result
     end)
     if not values then
         return str
@@ -26,12 +32,16 @@ function StringUtils.format(str, values)
     return str
 end
 
+
 ---Dumps a table into a string representation.
 ---@nodiscard
 ---This is useful for debugging purposes.
 ---@param table table The table to dump.
 ---@return string str The string representation of the table.
 function StringUtils.dumpTable(table)
+    if type(table) ~= "table" then
+        return tostring(table)
+    end
     local str = "{ "
     for k, v in pairs(table) do
         if type(v) == "table" then

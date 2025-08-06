@@ -80,10 +80,12 @@ function DBSC:update()
     local sql = "UPDATE " .. self.__meta.name .. " SET "
     local values = {}
     local conditions = {}
+    local condValues = {}
 
     for i, key in ipairs(self.__meta.columns) do
         if key.primary_key then
             table.insert(conditions, key.name .. " = ?")
+            table.insert(condValues, self[key.name])
         else
             sql = sql .. key.name .. " = ?"
             table.insert(values, self[key.name])
@@ -94,6 +96,9 @@ function DBSC:update()
     end
 
     sql = sql .. " WHERE " .. table.concat(conditions, " AND ")
+    for _, value in ipairs(condValues) do
+        table.insert(values, value)
+    end
     return Database.Execute(sql, values)
 end
 
@@ -115,7 +120,7 @@ function DBSC:get(primary_keys)
     sql = sql .. table.concat(conditions, " AND ")
 
     local results = Database.Select(sql, values)
-    local result = results and results[1].Column or nil
+    local result = results and results[1] and results[1].Column or nil
     if result then
         local instance = {}
         setmetatable(instance, self)
