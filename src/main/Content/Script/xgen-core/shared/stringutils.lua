@@ -23,3 +23,26 @@ function StringUtils.format(str, values)
     end)
     return str
 end
+
+---Dumps a table into a string representation.
+---@nodiscard
+---This is useful for debugging purposes.
+---@param table table The table to dump.
+---@return string str The string representation of the table.
+function StringUtils.dumpTable(table)
+    local str = "{ "
+    for k, v in pairs(table) do
+        if type(v) == "table" then
+            str = str .. k .. " = " .. DUMP(v) .. ", "
+        elseif type(v) == "string" then
+            str = str .. k .. ' = "' .. v .. '", '
+        else
+            str = str .. k .. " = " .. tostring(v) .. ", "
+        end
+    end
+
+    str = str:sub(1, -3) -- Remove the last comma and space
+
+    str = str .. " }"
+    return str
+end
