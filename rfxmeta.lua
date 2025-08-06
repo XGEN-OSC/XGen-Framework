@@ -1,3 +1,5 @@
+---@meta RFX
+
 ---@param path string
 function RFX_REQUIRE(path) end
 
