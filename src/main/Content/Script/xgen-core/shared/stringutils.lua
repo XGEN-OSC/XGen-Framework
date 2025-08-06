@@ -33,7 +33,7 @@ function StringUtils.dumpTable(table)
     local str = "{ "
     for k, v in pairs(table) do
         if type(v) == "table" then
-            str = str .. k .. " = " .. DUMP(v) .. ", "
+            str = str .. k .. " = " .. StringUtils.dumpTable(v) .. ", "
         elseif type(v) == "string" then
             str = str .. k .. ' = "' .. v .. '", '
         else
