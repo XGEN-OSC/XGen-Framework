@@ -6,11 +6,12 @@ DBSC.__index = DBSC
 
 ---@class DBSC.Meta
 ---@field name string the name of the table in the database
----@field columns table<string, DBSC.Meta.Column> a table of columns in the database
+---@field columns table<DBSC.Meta.Column> a table of columns in the database
 
 ---@class DBSC.Meta.Column
+---@field name string the name of the column
 ---@field type string the type of the column
----@field primary_key boolean whether the column is a primary key
+---@field primary_key boolean? whether the column is a primary key
 ---@field foreign_key string? the foreign key reference if applicable
 ---@field auto_increment boolean? whether the column should auto-increment
 
