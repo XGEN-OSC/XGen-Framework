@@ -43,7 +43,10 @@ function StringUtils.dumpTable(table)
         return tostring(table)
     end
     local str = "{ "
+    local empty = true
+
     for k, v in pairs(table) do
+        empty = false
         if type(v) == "table" then
             str = str .. k .. " = " .. StringUtils.dumpTable(v) .. ", "
         elseif type(v) == "string" then
@@ -53,8 +56,23 @@ function StringUtils.dumpTable(table)
         end
     end
 
-    str = str:sub(1, -3) -- Remove the last comma and space
+    if not empty then
+        str = str:sub(1, -3)
+    end
 
     str = str .. " }"
     return str
+end
+
+
+---Generates a formatted string based on the provided format.
+---@nodiscard
+---@param format string The format for the string. A will be replaced with a random upper case letter,
+---a will be replaced with a random lower case letter, and 0 will be replaced with a random digit.
+---@return string formatted The formatted string.
+function StringUtils.generate(format)
+    local formatted = format:gsub("A", function() return string.char(math.random(65, 90)) end)
+    formatted = formatted:gsub("a", function() return string.char(math.random(97, 122)) end)
+    formatted = formatted:gsub("0", function() return math.random(0, 9) end)
+    return formatted
 end
