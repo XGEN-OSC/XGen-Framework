@@ -169,6 +169,10 @@ function DBSC:get(primary_keys)
     return nil
 end
 
+---Returns a list of objects matching the given conditions.
+---@nodiscard
+---@param conditions table<string, any> the conditions to match
+---@return table<DBSC> instances a list of matching objects
 function DBSC:getWhere(conditions)
     local sql = "SELECT * FROM " .. self.__meta.name .. " WHERE "
     local values = {}
@@ -182,7 +186,7 @@ function DBSC:getWhere(conditions)
     sql = sql .. table.concat(conds, " AND ")
 
     local results = Database.Select(sql, values)
-    if not results then return nil end
+    if not results then return {} end
 
     local instances = {}
     for _, result in ipairs(results) do
