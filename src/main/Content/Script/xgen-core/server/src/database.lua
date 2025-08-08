@@ -6,4 +6,5 @@ function DB.init()
     Database.Initialize('xgen/core/database.db')
     XPlayer:init()
     XCharacter:init()
+    XAccount:init()
 end

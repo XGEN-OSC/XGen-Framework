@@ -19,6 +19,8 @@ function XAccount:new()
     local account = {}
     setmetatable(account, self)
     account.bid = StringUtils.generate("AA-AAAA-0000")
+    account.balance_major = 0
+    account.balance_minor = 0
     account:insert()
     return account
 end
@@ -42,6 +44,32 @@ end
 ---@return integer balance_minor The minor balance of the account.
 function XAccount:getBalance()
     return self.balance_major, self.balance_minor
+end
+
+---Checks if the account has at least the given amount of balance.
+---@nodiscard
+---@param amount number The amount to check against the account balance.
+---@return boolean has_balance True if the account has at least the given amount of balance, false otherwise.
+function XAccount:hasBalanceFloat(amount)
+    return self:getBalanceFloat() >= amount
+end
+
+---Checks if the account has at least the given amount of balance.
+---@nodiscard
+---@param major number The major part of the amount to check against the account balance.
+---@param minor number The minor part of the amount to check against the account balance.
+---@return boolean has_balance True if the account has at least the given amount of balance, false otherwise.
+function XAccount:hasBalance(major, minor)
+    major = math.floor(major)
+    minor = math.floor(minor)
+
+    if self.balance_major > major then
+        return true
+    elseif self.balance_major == major and self.balance_minor >= minor then
+        return true
+    end
+
+    return false
 end
 
 ---Adds the given amount to the account balance.
@@ -129,6 +157,25 @@ function XAccount:removeBalanceFloat(amount)
     local major = math.floor(amount)
     local minor = math.floor((amount - major) * 100)
     self:removeBalance(major, minor)
+end
+
+---Returns the amount of money on this account as a string, using the
+---currency formatting defined in `Config.Currency.format`.
+---@nodiscard
+---@return string formatted_balance The formatted balance of the account.
+function XAccount:getFormattedBalance()
+    local thousandsSeparator = Config.Currency.format.thousandsSeparator
+    local decimalSeparator = Config.Currency.format.decimalSeparator
+
+    local formatted_major = tostring(self.balance_major)
+        :reverse():gsub("(%d%d%d)", "%1" .. thousandsSeparator)
+        :reverse()
+    if formatted_major:sub(1, 1) == thousandsSeparator then
+        formatted_major = formatted_major:sub(2)
+    end
+    local formatted_minor = string.format("%02d", self.balance_minor)
+
+    return string.format("%s%s%s", formatted_major, decimalSeparator, formatted_minor)
 end
 
 ---Returns a string representation of the account.
