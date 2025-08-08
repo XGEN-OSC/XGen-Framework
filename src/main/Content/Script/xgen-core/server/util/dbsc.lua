@@ -14,6 +14,9 @@ DBSC.__index = DBSC
 ---@field primary_key boolean? whether the column is a primary key
 ---@field foreign_key string? the foreign key reference if applicable
 ---@field auto_increment boolean? whether the column should auto-increment
+---@field default string? the default value for the column
+---@field not_null boolean? whether the column cannot be null
+---@field unique boolean? whether the column should be unique
 
 ---Creates a new class extending the DBSC class.
 ---@nodiscard
@@ -43,8 +46,14 @@ function DBSC:init()
         if key.default then
             sql = sql .. " DEFAULT " .. key.default
         end
+        if key.not_null then
+            sql = sql .. " NOT NULL"
+        end
+        if key.unique then
+            sql = sql .. " UNIQUE"
+        end
         if i < #self.__meta.columns then
-            sql = sql .. " NOT NULL, "
+            sql = sql .. ", "
         end
     end
     sql = sql .. ")"

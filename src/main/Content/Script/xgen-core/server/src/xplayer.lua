@@ -6,8 +6,8 @@ XPlayer = DBSC:new({
     name = "xgen_player",
     columns = {
         { name = "identifier", type = "VARCHAR(255)", primary_key = true },
-        { name = "joined", type = "TIMESTAMP", default = "CURRENT_TIMESTAMP" },
-        { name = "last_seen", type = "TIMESTAMP", default = "CURRENT_TIMESTAMP" }
+        { name = "joined", type = "TIMESTAMP", default = "CURRENT_TIMESTAMP", not_null = true },
+        { name = "last_seen", type = "TIMESTAMP", default = "CURRENT_TIMESTAMP", not_null = true }
     }
 })
 XPlayer.__index = XPlayer
@@ -22,6 +22,7 @@ function XPlayer:new(identifier)
     return instance
 end
 
+---This function will be called when a player connected to the server.
 function XPlayer:connected()
     self.last_seen = os.date("%Y-%m-%d %H:%M:%S") --[[@as string]]
 end
