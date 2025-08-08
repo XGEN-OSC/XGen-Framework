@@ -87,6 +87,52 @@ function XAccount:addBalanceFloat(amount)
     self:addBalance(major, minor)
 end
 
+---Removes the given amount from the account balance.
+---@param major number The major part of the amount to remove from the account balance.
+---@param minor number The minor part of the amount to remove from the account balance.
+function XAccount:removeBalance(major, minor)
+    if major < 0 or minor < 0 then
+        error("Cannot remove a negative amount from the account balance.")
+    end
+
+    major = math.floor(major)
+    minor = math.floor(minor)
+
+    local _major = self.balance_major
+    local _minor = self.balance_minor
+
+    if self.balance_major < major or (self.balance_major == major and self.balance_minor < minor) then
+        error("Insufficient funds to remove from account balance.")
+    end
+
+    self.balance_major = self.balance_major - major
+    self.balance_minor = self.balance_minor - minor
+    if self.balance_minor < 0 then
+        self.balance_major = self.balance_major - 1
+        self.balance_minor = self.balance_minor + 100
+    end
+
+    if not self:update() then
+        self.balance_major = _major
+        self.balance_minor = _minor
+        error("Failed to update account balance.")
+    end
+end
+
+---Removes a floating point amount from the account balance.
+---@param amount number The amount to remove from the account balance.
+function XAccount:removeBalanceFloat(amount)
+    if amount < 0 then
+        error("Cannot remove a negative amount from the account balance.")
+    end
+
+    local major = math.floor(amount)
+    local minor = math.floor((amount - major) * 100)
+    self:removeBalance(major, minor)
+end
+
+---Returns a string representation of the account.
+---@return string str The string representation of the account.
 function XAccount:__tostring()
     return string.format("XAccount(%s, %d.%02d)", self.bid, self.balance_major, self.balance_minor)
 end
