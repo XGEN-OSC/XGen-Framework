@@ -12,9 +12,10 @@ StringUtils = {}
 ---of the placeholders to replace.
 ---@return string formatted the formatted string
 function StringUtils.format(str, values)
-    str = str:gsub("$(.-)$", function(lua)
+    str = str:gsub("${(.-)}", function(lua)
         local ok, result = pcall(function (...)
-            local fn = assert(load("return " .. string.sub(lua, 1, -2) .. ""))
+            local luaStr = "return " .. string.sub(lua, 1, -1)
+            local fn = assert(load(luaStr))
             local ok, result = pcall(fn)
             return tostring(result)
         end)
@@ -27,7 +28,7 @@ function StringUtils.format(str, values)
         return str
     end
     str = str:gsub("{(.-)}", function(key)
-        return tostring(values[key] or "")
+        return tostring(values[key])
     end)
     return str
 end
@@ -83,6 +84,8 @@ function StringUtils.dumpTable(tbl, parents)
 
     if not empty then
         str = str:sub(1, -3)
+    else
+        str = str:sub(1, -2)
     end
 
     str = str .. " }"

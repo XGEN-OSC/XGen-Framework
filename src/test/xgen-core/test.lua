@@ -1,0 +1,1 @@
+RFX_REQUIRE("src/test/xgen-core/shared/stringutils.lua")

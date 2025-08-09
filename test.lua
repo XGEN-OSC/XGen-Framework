@@ -1,28 +1,8 @@
-local sim = SIMULATION_CREATE("HELIX")
+RFX_REQUIRE("src/test/xgen-banking/test.lua")
+RFX_REQUIRE("src/test/xgen-charcreator/test.lua")
+RFX_REQUIRE("src/test/xgen-core/test.lua")
+RFX_REQUIRE("src/test/xgen-multicharacter/test.lua")
+RFX_REQUIRE("src/test/xgen-spawn/test.lua")
+RFX_REQUIRE("src/test/xgen-target/test.lua")
 
-local core = RESOURCE_LOAD(sim, "src/main/Content/Script/xgen-core")
-local multicharacter = RESOURCE_LOAD(sim, "src/main/Content/Script/xgen-multicharacter")
-local charcreator = RESOURCE_LOAD(sim, "src/main/Content/Script/xgen-charcreator")
-local spawn = RESOURCE_LOAD(sim, "src/main/Content/Script/xgen-spawn")
-local banking = RESOURCE_LOAD(sim, "src/main/Content/Script/xgen-banking")
-local target = RESOURCE_LOAD(sim, "src/main/Content/Script/xgen-target")
-
-RESOURCE_START(core)
-RESOURCE_START(multicharacter)
-RESOURCE_START(charcreator)
-RESOURCE_START(spawn)
-RESOURCE_START(banking)
-RESOURCE_START(target)
-
-local server = SIMULATION_GET_SERVER(sim)
-local environment = ENVIRONMENT_GET(server, core)
-local XPlayer = ENVIRONMENT_GET_VAR(environment, "XPlayer") --[[@as XPlayer]]
-local XCharacter = ENVIRONMENT_GET_VAR(environment, "XCharacter") --[[@as XCharacter]]
-
-local xPlayer = XPlayer:new("identifier")
-xPlayer:connected()
-
-local xCharacter = XCharacter:new(xPlayer, "John", "Doe", "2025-04-01")
-if xPlayer:loadCharacter(xCharacter.citizen_id) then
-    print("Character loaded successfully for " .. xPlayer.identifier)
-end
+Test.runAll()
