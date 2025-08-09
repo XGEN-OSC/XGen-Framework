@@ -176,8 +176,6 @@ end
 ---@param primary_keys table<string, any> the values of the primary keys
 ---@return DBSC? object The loaded object or nil if not found
 function DBSC:get(primary_keys)
-    print("DBSC:get called with primary keys: ", StringUtils.dumpTable(primary_keys))
-
     local pksString = ""
     for _, value in pairs(primary_keys) do
         pksString = pksString .. ":" .. tostring(value)
@@ -208,7 +206,6 @@ function DBSC:get(primary_keys)
         for _, key in ipairs(self.__meta.columns) do
             if key.foreign_key_class then
                 local foreignKeyClass = key.foreign_key_class
-                print("searching for ", key.name, " in ", StringUtils.dumpTable(result))
                 instance[key.name] = foreignKeyClass:get({[key.foreign_key_ref_name] = result[string.upper(key.name)]})
             else
                 instance[key.name] = result[string.upper(key.name)]
