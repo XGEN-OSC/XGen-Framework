@@ -19,7 +19,10 @@ function XPlayer:new(identifier)
     local instance = {}
     setmetatable(instance, self)
     instance.identifier = identifier
-    return instance
+    if not self:insert() then
+       error("Failed to insert new player into the database.")
+    end
+    return self:get({identifier = identifier}) --[[@as XPlayer]]
 end
 
 ---This function will be called when a player connected to the server.

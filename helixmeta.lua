@@ -20,3 +20,8 @@ function Database.Execute(sql, values) end
 ---@param values table<any> The values to bind to the SQL statement.
 ---@return table<{Column: table<string, any>}> results The results of the query.
 function Database.Select(sql, values) end
+
+---@class Controller
+
+---@class HPlayer : Controller
+HPlayer = {}
