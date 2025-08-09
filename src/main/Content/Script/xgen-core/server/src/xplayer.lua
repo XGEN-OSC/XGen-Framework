@@ -19,7 +19,7 @@ function XPlayer:new(identifier)
     local instance = {}
     setmetatable(instance, self)
     instance.identifier = identifier
-    if not self:insert() then
+    if not instance:insert() then
        error("Failed to insert new player into the database.")
     end
     return self:get({identifier = identifier}) --[[@as XPlayer]]

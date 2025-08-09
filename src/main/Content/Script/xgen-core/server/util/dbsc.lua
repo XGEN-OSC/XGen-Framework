@@ -13,6 +13,7 @@ DBSC.__index = DBSC
 ---@field type string the type of the column
 ---@field primary_key boolean? whether the column is a primary key
 ---@field foreign_key string? the foreign key reference if applicable
+---@field foreign_key_class DBSC? the class of the foreign key reference
 ---@field auto_increment boolean? whether the column should auto-increment
 ---@field default string? the default value for the column
 ---@field not_null boolean? whether the column cannot be null
@@ -29,10 +30,32 @@ function DBSC:new(meta)
     return instance
 end
 
+---Returns the column that is the primary key of this table.
+---@return DBSC.Meta.Column? column the primary key column or nil if not found
+function DBSC:primaryKey()
+    for _, column in ipairs(self.__meta.columns) do
+        if column.primary_key then
+            return column
+        end
+    end
+    return nil
+end
+
 ---Initializes the DBSC subclass.
 function DBSC:init()
     local sql = "CREATE TABLE IF NOT EXISTS " .. self.__meta.name .. " ("
     for i, key in ipairs(self.__meta.columns) do
+
+        if _G[key.type] then
+            local dbsc_class = _G[key.type]
+            local class_table = dbsc_class.__meta.name
+            local reference = dbsc_class:primaryKey()
+            key.type = reference.type
+            key.foreign_key = class_table .. "(" .. reference.name .. ")"
+            key.foreign_key_class = dbsc_class
+            key.foreign_key_ref_name = reference.name
+        end
+
         sql = sql .. key.name .. " " .. key.type
         if key.primary_key then
             sql = sql .. " PRIMARY KEY"
@@ -41,7 +64,7 @@ function DBSC:init()
             sql = sql .. " AUTO_INCREMENT"
         end
         if key.foreign_key then
-            sql = sql .. " REFERENCES " .. key.foreign_key
+            sql = sql .. " REFERENCES " .. key.foreign_key .. " ON DELETE CASCADE"
         end
         if key.default then
             sql = sql .. " DEFAULT " .. key.default
@@ -91,6 +114,13 @@ function DBSC:insert()
             sql = sql .. ", "
         end
         table.insert(values, "?")
+
+        if key.foreign_key_class then
+            local val = self[key.name][key.foreign_key_ref_name]
+            table.insert(thisVals, val)
+            goto continue
+        end
+
         table.insert(thisVals, self[key.name])
         ::continue::
     end
@@ -100,7 +130,7 @@ function DBSC:insert()
         return false
     end
 
-    self.__cache[pksString] = self:get(pks)
+    self:get(pks)
 
     return true
 end
@@ -121,7 +151,14 @@ function DBSC:update()
             table.insert(condValues, self[key.name])
         else
             sql = sql .. key.name .. " = ?"
-            table.insert(values, self[key.name])
+
+            if key.foreign_key_class then
+                local val = self[key.name][key.foreign_key_ref_name]
+                table.insert(values, val)
+            else
+                table.insert(values, self[key.name])
+            end
+
             if i < #self.__meta.columns then
                 sql = sql .. ", "
             end
@@ -139,6 +176,8 @@ end
 ---@param primary_keys table<string, any> the values of the primary keys
 ---@return DBSC? object The loaded object or nil if not found
 function DBSC:get(primary_keys)
+    print("DBSC:get called with primary keys: ", StringUtils.dumpTable(primary_keys))
+
     local pksString = ""
     for _, value in pairs(primary_keys) do
         pksString = pksString .. ":" .. tostring(value)
@@ -167,7 +206,13 @@ function DBSC:get(primary_keys)
         local instance = {}
         setmetatable(instance, self)
         for _, key in ipairs(self.__meta.columns) do
-            instance[key.name] = result[string.upper(key.name)]
+            if key.foreign_key_class then
+                local foreignKeyClass = key.foreign_key_class
+                print("searching for ", key.name, " in ", StringUtils.dumpTable(result))
+                instance[key.name] = foreignKeyClass:get({[key.foreign_key_ref_name] = result[string.upper(key.name)]})
+            else
+                instance[key.name] = result[string.upper(key.name)]
+            end
         end
 
         self.__cache[pksString] = instance
@@ -202,7 +247,12 @@ function DBSC:getWhere(conditions)
         local instance = {}
         setmetatable(instance, self)
         for _, key in ipairs(self.__meta.columns) do
-            instance[key.name] = result.Column[string.upper(key.name)]
+            if key.foreign_key_class then
+                local foreignKeyClass = key.foreign_key_class
+                instance[key.name] = foreignKeyClass:get({[key.foreign_key_ref_name] = result.Column[string.upper(key.foreign_key_ref_name)]})
+            else
+                instance[key.name] = result.Column[string.upper(key.name)]
+            end
         end
         table.insert(instances, instance)
 

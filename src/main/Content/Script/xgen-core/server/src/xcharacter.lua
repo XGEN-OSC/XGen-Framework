@@ -1,26 +1,27 @@
 ---@class XCharacter : DBSC A single character in the game, 
 ---bound to a player.
 ---@field citizen_id string The unique identifier for the character.
----@field owner string The identifier of the player who owns this character.
+---@field owner XPlayer The player who owns this character.
 ---@field firstname string The first name of the character.
 ---@field lastname string The last name of the character.
 ---@field date_of_birth string The date of birth of the character in YYYY-MM-DD format.
+---@field account XAccount the players primary banking account
 XCharacter = DBSC:new({
     name = "xgen_character",
     columns = {
         { name = "citizen_id", type = "VARCHAR(255)", primary_key = true },
-        { name = "owner", type = "VARCHAR(255)", foreign_key = "xgen_player(identifier)", not_null = true },
+        { name = "owner", type = "XPlayer" },
         { name = "firstname", type = "VARCHAR(255)", not_null = true },
         { name = "lastname", type = "VARCHAR(255)", not_null = true },
         { name = "date_of_birth", type = "DATE", not_null = true },
-        { name = "account", type = "VARCHAR(255)", foreign_key = "xgen_account(bid)", not_null = false }
+        { name = "account", type = "XAccount", not_null = false }
     }
 })
 XCharacter.__index = XCharacter
 
 ---Creates a new character instance.
 ---@nodiscard
----@param owner string The identifier of the player who owns this character.
+---@param owner XPlayer The player who owns this character.
 ---@return XCharacter character The new character instance.
 function XCharacter:new(owner, firstname, lastname, date_of_birth)
     local instance = {}
@@ -31,6 +32,7 @@ function XCharacter:new(owner, firstname, lastname, date_of_birth)
     instance.firstname = firstname
     instance.lastname = lastname
     instance.date_of_birth = date_of_birth
+    instance.account = XAccount:new()
     if not instance:insert() then
         error("Failed to create character: " .. instance.citizen_id .. "(citizen id already in use?)")
     end
