@@ -6,6 +6,7 @@
 ---@field lastname string The last name of the character.
 ---@field date_of_birth string The date of birth of the character in YYYY-MM-DD format.
 ---@field account XAccount the players primary banking account
+---@field xPlayer XPlayer the player this character is bound to
 XCharacter = DBSC:new({
     name = "xgen_character",
     columns = {

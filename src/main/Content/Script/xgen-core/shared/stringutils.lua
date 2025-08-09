@@ -36,19 +36,44 @@ end
 ---Dumps a table into a string representation.
 ---@nodiscard
 ---This is useful for debugging purposes.
----@param table table The table to dump.
+---@param tbl table The table to dump.
+---@param parents table<table>? parent tables
 ---@return string str The string representation of the table.
-function StringUtils.dumpTable(table)
-    if type(table) ~= "table" then
-        return tostring(table)
+function StringUtils.dumpTable(tbl, parents)
+    parents = parents or {tbl}
+    if type(tbl) ~= "table" then
+        return tostring(tbl)
     end
+
+    local function append(tbl)
+        local par = {}
+        for k, v in pairs(parents) do
+            table.insert(par, v)
+        end
+        table.insert(par, tbl)
+        return par
+    end
+
+    local function isParent(tbl)
+        for _, v in ipairs(parents) do
+            if v == tbl then
+                return true
+            end
+        end
+        return false
+    end
+
     local str = "{ "
     local empty = true
 
-    for k, v in pairs(table) do
+    for k, v in pairs(tbl) do
         empty = false
         if type(v) == "table" then
-            str = str .. k .. " = " .. StringUtils.dumpTable(v) .. ", "
+            if isParent(v) then
+                str = str .. k .. " = <circular reference (" .. tostring(v) .. ")>, "
+            else
+                str = str .. k .. " = " .. StringUtils.dumpTable(v, append(v)) .. ", "
+            end
         elseif type(v) == "string" then
             str = str .. k .. ' = "' .. v .. '", '
         else
@@ -82,4 +107,22 @@ function StringUtils.generate(format)
     end
     formatted = formatted:gsub("%.", function() return randomChar() end)
     return formatted
+end
+
+---Splits a string into substrings seperated by the given seperator.
+---@nodiscard
+---@param str string the string to split.
+---@param sep string the separator to use.
+---@return table<string> strings the split substrings
+function StringUtils.split(str, sep)
+    local t = {}
+    local start = 1
+    local sepStart, sepEnd = string.find(str, sep, start, true)
+    while sepStart do
+        table.insert(t, string.sub(str, start, sepStart - 1))
+        start = sepEnd + 1
+        sepStart, sepEnd = string.find(str, sep, start, true)
+    end
+    table.insert(t, string.sub(str, start))
+    return t
 end

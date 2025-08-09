@@ -203,6 +203,8 @@ function DBSC:get(primary_keys)
     if result then
         local instance = {}
         setmetatable(instance, self)
+        instance.__index = instance
+        self.__index = self
         for _, key in ipairs(self.__meta.columns) do
             if key.foreign_key_class then
                 local foreignKeyClass = key.foreign_key_class
