@@ -25,3 +25,8 @@ function Database.Select(sql, values) end
 
 ---@class HPlayer : Controller
 HPlayer = {}
+
+---@class Events
+Events = {}
+function Events.Call(eventName, ...) end
+function Events.Subscribe(eventName, ...) end
