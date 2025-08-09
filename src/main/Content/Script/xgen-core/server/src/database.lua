@@ -7,4 +7,5 @@ function DB.init()
     XPlayer:init()
     XAccount:init()
     XCharacter:init()
+    XTransaction:init()
 end

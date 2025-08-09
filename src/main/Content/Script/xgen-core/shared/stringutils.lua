@@ -68,11 +68,18 @@ end
 ---Generates a formatted string based on the provided format.
 ---@nodiscard
 ---@param format string The format for the string. A will be replaced with a random upper case letter,
----a will be replaced with a random lower case letter, and 0 will be replaced with a random digit.
+---a will be replaced with a random lower case letter, and 0 will be replaced with a random digit,
+---and . will be replaced with any uppercase letter or number.
 ---@return string formatted The formatted string.
 function StringUtils.generate(format)
     local formatted = format:gsub("A", function() return string.char(math.random(65, 90)) end)
     formatted = formatted:gsub("a", function() return string.char(math.random(97, 122)) end)
     formatted = formatted:gsub("0", function() return math.random(0, 9) end)
+    local chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    local function randomChar()
+        local random = math.random(1, #chars)
+        return chars:sub(random, random)
+    end
+    formatted = formatted:gsub("%.", function() return randomChar() end)
     return formatted
 end

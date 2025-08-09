@@ -178,6 +178,63 @@ function XAccount:getFormattedBalance()
     return string.format("%s%s%s", formatted_major, decimalSeparator, formatted_minor)
 end
 
+---Sends the given amount of money to the given account.
+---@param major number
+---@param minor number
+---@param to_account XAccount
+---@param reason string
+---@return XTransaction transaction the created transaction
+function XAccount:send(major, minor, to_account, reason)
+    if not to_account or not to_account.bid then
+        error("Invalid target account.")
+    end
+
+    if not self:hasBalance(major, minor) then
+        error("Insufficient funds to send money.")
+    end
+
+    self:removeBalance(major, minor)
+    to_account:addBalance(major, minor)
+
+    local transaction = XTransaction:new(self.bid, to_account.bid, major, minor, reason or "Transfer")
+    if not transaction then
+        error("Failed to create transaction.")
+    end
+
+    return transaction
+end
+
+
+---Sends the given amount of money to the given account.
+---@param amount number
+---@param to_account XAccount
+---@param reason string
+---@return XTransaction transaction the created transaction
+function XAccount:sendFloat(amount, to_account, reason)
+    local major = math.floor(amount)
+    local minor = math.floor((amount - major) * 100)
+
+    return self:send(major, minor, to_account, reason)
+end
+
+---Returns a table of all transactions associated with this account.
+---@nodiscard
+---@return table<XTransaction> transactions all transactions of this account.
+function XAccount:getTransactions()
+    local sent = XTransaction:getWhere({from_bid = self.bid}) --[[@as table<XTransaction>]]
+    local received = XTransaction:getWhere({to_bid = self.bid}) --[[@as table<XTransaction>]]
+    local transactions = {}
+
+    for _, tx in ipairs(sent) do
+        table.insert(transactions, tx)
+    end
+    for _, tx in ipairs(received) do
+        table.insert(transactions, tx)
+    end
+
+    return transactions
+end
+
 ---Returns a string representation of the account.
 ---@return string str The string representation of the account.
 function XAccount:__tostring()
