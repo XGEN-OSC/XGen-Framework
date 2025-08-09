@@ -12,18 +12,6 @@ StringUtils = {}
 ---of the placeholders to replace.
 ---@return string formatted the formatted string
 function StringUtils.format(str, values)
-    str = str:gsub("${(.-)}", function(lua)
-        local ok, result = pcall(function (...)
-            local luaStr = "return " .. string.sub(lua, 1, -1)
-            local fn = assert(load(luaStr))
-            local ok, result = pcall(fn)
-            return tostring(result)
-        end)
-        if not ok then
-            return "$" .. lua
-        end
-        return result
-    end)
     if not values then
         return str
     end

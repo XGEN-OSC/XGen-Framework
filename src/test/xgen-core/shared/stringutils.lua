@@ -15,11 +15,6 @@ Test.new("StringUtils.format should replace placeholders", function (self)
     return Test.assertEqual(result, "Hello, World!", "StringUtils.format should replace placeholders correctly")
 end)
 
-Test.new("StringUtils.format should handle Lua expressions", function (self)
-    local result = StringUtils.format("The sum of 2 and 3 is ${2 + 3}.", nil)
-    return Test.assertEqual(result, "The sum of 2 and 3 is 5.", "StringUtils.format should evaluate Lua expressions")
-end)
-
 Test.new("StringUtils.format should handle missing placeholders", function (self)
     local result = StringUtils.format("Hello, {name}!", { age = 30 })
     return Test.assertEqual(result, "Hello, nil!", "StringUtils.format should handle missing placeholders")
