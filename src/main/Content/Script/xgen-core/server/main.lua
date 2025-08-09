@@ -1,7 +1,9 @@
 local function init()
     DB.init()
-    local xPlayer = XPlayer:new("player_identifier")
-    xPlayer:connected()
 end
 
 init()
+
+Events.Subscribe("xgen:core:get", function (cb)
+    cb(Core)
+end)
