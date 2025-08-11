@@ -29,6 +29,6 @@ jobs:
       - name: Run a multi-line script
         run: |
           wget https://github.com/java3east/RefineXModular/releases/download/latest/refinex.zip
-          unzip -P refinex.zip
+          unzip refinex.zip
           java -jar refinex/RefineX-1.0-SNAPSHOT.jar RFX $GITHUB_WORKSPACE/test.lua
 
