@@ -30,5 +30,6 @@ jobs:
         run: |
           wget https://github.com/java3east/RefineXModular/releases/download/latest/refinex.zip
           unzip refinex.zip
+          ls -a
           java -jar refinex/RefineX-1.0-SNAPSHOT.jar RFX $GITHUB_WORKSPACE/test.lua
 
