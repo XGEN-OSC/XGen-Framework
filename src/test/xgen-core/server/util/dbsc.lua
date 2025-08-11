@@ -1,5 +1,4 @@
-local environment = ENVIRONMENT_GET(SERVER, XGEN_CORE)
-local DBSC = ENVIRONMENT_GET_VAR(environment, "DBSC")
+local DBSC = ENVIRONMENT_GET_VAR(ENVIRONMENT, "DBSC")
 
 Test.new("DBSC should exist", function (self)
     return Test.assert(DBSC ~= nil, "DBSC should not be nil")

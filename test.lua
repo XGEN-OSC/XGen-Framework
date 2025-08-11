@@ -4,6 +4,10 @@ SERVER = SIMULATION_GET_SERVER(SIM)
 XGEN_CORE = RESOURCE_LOAD(SIM, "src/main/Content/Script/xgen-core")
 RESOURCE_START(XGEN_CORE)
 
+RESOURCES = { XGEN_CORE }
+
+ENVIRONMENT = ENVIRONMENT_GET(SERVER, XGEN_CORE)
+
 RFX_REQUIRE("src/test/xgen-banking/test.lua")
 RFX_REQUIRE("src/test/xgen-charcreator/test.lua")
 RFX_REQUIRE("src/test/xgen-core/test.lua")
@@ -13,22 +17,99 @@ RFX_REQUIRE("src/test/xgen-target/test.lua")
 
 Test.runAll()
 
-local coverage = RESOURCE_GET_COVERAGE(XGEN_CORE)
+local coverage = {}
+for _, resource in ipairs(RESOURCES) do
+    local cov = RESOURCE_GET_COVERAGE(resource)
+    for _, entry in ipairs(cov) do
+        table.insert(coverage, entry)
+    end
+end
+
+local function readLineOfFile(file, line)
+    local currentLine = 1
+    for lineContent in file:lines() do
+        if currentLine == line then
+            return lineContent
+        end
+        currentLine = currentLine + 1
+    end
+    return nil
+end
 
 local totalCovered = 0
 local totalExecutable = 0
 
+local function contains(tbl, obj)
+    for _, v in ipairs(tbl) do
+        if v == obj then
+            return true
+        end
+    end
+    return false
+end
+
+local function not_covered(entry)
+    local missing = {}
+    for _, line in ipairs(entry.executable) do
+        if not contains(entry.covered, line) then
+            table.insert(missing, line)
+        end
+    end
+    return missing
+end
+
+local function fixed_length_str(str, length)
+    if #str < length then
+        return str .. string.rep(" ", length - #str)
+    elseif #str > length then
+        return string.sub(str, 1, length)
+    else
+        return str
+    end
+end
+
+local function save_coverage(text, file_name)
+    local file = io.open(file_name, "w")
+    if not file then
+        error("Could not open file for writing: " .. file_name)
+    end
+    file:write(text)
+    file:close()
+end
+
+local detailedCoverage = ""
+
 for _, entry in ipairs(coverage) do
     local fileName = entry.name
+    local path = entry.path
     local covered = #entry.covered
     local executable = #entry.executable
     totalCovered = totalCovered + covered
     totalExecutable = totalExecutable + executable
-    print("Coverage for " .. fileName .. ": " .. executable .. "/" .. covered .. " (" .. math.floor((executable / (covered == 0 and 1 or covered)) * 100) .. "%)")
+    local percentage = executable == covered and 1 or (executable == 0 and 1 or (covered / executable))
+    local str = string.format("%s | %s | %.2f%%", fixed_length_str(fileName, 50), fixed_length_str(string.format("%d/%d", covered, executable), 10), math.floor(percentage * 100))
+    print(">>> " .. str)
+    if not (percentage == 1) then
+        detailedCoverage = detailedCoverage .. "\n## " .. fileName .. "\n"
+        detailedCoverage = detailedCoverage .. "*COVERAGE*:" .. string.format(" %d/%d (%.2f%%)", covered, executable, math.floor(percentage * 100))
+        detailedCoverage = detailedCoverage .. "\n```LUA\n"
+        local last = -1
+        for _, line in ipairs(not_covered(entry)) do
+            if last ~= -1 and last + 1 ~= line then
+                detailedCoverage = detailedCoverage .. "```\n```LUA\n"
+            end
+            detailedCoverage = detailedCoverage .. fixed_length_str(tostring(line), 4) .. " | " .. tostring(readLineOfFile(io.open(path, "r"), line)) .. "\n"
+            last = line
+        end
+        detailedCoverage = detailedCoverage .. "```"
+    end
+    detailedCoverage = detailedCoverage .. "\n"
 end
+detailedCoverage = detailedCoverage .. "\n"
+detailedCoverage = detailedCoverage .. "Total coverage: " .. totalCovered .. "/" .. totalExecutable .. " (" .. math.floor((totalCovered / (totalExecutable == 0 and 1 or totalExecutable)) * 100) .. "%)"
 
-print("Total coverage: " .. totalExecutable .. "/" .. totalCovered .. " (" .. math.floor((totalExecutable / (totalCovered == 0 and 1 or totalCovered)) * 100) .. "%)")
+save_coverage(detailedCoverage, "coverage.md")
 
-if totalExecutable / totalCovered < 0.8 then
-    error("Coverage is below 80%: " .. totalExecutable .. "/" .. totalCovered .. " (" .. math.floor((totalExecutable / (totalCovered == 0 and 1 or totalCovered)) * 100) .. "%)")
+if totalCovered / totalExecutable < 0.8 then
+    error("Coverage is below 80%: " .. totalCovered .. "/" .. totalExecutable .. " (" .. math.floor((totalCovered / (totalExecutable == 0 and 1 or totalExecutable)) * 100) .. "%)")
 end

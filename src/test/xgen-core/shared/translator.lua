@@ -1,5 +1,4 @@
-local environment = ENVIRONMENT_GET(SERVER, XGEN_CORE)
-local Translator = ENVIRONMENT_GET_VAR(environment, "Translator")
+local Translator = ENVIRONMENT_GET_VAR(ENVIRONMENT, "Translator")
 
 Test.new("Translator should exist", function (self)
     return Test.assert(Translator ~= nil, "Translator should not be nil")
