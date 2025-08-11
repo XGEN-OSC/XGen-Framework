@@ -1,9 +1,4 @@
-local sim = SIMULATION_CREATE("HELIX")
-local server = SIMULATION_GET_SERVER(sim)
-local resource = RESOURCE_LOAD(sim, "src/main/Content/Script/xgen-core")
-RESOURCE_START(resource)
-
-local environment = ENVIRONMENT_GET(server, resource)
+local environment = ENVIRONMENT_GET(SERVER, XGEN_CORE)
 local StringUtils = ENVIRONMENT_GET_VAR(environment, "StringUtils")
 
 Test.new("StringUtils should exist", function (self)

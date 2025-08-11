@@ -1,5 +1,6 @@
 SIM = SIMULATION_CREATE("HELIX")
 SERVER = SIMULATION_GET_SERVER(SIM)
+
 XGEN_CORE = RESOURCE_LOAD(SIM, "src/main/Content/Script/xgen-core")
 RESOURCE_START(XGEN_CORE)
 
@@ -13,21 +14,6 @@ RFX_REQUIRE("src/test/xgen-target/test.lua")
 Test.runAll()
 
 local coverage = RESOURCE_GET_COVERAGE(XGEN_CORE)
-local function dump(table)
-    if type(table) ~= "table" then
-        return tostring(table)
-    end
-    local str = "{"
-    for k, v in pairs(table) do
-        if type(v) == "table" then
-            str = str .. k .. ": " .. dump(v) .. ", "
-        else
-            str = str .. k .. ": " .. tostring(v) .. ", "
-        end
-    end
-    str = str .. "}"
-    return str
-end
 
 local totalCovered = 0
 local totalExecutable = 0
