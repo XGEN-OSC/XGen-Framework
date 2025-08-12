@@ -8,8 +8,8 @@ XPlayer = DBSC:new({
     name = "xgen_player",
     columns = {
         { name = "identifier", type = "VARCHAR(255)", primary_key = true },
-        { name = "joined", type = "TIMESTAMP", default = "CURRENT_TIMESTAMP", not_null = true },
-        { name = "last_seen", type = "TIMESTAMP", default = "CURRENT_TIMESTAMP", not_null = true }
+        { name = "joined", type = "TIMESTAMP", not_null = true },
+        { name = "last_seen", type = "TIMESTAMP", not_null = true }
     }
 })
 XPlayer.__index = XPlayer
@@ -22,6 +22,8 @@ function XPlayer:new(identifier)
     setmetatable(instance, self)
     self.__index = self
     instance.identifier = identifier
+    instance.joined = os.date("%Y-%m-%d %H:%M:%S") --[[@as string]]
+    instance.last_seen = os.date("%Y-%m-%d %H:%M:%S") --[[@as string]]
     if not instance:insert() then
        error("Failed to insert new player into the database.")
     end
@@ -50,6 +52,10 @@ end
 ---@param citizenId string the citizen ID of the character to load
 ---@return boolean success Whether the character was successfully loaded.
 function XPlayer:loadCharacter(citizenId)
+    if self.current_character then
+        self.current_character.xPlayer = nil
+        self.current_character = nil
+    end
     local character = XCharacter:get({citizen_id = citizenId}) --[[@as XCharacter?]]
     if not character then
         return false

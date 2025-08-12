@@ -2,17 +2,18 @@
 ---translation keys to the current language.
 Translator = {}
 
----@type table<string, string> A table containing the loaded language.
+---@type table<string, table<string, string>> A table containing the loaded language.
 local translations = {}
 
 ---Sets the translations for the current language. The values are allowed to
 ---use placeholders in the form of `$lua_expression$` for Lua expressions and
 ---`{key}` for values from a table.
 ---@see StringUtils.format
+---@param language string the name of the language to set the translations for
 ---@param locale table<string, string> A table containing the translations
 ---for the current language.
-function Translator.setTranslations(locale)
-    translations = locale
+function Translator.setTranslations(language, locale)
+    translations[language] = locale
 end
 
 ---Translates a key to the current language.
@@ -26,6 +27,6 @@ end
 ---@see StringUtils.format
 ---@return string translated the translated and formatted string
 function Translator.translate(key, values)
-    local translation = translations[key] or key
+    local translation = translations[Config.General.language or "en"][key] or key
     return StringUtils.format(translation, values)
 end

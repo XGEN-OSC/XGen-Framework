@@ -8,7 +8,7 @@ XTransaction = DBSC:new({
         { name = "amount_major", type = "INT", not_null = true },
         { name = "amount_minor", type = "INT", not_null = true },
         { name = "reason", type = "TEXT", not_null = true },
-        { name = "timestamp", type = "TIMESTAMP", default = "CURRENT_TIMESTAMP", not_null = true }
+        { name = "timestamp", type = "TIMESTAMP", not_null = true }
     }
 })
 XTransaction.__index = XTransaction
@@ -30,6 +30,7 @@ function XTransaction:new(from_bid, to_bid, amount_major, amount_minor, reason)
     instance.reason = reason
     instance.amount_major = amount_major
     instance.amount_minor = amount_minor
+    instance.timestamp = os.date("%Y-%m-%d %H:%M:%S")
     if not instance:insert() then
         error("Failed to create transaction: " .. instance.transaction_id .. "(transaction id already in use?)")
     end

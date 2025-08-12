@@ -1,10 +1,4 @@
-local sim = SIMULATION_CREATE("HELIX")
-local server = SIMULATION_GET_SERVER(sim)
-local resource = RESOURCE_LOAD(sim, "src/main/Content/Script/xgen-core")
-RESOURCE_START(resource)
-
-local environment = ENVIRONMENT_GET(server, resource)
-local StringUtils = ENVIRONMENT_GET_VAR(environment, "StringUtils")
+local StringUtils = ENVIRONMENT_GET_VAR(ENVIRONMENT, "StringUtils")
 
 Test.new("StringUtils should exist", function (self)
     return Test.assert(StringUtils ~= nil, "StringUtils should not be nil")
@@ -36,6 +30,16 @@ end)
 Test.new("StringUtils.dumpTable should handle non-table values", function (self)
     local result = StringUtils.dumpTable("Hello")
     return Test.assertEqual(result, "Hello", "StringUtils.dumpTable should return string representation of non-table values")
+end)
+
+Test.new("StringUtils.dumpTable should handle string values", function (self)
+    local result = StringUtils.dumpTable({a = 'hello'})
+    return Test.assertEqual(result, "{ a = \"hello\" }", "StringUtils.dumpTable should return string representation for table with string values")
+end)
+
+Test.new("StringUtils.dumpTable should handle nested tables", function (self)
+    local result = StringUtils.dumpTable({ a = 1, b = { c = 2, d = 3 } })
+    return Test.assertEqual(result, "{ a = 1, b = { c = 2, d = 3 } }", "StringUtils.dumpTable should return correct string representation for nested tables")
 end)
 
 Test.new("StringUtils.dumpTable should handle empty tables", function (self)

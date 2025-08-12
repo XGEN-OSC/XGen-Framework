@@ -1,0 +1,5 @@
+local XGEN_CHARCREATOR = RESOURCE_LOAD(SIM, "src/main/Content/Script/xgen-charcreator")
+RESOURCE_START(XGEN_CHARCREATOR)
+table.insert(RESOURCES, XGEN_CHARCREATOR)
+
+local environment = ENVIRONMENT_GET(SERVER, XGEN_CHARCREATOR)

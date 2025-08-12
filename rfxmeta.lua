@@ -58,6 +58,11 @@ function Test.assertEqual(a, b, message) end
 ---@return boolean passed
 function Test.assertOneOf(value, acceptedValues, message) end
 
+---@param callback fun()
+---@param message string
+---@return boolean passed
+function Test.assertError(callback, message) end
+
 function Test.runAll() end
 
 function Test:run() end
