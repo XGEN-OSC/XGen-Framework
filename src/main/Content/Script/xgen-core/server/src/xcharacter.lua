@@ -14,7 +14,7 @@ XCharacter = DBSC:new({
         { name = "owner", type = "XPlayer" },
         { name = "firstname", type = "VARCHAR(255)", not_null = true },
         { name = "lastname", type = "VARCHAR(255)", not_null = true },
-        { name = "date_of_birth", type = "DATE", not_null = true },
+        { name = "date_of_birth", type = "TIMESTAMP", not_null = true },
         { name = "account", type = "XAccount", not_null = false }
     }
 })
@@ -23,6 +23,9 @@ XCharacter.__index = XCharacter
 ---Creates a new character instance.
 ---@nodiscard
 ---@param owner XPlayer The player who owns this character.
+---@param firstname string
+---@param lastname string
+---@param date_of_birth string
 ---@return XCharacter character The new character instance.
 function XCharacter:new(owner, firstname, lastname, date_of_birth)
     local instance = {}

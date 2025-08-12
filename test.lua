@@ -18,10 +18,50 @@ RFX_REQUIRE("src/test/xgen-target/test.lua")
 Test.runAll()
 
 local coverage = {}
+
+local function contains(tbl, obj)
+    for _, v in ipairs(tbl) do
+        if v == obj then
+            return true
+        end
+    end
+    return false
+end
+
+local function get_cov_entry(file_name)
+    for _, entry in ipairs(coverage) do
+        if entry.name == file_name then
+            return entry
+        end
+    end
+    return nil
+end
+
+local function merge_array(arr1, arr2)
+    local merged = {}
+    for _, v in ipairs(arr1) do
+        if not contains(merged, v) then
+            table.insert(merged, v)
+        end
+    end
+    for _, v in ipairs(arr2) do
+        if not contains(merged, v) then
+            table.insert(merged, v)
+        end
+    end
+    return merged
+end
+
 for _, resource in ipairs(RESOURCES) do
     local cov = RESOURCE_GET_COVERAGE(resource)
     for _, entry in ipairs(cov) do
-        table.insert(coverage, entry)
+        local ent = get_cov_entry(entry.name)
+        if ent == nil then
+            table.insert(coverage, entry)
+        else
+            ent.covered = merge_array(ent.covered, entry.covered)
+            ent.executable = merge_array(ent.executable, entry.executable)
+        end
     end
 end
 
@@ -38,15 +78,6 @@ end
 
 local totalCovered = 0
 local totalExecutable = 0
-
-local function contains(tbl, obj)
-    for _, v in ipairs(tbl) do
-        if v == obj then
-            return true
-        end
-    end
-    return false
-end
 
 local function not_covered(entry)
     local missing = {}
@@ -90,7 +121,7 @@ for _, entry in ipairs(coverage) do
     local str = string.format("%s | %s | %.2f%%", fixed_length_str(fileName, 50), fixed_length_str(string.format("%d/%d", covered, executable), 10), math.floor(percentage * 100))
     print(">>> " .. str)
     if not (percentage == 1) then
-        detailedCoverage = detailedCoverage .. "\n## " .. fileName .. "\n"
+        detailedCoverage = detailedCoverage .. "## " .. fileName .. "\n"
         detailedCoverage = detailedCoverage .. "*COVERAGE*:" .. string.format(" %d/%d (%.2f%%)", covered, executable, math.floor(percentage * 100))
         detailedCoverage = detailedCoverage .. "\n```LUA\n"
         local last = -1
@@ -101,14 +132,15 @@ for _, entry in ipairs(coverage) do
             detailedCoverage = detailedCoverage .. fixed_length_str(tostring(line), 4) .. " | " .. tostring(readLineOfFile(io.open(path, "r"), line)) .. "\n"
             last = line
         end
-        detailedCoverage = detailedCoverage .. "```"
+        detailedCoverage = detailedCoverage .. "```\n"
     end
-    detailedCoverage = detailedCoverage .. "\n"
 end
 detailedCoverage = detailedCoverage .. "\n"
 detailedCoverage = detailedCoverage .. "Total coverage: " .. totalCovered .. "/" .. totalExecutable .. " (" .. math.floor((totalCovered / (totalExecutable == 0 and 1 or totalExecutable)) * 100) .. "%)"
 
 save_coverage(detailedCoverage, "coverage.md")
+
+print(">>> Total coverage: " .. totalCovered .. "/" .. totalExecutable .. " (" .. math.floor((totalCovered / (totalExecutable == 0 and 1 or totalExecutable)) * 100) .. "%)")
 
 if totalCovered / totalExecutable < 0.8 then
     error("Coverage is below 80%: " .. totalCovered .. "/" .. totalExecutable .. " (" .. math.floor((totalCovered / (totalExecutable == 0 and 1 or totalExecutable)) * 100) .. "%)")

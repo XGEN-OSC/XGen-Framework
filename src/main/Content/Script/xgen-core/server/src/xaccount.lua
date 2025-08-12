@@ -185,10 +185,6 @@ end
 ---@param reason string
 ---@return XTransaction transaction the created transaction
 function XAccount:send(major, minor, to_account, reason)
-    if not to_account or not to_account.bid then
-        error("Invalid target account.")
-    end
-
     if not self:hasBalance(major, minor) then
         error("Insufficient funds to send money.")
     end

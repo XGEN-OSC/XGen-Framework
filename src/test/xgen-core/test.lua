@@ -1,3 +1,8 @@
 RFX_REQUIRE("src/test/xgen-core/shared/stringutils.lua")
 RFX_REQUIRE("src/test/xgen-core/shared/translator.lua")
 RFX_REQUIRE("src/test/xgen-core/server/util/dbsc.lua")
+RFX_REQUIRE("src/test/xgen-core/server/core.lua")
+RFX_REQUIRE("src/test/xgen-core/server/src/xcharactersystem.lua")
+RFX_REQUIRE("src/test/xgen-core/server/src/xcharacter.lua")
+RFX_REQUIRE("src/test/xgen-core/server/src/xplayer.lua")
+RFX_REQUIRE("src/test/xgen-core/server/src/xaccount.lua")
