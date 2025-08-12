@@ -27,6 +27,17 @@ function DBSC:new(meta)
     local instance = setmetatable({}, self)
     instance.__meta = meta
     instance.__cache = {}
+    instance.new = function (self, values)
+        local obj = setmetatable({}, self)
+        self.__index = self
+        for k, v in pairs(values) do
+            obj[k] = v
+        end
+        if not obj:insert() then
+            error("Failed to insert new object into the database")
+        end
+        return self:get({ [self:primaryKey().name] = obj[self:primaryKey().name] }) --[[@as DBSC]]
+    end
     return instance
 end
 
@@ -38,7 +49,6 @@ function DBSC:primaryKey()
             return column
         end
     end
-    return nil
 end
 
 ---Initializes the DBSC subclass.
@@ -67,7 +77,11 @@ function DBSC:init()
             sql = sql .. " REFERENCES " .. key.foreign_key .. " ON DELETE CASCADE"
         end
         if key.default then
-            sql = sql .. " DEFAULT " .. key.default
+            local defaultVal = tostring(key.default)
+            if type(key.default) == "string" then
+                defaultVal = "'" .. defaultVal .. "'"
+            end
+            sql = sql .. " DEFAULT " .. defaultVal
         end
         if key.not_null then
             sql = sql .. " NOT NULL"
@@ -248,7 +262,7 @@ function DBSC:getWhere(conditions)
         for _, key in ipairs(self.__meta.columns) do
             if key.foreign_key_class then
                 local foreignKeyClass = key.foreign_key_class
-                instance[key.name] = foreignKeyClass:get({[key.foreign_key_ref_name] = result.Column[string.upper(key.foreign_key_ref_name)]})
+                instance[key.name] = foreignKeyClass:get({[key.foreign_key_ref_name] = result.Column[string.upper(key.name)]})
             else
                 instance[key.name] = result.Column[string.upper(key.name)]
             end

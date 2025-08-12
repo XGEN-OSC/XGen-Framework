@@ -1,1 +1,1 @@
-Translator.setTranslations({})
+Translator.setTranslations("en", {})
