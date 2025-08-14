@@ -1,0 +1,7 @@
+site_name: XGen - Framework - Documentation
+site_url: https://XGEN-OSC.github.io/XGen-Framework
+theme:
+  name: material
+
+nav:
+  - Home: index.md
