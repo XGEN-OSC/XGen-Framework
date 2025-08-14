@@ -1,5 +1,5 @@
----@class XCharacterSystem This character system should be overwritten by
----an external resource (e.g. multicharacter).
+---@class XCharacterSystem The functions in this system
+---MUST be injected into the core resource.
 XCharacterSystem = {}
 
 ---Starts the character selection process for the given player.
