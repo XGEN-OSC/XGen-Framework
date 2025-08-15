@@ -5,3 +5,5 @@ theme:
 
 nav:
   - Home: index.md
+  - API:
+    - DBSC: api/dbsc.md
