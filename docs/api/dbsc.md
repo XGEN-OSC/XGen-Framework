@@ -1,48 +1,41 @@
 ## DBSC
 *The `DBSC` (Database Synchronized Class) class provides a simple way to synchronize classes and objects with the database.*
 
-### [`DBSC.Meta`](#dbscmeta)
-See also: [`DBSC.Meta.Column`](#dbscmetacolumn)
+### DBSC.Meta
+*Metadata for a DBSC class.*
+
+**fields**<br>
+`name` - `string` The name of the table representing this class in the database.<br>
+`columns` - `table<`[`DBSC.Meta.Column`](#dbscmetacolumn)`>` The columns of table in the database.<br>
 
 ---
 
-**fields**  
-`name` - `string` The name of the table representing this class in the database.  
-`columns` - `table<`[`DBSC.Meta.Column`](#dbscmetacolumn)`>` The columns of table in the database.
+### DBSC.Meta.Column
+*Column metadata for a DBSC class.*
+
+**fields**<br>
+`name` - `string` the name of the column. This is the name of the column in the database and must be the name of the value in the class.<br>
+`type` - `string` the type of the value. This can be a normal database type e.g. VARCHAR or the class name of another [`DBSC`](#dbsc) class.<br>
+`primary_key` - `boolean?` if true this column will be registered as primary key.<br>
+`not_null` - `boolean?` if true this column will be registered as not nullable.<br>
+`unique` - `boolean?` if true this column cannot have the same value twice.<br>
 
 ---
 
-### [`DBSC.Meta.Column`](#dbscmetacolumn)
-
----
-
-**fields**  
-`name` - `string` the name of the column. This is the name of the column in the database and must be the name of the value in the class.  
-`type` - `string` the type of the value. This can be a normal database type e.g. VARCHAR or the class name of another [`DBSC`](#dbsc) class.  
-`primary_key` - `boolean?` if true this column will be registered as primary key.  
-`not_null` - `boolean?` if true this column will be registered as not nullable.  
-`unique` - `boolean?` if true this column cannot have the same value twice.  
-
----
-
-### [`DBSC:new`](#dbscnewmeta)
-See also: [`DBSC.Meta`](#dbscmeta)  
+### DBSC:new(meta)
 *Creates a new class extending the `DBSC` super class.*
 
 ---
-
-**parameters**  
-`meta` - [`DBSC.Meta`](#dbscmeta) the metadata for the database table
-
----
-
-**returns**  
-`class` - `T` the new class extending the `DBSC` class.
+**parameters**<br>
+`meta` - [`DBSC.Meta`](#dbscmeta) the metadata for the database table.<br>
 
 ---
+**returns**<br>
+`class` - `T` the new class extending the `DBSC` class.<br>
 
-**example**
-```LUA
+---
+**example**<br>
+```lua
 MyClass = DBSC:new({
     name = "my_class",
     columns = {
@@ -54,7 +47,6 @@ MyClass = DBSC:new({
 ---
 
 ### DBSC:init()
-[DBSC:new(meta)](#dbscnewmeta)  
 *Initializes a class extending the DBSC super class. This will create the table in the database (if not exists). This requires the 'self' object to be a DBSC subclass, created with DBSC:new(meta)*
 
 ---
