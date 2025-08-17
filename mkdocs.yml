@@ -6,10 +6,10 @@ theme:
 nav:
   - Home: index.md
   - API:
-  - DBSC: api/dbsc.md
-  - XTransaction: api/xtransaction.md
-  - XPlayer: api/xplayer.md
-  - XCharacter: api/xcharacter.md
-  - Core: api/core.md
-  - XAccount: api/xaccount.md
-  - Database: api/database.md
+    - DBSC: api/dbsc.md
+    - XTransaction: api/xtransaction.md
+    - XPlayer: api/xplayer.md
+    - XCharacter: api/xcharacter.md
+    - Core: api/core.md
+    - XAccount: api/xaccount.md
+    - Database: api/database.md
