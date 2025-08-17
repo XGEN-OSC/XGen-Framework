@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://XGEN-OSC.github.io/XGen-Framework/</loc>
+         <lastmod>2025-08-17</lastmod>
+    </url>
+    <url>
+         <loc>https://XGEN-OSC.github.io/XGen-Framework/api/core/</loc>
+         <lastmod>2025-08-17</lastmod>
+    </url>
+    <url>
+         <loc>https://XGEN-OSC.github.io/XGen-Framework/api/dbsc/</loc>
+         <lastmod>2025-08-17</lastmod>
+    </url>
+    <url>
+         <loc>https://XGEN-OSC.github.io/XGen-Framework/api/layout/</loc>
+         <lastmod>2025-08-17</lastmod>
+    </url>
+    <url>
+         <loc>https://XGEN-OSC.github.io/XGen-Framework/api/xcharacter/</loc>
+         <lastmod>2025-08-17</lastmod>
+    </url>
+    <url>
+         <loc>https://XGEN-OSC.github.io/XGen-Framework/api/xplayer/</loc>
+         <lastmod>2025-08-17</lastmod>
+    </url>
+    <url>
+         <loc>https://XGEN-OSC.github.io/XGen-Framework/api/xtransaction/</loc>
+         <lastmod>2025-08-17</lastmod>
+    </url>
+</urlset>
