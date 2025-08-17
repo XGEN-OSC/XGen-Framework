@@ -1,42 +1,43 @@
 ## DBSC
-The DBSC (Database Synchronized Class) class provides a simple way to synchronize classes and objects with the database.
+*The `DBSC` (Database Synchronized Class) class provides a simple way to synchronize classes and objects with the database.*
 
-### DBSC.Meta
-[DBSC.Meta.Column](#dbscmetacolumn)
+### [`DBSC.Meta`](#dbscmeta)
+See also: [`DBSC.Meta.Column`](#dbscmetacolumn)
 
 ---
 
 **fields**  
 `name` - `string` The name of the table representing this class in the database.  
-`columns` - `table<DBSC.Meta.Column>` The columns of table in the database.
+`columns` - `table<`[`DBSC.Meta.Column`](#dbscmetacolumn)`>` The columns of table in the database.
 
 ---
 
-### DBSC.Meta.Column
+### [`DBSC.Meta.Column`](#dbscmetacolumn)
+
 ---
 
 **fields**  
 `name` - `string` the name of the column. This is the name of the column in the database and must be the name of the value in the class.  
-`type` - `string` the type of the value. This can be a normal database type e.g. VARCHAR or the class name of another DBSC class.  
+`type` - `string` the type of the value. This can be a normal database type e.g. VARCHAR or the class name of another [`DBSC`](#dbsc) class.  
 `primary_key` - `boolean?` if true this column will be registered as primary key.  
 `not_null` - `boolean?` if true this column will be registered as not nullable.  
 `unique` - `boolean?` if true this column cannot have the same value twice.  
 
 ---
 
-### DBSC:new(meta)
-[DBSC.Meta](#dbscmeta)  
-*Creates a new class extending the DBSC super class.*
+### [`DBSC:new`](#dbscnewmeta)
+See also: [`DBSC.Meta`](#dbscmeta)  
+*Creates a new class extending the `DBSC` super class.*
 
 ---
 
 **parameters**  
-`meta` - `DBSC.Meta` the metadata for the database table
+`meta` - [`DBSC.Meta`](#dbscmeta) the metadata for the database table
 
 ---
 
 **returns**  
-`class` - `T` the new class extending the dbsc class.
+`class` - `T` the new class extending the `DBSC` class.
 
 ---
 
@@ -114,6 +115,8 @@ local obj = MyClass:get({ identifier = "my_identifier" })
 **returns**  
 `objects` - `table<T>` The objects that match the given conditions.
 
+---
+
 ### DBSC:delete()
 *Deletes this object from the database and cache.*
 
@@ -130,3 +133,4 @@ local obj = MyClass:get({ identifier = "my_identifier" })
 myObject:delete()
 ```
 
+---
