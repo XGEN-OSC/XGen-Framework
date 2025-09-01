@@ -1,4 +1,4 @@
----@diagnostic disable: undefined-field, missing-fields, discard-returns, inject-field, need-check-nil
+---@diagnostic disable: missing-fields, discard-returns, undefined-global, undefined-field, need-check-nil, inject-field
 local Server = ENVIRONMENT_GET_VAR(ENVIRONMENT, "Server") --[[@as Server]]
 
 local DBSC = Server.DBSC
@@ -34,20 +34,9 @@ Test.new("DBSC.insert should insert data into the database", function (self)
         }
     })
 
-    function MyClass:new()
-        local obj = {}
-        setmetatable(obj, self)
-        obj.id = 1
-        obj.name = "John Doe"
-        obj.age = 30
-        obj:insert()
-        return obj
-    end
-
     MyClass:init()
-    local obj = MyClass:new()
-
-    return Test.assert(MyClass:get({ id = obj.id }) ~= nil, "DBSC.get should retrieve the inserted data")
+    
+    return Test.assert(MyClass:get({ id = instance.id }) ~= nil, "DBSC.get should retrieve the inserted data")
 end)
 
 Test.new("DBSC(instance):new should throw error when insertation failed", function (self)
@@ -60,23 +49,11 @@ Test.new("DBSC(instance):new should throw error when insertation failed", functi
         }
     })
 
-    function MyClass:new(data)
-        local obj = {}
-        setmetatable(obj, self)
-        obj.id = data.id
-        obj.name = data.name
-        obj.age = data.age
-        if not obj:insert() then
-            error("Failed to insert new object into the database.")
-        end
-        return obj
-    end
-
     MyClass:init()
 
-    MyClass:new ({ id = 1, name = "John Doe", age = 30 })
+    MyClass:new { id = 1, name = "John Doe", age = 30 }
     return Test.assertError(function()
-        MyClass:new ({ id = 1, name = "Jane Doe", age = 25 })
+        MyClass:new { id = 1, name = "Jane Doe", age = 25 }
     end, "DBSC should throw an error when trying to insert a duplicate primary key")
 end)
 
@@ -89,16 +66,6 @@ Test.new("DBSC:insert should work correctly when using default values", function
             { name = "age", type = "integer", default = 0 }
         }
     })
-
-    function MyClass:new(data)
-        local obj = {}
-        setmetatable(obj, self)
-        obj.id = data.id
-        if not obj:insert() then
-            error("Failed to insert new object into the database.")
-        end
-        return obj
-    end
 
     MyClass:init()
 
@@ -117,18 +84,6 @@ Test.new("DBSC:insert should handle foreign keys correctly", function (self)
         }
     })
 
-    function MyClass:new(data)
-        local obj = {}
-        setmetatable(obj, self)
-        obj.id = data.id
-        obj.foreign_object = data.foreign_object
-        obj.name = data.name
-        if not obj:insert() then
-            error("Failed to insert new object into the database.")
-        end
-        return obj
-    end
-
     MyClass:init()
 
     local instance = MyClass:new { id = 1, foreign_object = account, name = "Linked Instance" }
@@ -146,19 +101,6 @@ Test.new("DBSC:update should update data in the database", function (self)
             { name = "account", type = "XAccount" }
         }
     })
-
-    function MyClass:new(data)
-        local obj = {}
-        setmetatable(obj, self)
-        obj.id = data.id
-        obj.name = data.name
-        obj.age = data.age
-        obj.account = data.account
-        if not obj:insert() then
-            error("Failed to insert new object into the database.")
-        end
-        return obj
-    end
 
     MyClass:init()
 
