@@ -25,7 +25,7 @@ jobs:
       - name: Generate documentation
         run: |
           wget https://github.com/java3east/lua-doc-generator/releases/download/LATEST/luadocgen.jar
-          java -jar luadocgen.jar $GITHUB_WORKSPACE/
+          java -jar luadocgen.jar $GITHUB_WORKSPACE/src/main/Content/Script
           # Move generated docs outside so they survive branch switch
           mv docs ../docs-build
 
