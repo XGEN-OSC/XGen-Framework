@@ -1,28 +1,49 @@
-name: Deploy Docs
+name: Deploy Documentation
 
 on:
   push:
     branches:
-      - main  # Only run on pushes to main
+      - main
 
 permissions:
-  contents: write  # Needed to push to gh-pages
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
-  deploy:
+  build-docs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Set up Java
+        uses: actions/setup-java@v4
         with:
-          python-version: '3.10'
+          distribution: temurin
+          java-version: 21
 
-      - name: Install dependencies
-        run: pip install mkdocs mkdocs-material
+      - name: Generate documentation
+        run: |
+          wget https://github.com/java3east/lua-doc-generator/releases/download/latest/luadocgen.zip
+          unzip luadocgen.zip
+          ls -a
+          java -jar luadocgen.jar $GITHUB_WORKSPACE/
 
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+  deploy:
+    needs: build-docs
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
-        run: mkdocs gh-deploy --force
+        id: deployment
+        uses: actions/deploy-pages@v4
