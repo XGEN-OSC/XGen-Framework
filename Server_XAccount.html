@@ -254,5 +254,111 @@ Extends: <a href="Server.DBSC.html" class="class-link">Server.DBSC</a>
 <div><strong>Visibility:</strong> public</div>
 <div class="description">the minor balance of the account</div>
 </div>
+<h2>Methods</h2>
+<div class="method" id="new">
+<strong>new(): <span class="type"><a href="Server_XAccount.html" class="class-link">Server.XAccount</a></span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Creates a new XAccount instance.</div>
+<div><strong>Returns:</strong> account The new XAccount instance.</div>
+</div>
+<div class="method" id="getBalanceFloat">
+<strong>getBalanceFloat(): <span class="type">number</span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Returns the current balance of the account as a floating point number.</div>
+<div><strong>Returns:</strong> balance The current balance of the account.</div>
+</div>
+<div class="method" id="getBalance">
+<strong>getBalance(): <span class="type">integer</span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Returns the current balance of the account, as two seperate integers. The first integer is the major balance and the second integer is the minor balance. the major balance is the whole number part of the balance and the minor balance is the fractional part of the balance, multiplied by 100. If you don't care about floating point precision, you can use `XAccount:getBalanceFloat()` instead.</div>
+<div><strong>Returns:</strong> balance_minor The minor balance of the account.</div>
+</div>
+<div class="method" id="hasBalanceFloat">
+<strong>hasBalanceFloat(<span class="param">amount: number</span>): <span class="type">boolean</span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Checks if the account has at least the given amount of balance.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">amount</span> (<span class="type">number</span>): The amount to check against the account balance.</li>
+</ul></div>
+<div><strong>Returns:</strong> has_balance True if the account has at least the given amount of balance, false otherwise.</div>
+</div>
+<div class="method" id="hasBalance">
+<strong>hasBalance(<span class="param">major: number</span>, <span class="param">minor: number</span>): <span class="type">boolean</span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Checks if the account has at least the given amount of balance.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">major</span> (<span class="type">number</span>): The major part of the amount to check against the account balance.</li>
+<li><span class="param">minor</span> (<span class="type">number</span>): The minor part of the amount to check against the account balance.</li>
+</ul></div>
+<div><strong>Returns:</strong> has_balance True if the account has at least the given amount of balance, false otherwise.</div>
+</div>
+<div class="method" id="addBalance">
+<strong>addBalance(<span class="param">major: number</span>, <span class="param">minor: number</span>)</strong>
+<div class="description">Adds the given amount to the account balance.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">major</span> (<span class="type">number</span>): The major part of the amount to add to the account balance.</li>
+<li><span class="param">minor</span> (<span class="type">number</span>): The minor part of the amount to add to the account balance.</li>
+</ul></div>
+</div>
+<div class="method" id="addBalanceFloat">
+<strong>addBalanceFloat(<span class="param">amount: number</span>)</strong>
+<div class="description">Adds a floating point amount to the account balance. When using larger amounts, this may lead to floating point precision issues. If you want to avoid this, use `XAccount:addBalance(major, minor)` instead.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">amount</span> (<span class="type">number</span>): The amount to add to the account balance.</li>
+</ul></div>
+</div>
+<div class="method" id="removeBalance">
+<strong>removeBalance(<span class="param">major: number</span>, <span class="param">minor: number</span>)</strong>
+<div class="description">Removes the given amount from the account balance.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">major</span> (<span class="type">number</span>): The major part of the amount to remove from the account balance.</li>
+<li><span class="param">minor</span> (<span class="type">number</span>): The minor part of the amount to remove from the account balance.</li>
+</ul></div>
+</div>
+<div class="method" id="removeBalanceFloat">
+<strong>removeBalanceFloat(<span class="param">amount: number</span>)</strong>
+<div class="description">Removes a floating point amount from the account balance.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">amount</span> (<span class="type">number</span>): The amount to remove from the account balance.</li>
+</ul></div>
+</div>
+<div class="method" id="getFormattedBalance">
+<strong>getFormattedBalance(): <span class="type">string</span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Returns the amount of money on this account as a string, using the currency formatting defined in `Config.Currency.format`.</div>
+<div><strong>Returns:</strong> formatted_balance The formatted balance of the account.</div>
+</div>
+<div class="method" id="send">
+<strong>send(<span class="param">major: number</span>, <span class="param">minor: number</span>, <span class="param">to_account: <a href="Server_XAccount.html" class="class-link">Server.XAccount</a></span>, <span class="param">reason: string</span>): <span class="type"><a href="Server_XTransaction.html" class="class-link">Server.XTransaction</a></span></strong>
+<div class="description">Sends the given amount of money to the given account.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">major</span> (<span class="type">number</span>): </li>
+<li><span class="param">minor</span> (<span class="type">number</span>): </li>
+<li><span class="param">to_account</span> (<span class="type"><a href="Server_XAccount.html" class="class-link">Server.XAccount</a></span>): </li>
+<li><span class="param">reason</span> (<span class="type">string</span>): </li>
+</ul></div>
+<div><strong>Returns:</strong> transaction the created transaction</div>
+</div>
+<div class="method" id="sendFloat">
+<strong>sendFloat(<span class="param">amount: number</span>, <span class="param">to_account: <a href="Server_XAccount.html" class="class-link">Server.XAccount</a></span>, <span class="param">reason: string</span>): <span class="type"><a href="Server_XTransaction.html" class="class-link">Server.XTransaction</a></span></strong>
+<div class="description">Sends the given amount of money to the given account.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">amount</span> (<span class="type">number</span>): </li>
+<li><span class="param">to_account</span> (<span class="type"><a href="Server_XAccount.html" class="class-link">Server.XAccount</a></span>): </li>
+<li><span class="param">reason</span> (<span class="type">string</span>): </li>
+</ul></div>
+<div><strong>Returns:</strong> transaction the created transaction</div>
+</div>
+<div class="method" id="getTransactions">
+<strong>getTransactions(): <span class="type">table&lt;<a href="Server_XTransaction.html" class="class-link">Server.XTransaction</a>&gt;</span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Returns a table of all transactions associated with this account.</div>
+<div><strong>Returns:</strong> transactions all transactions of this account.</div>
+</div>
+<div class="method" id="__tostring">
+<strong>__tostring(): <span class="type">string</span></strong>
+<div class="description">Returns a string representation of the account.</div>
+<div><strong>Returns:</strong> str The string representation of the account.</div>
+</div>
 </div>
 </body></html>

@@ -245,5 +245,59 @@ h3 { color: #7f8c8d; }
 <div><strong>Visibility:</strong> private</div>
 <div class="description">cached objects</div>
 </div>
+<h2>Methods</h2>
+<div class="method" id="new">
+<strong>new(<span class="param">meta: <a href="Server_DBSC_Meta.html" class="class-link">Server.DBSC.Meta</a></span>): <span class="type"><a href="Server_DBSC.html" class="class-link">Server.DBSC</a></span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Creates a new class extending the DBSC class.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">meta</span> (<span class="type"><a href="Server_DBSC_Meta.html" class="class-link">Server.DBSC.Meta</a></span>): the metadata for the class</li>
+</ul></div>
+<div><strong>Returns:</strong> class a new class extending the DBSC class</div>
+</div>
+<div class="method" id="primaryKey">
+<strong>primaryKey(): <span class="type"><a href="Server_DBSC_Meta_Column.html" class="class-link">Server.DBSC.Meta.Column</a>?</span></strong>
+<div class="description">Returns the column that is the primary key of this table.</div>
+<div><strong>Returns:</strong> column the primary key column or nil if not found</div>
+</div>
+<div class="method" id="init">
+<strong>init()</strong>
+<div class="description">Initializes the DBSC subclass.</div>
+</div>
+<div class="method" id="insert">
+<strong>insert(): <span class="type">boolean</span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Inserts the object into the database.</div>
+<div><strong>Returns:</strong> success whether the insert was successful</div>
+</div>
+<div class="method" id="update">
+<strong>update(): <span class="type">boolean</span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Updates the object in the database.</div>
+<div><strong>Returns:</strong> success whether the update was successful</div>
+</div>
+<div class="method" id="get">
+<strong>get(<span class="param">primary_keys: table&lt;string, any&gt;</span>): <span class="type"><a href="Server_DBSC.html" class="class-link">Server.DBSC</a>?</span></strong>
+<div class="description">Loads an object by its primary keys</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">primary_keys</span> (<span class="type">table&lt;string, any&gt;</span>): the values of the primary keys</li>
+</ul></div>
+<div><strong>Returns:</strong> object The loaded object or nil if not found</div>
+</div>
+<div class="method" id="getWhere">
+<strong>getWhere(<span class="param">conditions: table&lt;string, any&gt;</span>): <span class="type">table&lt;<a href="Server_DBSC.html" class="class-link">Server.DBSC</a>&gt;</span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Returns a list of objects matching the given conditions.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">conditions</span> (<span class="type">table&lt;string, any&gt;</span>): the conditions to match</li>
+</ul></div>
+<div><strong>Returns:</strong> instances a list of matching objects</div>
+</div>
+<div class="method" id="delete">
+<strong>delete(): <span class="type">boolean</span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Deletes the object from the database.</div>
+<div><strong>Returns:</strong> success whether the delete was successful</div>
+</div>
 </div>
 </body></html>
