@@ -1,7 +1,7 @@
 ---@class Server.DBSC (Database Synchronized Class)
 ---@field private __meta Server.DBSC.Meta
 ---@field private __cache table<string, Server.DBSC> cached objects
----@field public create fun(self: Server.DBSC, values: table): Server.DBSC creates a new instance of the class extending Server.DBSC
+---@field public create fun(self: Server.DBSC, values: table): Server.DBSC creates a new instance of the class extending DBSC
 Server.DBSC = {}
 Server.DBSC.__index = Server.DBSC
 
@@ -30,6 +30,7 @@ function Server.DBSC:new(meta)
     instance.__cache = {}
     instance.create = function (self, values)
         local obj = setmetatable({}, self)
+        self.__index = self
         for k, v in pairs(values) do
             obj[k] = v
         end
