@@ -1,4 +1,5 @@
-local Core = ENVIRONMENT_GET_VAR(ENVIRONMENT, "Core")
+local Server = ENVIRONMENT_GET_VAR(ENVIRONMENT, "Server") --[[@as Server]]
+local Core = Server.Core
 
 Test.new("Core should exist", function (self)
     return Test.assert(Core ~= nil, "Core should not be nil")

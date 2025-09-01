@@ -3,9 +3,10 @@ local server = SIMULATION_GET_SERVER(sim)
 local resource = RESOURCE_LOAD(sim, "src/main/Content/Script/xgen-core")
 RESOURCE_START(resource)
 table.insert(RESOURCES, resource)
-print(resource, "is", "xgen-core")
 local env = ENVIRONMENT_GET(server, resource)
-local XCharacterSystem = ENVIRONMENT_GET_VAR(env, "Server.XCharacterSystem")
+
+local Server = ENVIRONMENT_GET_VAR(ENVIRONMENT, "Server") --[[@as Server]]
+local XCharacterSystem = Server.XCharacterSystem
 
 Test.new("XCharacterSystem.startCharacterSelection should throw error by default", function (self)
     return Test.assertError(function ()

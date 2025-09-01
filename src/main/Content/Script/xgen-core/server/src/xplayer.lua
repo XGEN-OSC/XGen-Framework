@@ -47,7 +47,7 @@ end
 ---This function will be called when a player joins the server, or
 ---unloads his current character.
 function Server.XPlayer:onJoin()
-    XCharacterSystem.startCharacterSelection(self)
+    Server.XCharacterSystem.startCharacterSelection(self)
 end
 
 ---Sets the character this player is currently playing.
@@ -68,7 +68,7 @@ function Server.XPlayer:loadCharacter(citizenId)
     end
     self.current_character = character
     self.current_character.xPlayer = self
-    XCharacterSystem.onCharacterLoaded(self, character)
+    Server.XCharacterSystem.onCharacterLoaded(self, character)
     return true
 end
 
