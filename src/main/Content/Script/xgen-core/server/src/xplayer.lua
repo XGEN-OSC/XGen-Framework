@@ -1,4 +1,5 @@
 ---@class Server
+---@field XPlayer Server.XPlayer Player management
 Server = Server or {}
 
 ---@class Server.XPlayer : Server.DBSC

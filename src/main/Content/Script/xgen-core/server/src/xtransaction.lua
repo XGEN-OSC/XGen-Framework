@@ -1,4 +1,5 @@
 ---@class Server
+---@field XTransaction Server.XTransaction Transaction management
 Server = Server or {}
 
 ---@class Server.XTransaction : Server.DBSC

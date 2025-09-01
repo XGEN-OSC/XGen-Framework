@@ -1,4 +1,5 @@
 ---@class Server
+---@field Core Server.Core Core server functionalities
 Server = Server or {}
 
 ---@class Server.Core
