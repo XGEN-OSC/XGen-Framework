@@ -1,4 +1,4 @@
-local XAccount = ENVIRONMENT_GET_VAR(ENVIRONMENT, "XAccount") --[[@as XAccount]]
+local XAccount = ENVIRONMENT_GET_VAR(ENVIRONMENT, "Server.XAccount") --[[@as Server.XAccount]]
 
 Test.new("XAccount should exist", function()
     return Test.assert(XAccount ~= nil, "XAccount should exist")

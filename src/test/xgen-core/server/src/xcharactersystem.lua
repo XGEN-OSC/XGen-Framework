@@ -5,7 +5,7 @@ RESOURCE_START(resource)
 table.insert(RESOURCES, resource)
 print(resource, "is", "xgen-core")
 local env = ENVIRONMENT_GET(server, resource)
-local XCharacterSystem = ENVIRONMENT_GET_VAR(env, "XCharacterSystem")
+local XCharacterSystem = ENVIRONMENT_GET_VAR(env, "Server.XCharacterSystem")
 
 Test.new("XCharacterSystem.startCharacterSelection should throw error by default", function (self)
     return Test.assertError(function ()

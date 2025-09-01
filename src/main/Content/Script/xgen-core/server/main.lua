@@ -1,9 +1,9 @@
 local function init()
-    DB.init()
+    Server.DB.init()
 end
 
 init()
 
 Events.Subscribe("xgen:core:get", function (cb)
-    cb(Core)
+    cb(Server.Core)
 end)

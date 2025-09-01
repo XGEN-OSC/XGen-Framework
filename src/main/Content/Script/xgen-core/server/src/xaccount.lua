@@ -1,8 +1,11 @@
----@class XAccount : DBSC a XAccount represents a banking account.
+---@class Server
+Server = Server or {}
+
+---@class Server.XAccount : Server.DBSC a XAccount represents a banking account.
 ---@field bid string the unique identifier of the account
 ---@field balance_major integer the major balance of the account
 ---@field balance_minor integer the minor balance of the account
-XAccount = DBSC:new({
+Server.XAccount = Server.DBSC:new({
     name = "xgen_account",
     columns = {
         { name = "bid", type = "VARCHAR(255)", primary_key = true },
@@ -10,12 +13,12 @@ XAccount = DBSC:new({
         { name = "balance_minor", type = "INT", default = 0, not_null = true }
     }
 })
-XAccount.__index = XAccount
+Server.XAccount.__index = Server.XAccount
 
 ---Creates a new XAccount instance.
 ---@nodiscard
----@return XAccount account The new XAccount instance.
-function XAccount:new()
+---@return Server.XAccount account The new XAccount instance.
+function Server.XAccount:new()
     local account = {}
     setmetatable(account, self)
     account.bid = StringUtils.generate("AA-AAAA-0000")
@@ -28,7 +31,7 @@ end
 ---Returns the current balance of the account as a floating point number.
 ---@nodiscard
 ---@return number balance The current balance of the account.
-function XAccount:getBalanceFloat()
+function Server.XAccount:getBalanceFloat()
     return self.balance_major + (self.balance_minor / 100)
 end
 
@@ -42,7 +45,7 @@ end
 ---@nodiscard
 ---@return integer balance_major The major balance of the account.
 ---@return integer balance_minor The minor balance of the account.
-function XAccount:getBalance()
+function Server.XAccount:getBalance()
     return self.balance_major, self.balance_minor
 end
 
@@ -50,7 +53,7 @@ end
 ---@nodiscard
 ---@param amount number The amount to check against the account balance.
 ---@return boolean has_balance True if the account has at least the given amount of balance, false otherwise.
-function XAccount:hasBalanceFloat(amount)
+function Server.XAccount:hasBalanceFloat(amount)
     return self:getBalanceFloat() >= amount
 end
 
@@ -59,7 +62,7 @@ end
 ---@param major number The major part of the amount to check against the account balance.
 ---@param minor number The minor part of the amount to check against the account balance.
 ---@return boolean has_balance True if the account has at least the given amount of balance, false otherwise.
-function XAccount:hasBalance(major, minor)
+function Server.XAccount:hasBalance(major, minor)
     major = math.floor(major)
     minor = math.floor(minor)
 
@@ -75,7 +78,7 @@ end
 ---Adds the given amount to the account balance.
 ---@param major number The major part of the amount to add to the account balance.
 ---@param minor number The minor part of the amount to add to the account balance.
-function XAccount:addBalance(major, minor)
+function Server.XAccount:addBalance(major, minor)
     if major < 0 or minor < 0 then
         error("Cannot add a negative amount to the account balance.")
     end
@@ -105,7 +108,7 @@ end
 ---When using larger amounts, this may lead to floating point precision issues.
 ---If you want to avoid this, use `XAccount:addBalance(major, minor)` instead.
 ---@param amount number The amount to add to the account balance.
-function XAccount:addBalanceFloat(amount)
+function Server.XAccount:addBalanceFloat(amount)
     if amount < 0 then
         error("Cannot add a negative amount to the account balance.")
     end
@@ -118,7 +121,7 @@ end
 ---Removes the given amount from the account balance.
 ---@param major number The major part of the amount to remove from the account balance.
 ---@param minor number The minor part of the amount to remove from the account balance.
-function XAccount:removeBalance(major, minor)
+function Server.XAccount:removeBalance(major, minor)
     if major < 0 or minor < 0 then
         error("Cannot remove a negative amount from the account balance.")
     end
@@ -149,7 +152,7 @@ end
 
 ---Removes a floating point amount from the account balance.
 ---@param amount number The amount to remove from the account balance.
-function XAccount:removeBalanceFloat(amount)
+function Server.XAccount:removeBalanceFloat(amount)
     if amount < 0 then
         error("Cannot remove a negative amount from the account balance.")
     end
@@ -163,7 +166,7 @@ end
 ---currency formatting defined in `Config.Currency.format`.
 ---@nodiscard
 ---@return string formatted_balance The formatted balance of the account.
-function XAccount:getFormattedBalance()
+function Server.XAccount:getFormattedBalance()
     local thousandsSeparator = Config.Currency.format.thousandsSeparator
     local decimalSeparator = Config.Currency.format.decimalSeparator
 
@@ -181,10 +184,10 @@ end
 ---Sends the given amount of money to the given account.
 ---@param major number
 ---@param minor number
----@param to_account XAccount
+---@param to_account Server.XAccount
 ---@param reason string
----@return XTransaction transaction the created transaction
-function XAccount:send(major, minor, to_account, reason)
+---@return Server.XTransaction transaction the created transaction
+function Server.XAccount:send(major, minor, to_account, reason)
     if not self:hasBalance(major, minor) then
         error("Insufficient funds to send money.")
     end
@@ -192,7 +195,7 @@ function XAccount:send(major, minor, to_account, reason)
     self:removeBalance(major, minor)
     to_account:addBalance(major, minor)
 
-    local transaction = XTransaction:new(self.bid, to_account.bid, major, minor, reason or "Transfer")
+    local transaction = Server.XTransaction:new(self.bid, to_account.bid, major, minor, reason or "Transfer")
     if not transaction then
         error("Failed to create transaction.")
     end
@@ -203,10 +206,10 @@ end
 
 ---Sends the given amount of money to the given account.
 ---@param amount number
----@param to_account XAccount
+---@param to_account Server.XAccount
 ---@param reason string
----@return XTransaction transaction the created transaction
-function XAccount:sendFloat(amount, to_account, reason)
+---@return Server.XTransaction transaction the created transaction
+function Server.XAccount:sendFloat(amount, to_account, reason)
     local major = math.floor(amount)
     local minor = math.floor((amount - major) * 100)
 
@@ -215,10 +218,10 @@ end
 
 ---Returns a table of all transactions associated with this account.
 ---@nodiscard
----@return table<XTransaction> transactions all transactions of this account.
-function XAccount:getTransactions()
-    local sent = XTransaction:getWhere({from_bid = self.bid}) --[[@as table<XTransaction>]]
-    local received = XTransaction:getWhere({to_bid = self.bid}) --[[@as table<XTransaction>]]
+---@return table<Server.XTransaction> transactions all transactions of this account.
+function Server.XAccount:getTransactions()
+    local sent = Server.XTransaction:getWhere({from_bid = self.bid}) --[[@as table<Server.XTransaction>]]
+    local received = Server.XTransaction:getWhere({to_bid = self.bid}) --[[@as table<Server.XTransaction>]]
     local transactions = {}
 
     for _, tx in ipairs(sent) do
@@ -233,6 +236,6 @@ end
 
 ---Returns a string representation of the account.
 ---@return string str The string representation of the account.
-function XAccount:__tostring()
+function Server.XAccount:__tostring()
     return string.format("XAccount(%s, %d.%02d)", self.bid, self.balance_major, self.balance_minor)
 end

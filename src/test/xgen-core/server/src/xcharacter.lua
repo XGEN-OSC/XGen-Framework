@@ -1,5 +1,5 @@
-local XCharacter = ENVIRONMENT_GET_VAR(ENVIRONMENT, "XCharacter") --[[@as XCharacter]]
-local XPlayer = ENVIRONMENT_GET_VAR(ENVIRONMENT, "XPlayer")
+local XCharacter = ENVIRONMENT_GET_VAR(ENVIRONMENT, "Server.XCharacter") --[[@as Server.XCharacter]]
+local XPlayer = ENVIRONMENT_GET_VAR(ENVIRONMENT, "Server.XPlayer") --[[@as Server.XPlayer]]
 
 Test.new("XCharacter should exist", function (self)
     return Test.assert(XCharacter ~= nil, "XCharacter should not be nil")
