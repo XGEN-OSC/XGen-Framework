@@ -15,7 +15,7 @@ end)
 
 Test.new("Core.inject should inject an object into a module", function (self)
     Core.inject("TestModule", { testFunction = function() return "Hello, World!" end })
-    local TestModule = ENVIRONMENT_GET_VAR(ENVIRONMENT, "TestModule")
+    local TestModule = Server.TestModule --[[@as table]]
 
     return Test.assert(TestModule ~= nil, "TestModule should not be nil") and
            Test.assert(TestModule.testFunction ~= nil, "TestModule.testFunction should not be nil") and

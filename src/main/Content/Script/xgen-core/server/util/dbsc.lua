@@ -29,7 +29,6 @@ function Server.DBSC:new(meta)
     instance.__cache = {}
     instance.new = function (self, values)
         local obj = setmetatable({}, self)
-        self.__index = self
         for k, v in pairs(values) do
             obj[k] = v
         end
