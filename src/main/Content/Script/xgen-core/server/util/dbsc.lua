@@ -57,8 +57,8 @@ function Server.DBSC:init()
     local sql = "CREATE TABLE IF NOT EXISTS " .. self.__meta.name .. " ("
     for i, key in ipairs(self.__meta.columns) do
 
-        if _G[key.type] then
-            local dbsc_class = _G[key.type]
+        if Server[key.type] then
+            local dbsc_class = Server[key.type]
             local class_table = dbsc_class.__meta.name
             local reference = dbsc_class:primaryKey()
             key.type = reference.type

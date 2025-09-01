@@ -35,7 +35,9 @@ Test.new("DBSC.insert should insert data into the database", function (self)
     })
 
     MyClass:init()
-    
+
+    local instance = MyClass:new { id = 1, name = "John Doe", age = 30 }
+
     return Test.assert(MyClass:get({ id = instance.id }) ~= nil, "DBSC.get should retrieve the inserted data")
 end)
 
