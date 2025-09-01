@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class XPlayer</title>
+    <title>Class Server.XCharacter</title>
     <style>body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
@@ -233,62 +233,46 @@ h3 { color: #7f8c8d; }
     <a href="globals.html">🌐 Global Elements</a>
 </div>
 <div class="class-header">
-<h1>Class XPlayer</h1>
+<h1>Class Server.XCharacter</h1>
 </div>
 <div class="inheritance">
-Extends: <a href="DBSC.html" class="class-link">DBSC</a>
+Extends: <a href="Server.DBSC.html" class="class-link">Server.DBSC</a>
 </div>
 <h2>Fields</h2>
 <div class="field">
-<strong>identifier</strong>: <span class="type">string</span>
+<strong>citizen_id</strong>: <span class="type">string</span>
 <div><strong>Visibility:</strong> public</div>
-<div class="description">the identifier of the player</div>
+<div class="description">The unique identifier for the character.</div>
 </div>
 <div class="field">
-<strong>joined</strong>: <span class="type">string</span>
+<strong>owner</strong>: <span class="type"><a href="Server_XPlayer.html" class="class-link">Server.XPlayer</a></span>
 <div><strong>Visibility:</strong> public</div>
-<div class="description">the timestamp when the player joined</div>
+<div class="description">The player who owns this character.</div>
 </div>
 <div class="field">
-<strong>last_seen</strong>: <span class="type">string</span>
+<strong>firstname</strong>: <span class="type">string</span>
 <div><strong>Visibility:</strong> public</div>
-<div class="description">the timestamp when the player was last seen</div>
+<div class="description">The first name of the character.</div>
 </div>
 <div class="field">
-<strong>current_character</strong>: <span class="type"><a href="XCharacter.html" class="class-link">XCharacter</a>?</span>
+<strong>lastname</strong>: <span class="type">string</span>
 <div><strong>Visibility:</strong> public</div>
-<div class="description">the character this player is currently playing</div>
+<div class="description">The last name of the character.</div>
 </div>
 <div class="field">
-<strong>hPlayer</strong>: <span class="type">HPlayer?</span>
+<strong>date_of_birth</strong>: <span class="type">string</span>
 <div><strong>Visibility:</strong> public</div>
-<div class="description">the connected HELIX player</div>
+<div class="description">The date of birth of the character in YYYY-MM-DD format.</div>
 </div>
-<h2>Methods</h2>
-<div class="method" id="new">
-<strong>new(<span class="param">identifier: string</span>): <span class="type"><a href="XPlayer.html" class="class-link">XPlayer</a></span></strong>
-<div class="description">Creates a new player instance.</div>
-<div class="param-list"><strong>Parameters:</strong><ul>
-<li><span class="param">identifier</span> (<span class="type">string</span>): The identifier of the player.</li>
-</ul></div>
-<div><strong>Returns:</strong> xPlayer The new player instance.</div>
+<div class="field">
+<strong>account</strong>: <span class="type"><a href="Server_XAccount.html" class="class-link">Server.XAccount</a></span>
+<div><strong>Visibility:</strong> public</div>
+<div class="description">the players primary banking account</div>
 </div>
-<div class="method" id="connected">
-<strong>connected()</strong>
-<div class="description">This function will be called when a player connected to the server. It will set the last seen timestamp to the current time and call the onJoin function.</div>
-</div>
-<div class="method" id="onJoin">
-<strong>onJoin()</strong>
-<div class="description">This function will be called when a player joins the server, or unloads his current character.</div>
-</div>
-<div class="method" id="loadCharacter">
-<strong>loadCharacter(<span class="param">citizenId: string</span>): <span class="type">boolean</span></strong>
-<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
-<div class="description">Sets the character this player is currently playing.</div>
-<div class="param-list"><strong>Parameters:</strong><ul>
-<li><span class="param">citizenId</span> (<span class="type">string</span>): the citizen ID of the character to load</li>
-</ul></div>
-<div><strong>Returns:</strong> success Whether the character was successfully loaded.</div>
+<div class="field">
+<strong>xPlayer</strong>: <span class="type"><a href="Server_XPlayer.html" class="class-link">Server.XPlayer</a></span>
+<div><strong>Visibility:</strong> public</div>
+<div class="description">the player this character is bound to</div>
 </div>
 </div>
 </body></html>
