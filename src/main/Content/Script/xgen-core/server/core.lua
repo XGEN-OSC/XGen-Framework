@@ -31,7 +31,7 @@ end
 ---@param obj any
 function Server.Core.inject(name, obj)
     local path = StringUtils.split(name, ".")
-    local module = _G
+    local module = Server
 
     for i = 1, #path - 1 do
         local part = path[i]
