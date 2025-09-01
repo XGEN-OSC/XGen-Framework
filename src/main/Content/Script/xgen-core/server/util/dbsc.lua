@@ -27,11 +27,11 @@ function Server.DBSC:new(meta)
     local instance = setmetatable({}, self)
     instance.__meta = meta
     instance.__cache = {}
+    ---@param self Server.DBSC
+    ---@param values table
+    ---@return Server.DBSC
     instance.new = function (self, values)
-        local obj = setmetatable({}, self)
-        for k, v in pairs(values) do
-            obj[k] = v
-        end
+        local obj = setmetatable(values, instance)
         if not obj:insert() then
             error("Failed to insert new object into the database")
         end
