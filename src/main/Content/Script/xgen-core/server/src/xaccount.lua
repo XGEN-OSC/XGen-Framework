@@ -1,4 +1,5 @@
 ---@class Server
+---@field XAccount Server.XAccount Bank account management
 Server = Server or {}
 
 ---@class Server.XAccount : Server.DBSC a XAccount represents a banking account.

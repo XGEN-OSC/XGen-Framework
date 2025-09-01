@@ -1,4 +1,5 @@
 ---@class Server
+---@field DB Server.DB Database related functions
 Server = Server or {}
 
 ---@class Server.DB

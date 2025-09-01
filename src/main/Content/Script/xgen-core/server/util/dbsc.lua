@@ -1,4 +1,5 @@
 ---@class Server
+---@field DBSC Server.DBSC Database Synchronized Class
 Server = Server or {}
 
 ---@class Server.DBSC (Database Synchronized Class)

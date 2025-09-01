@@ -1,4 +1,5 @@
 ---@class Server
+---@field XCharacter Server.XCharacter Character management
 Server = Server or {}
 
 ---@class Server.XCharacter : Server.DBSC A single character in the game, 
