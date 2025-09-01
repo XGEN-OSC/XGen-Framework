@@ -30,15 +30,6 @@ function Server.DBSC:new(meta)
     local instance = setmetatable({}, self)
     instance.__meta = meta
     instance.__cache = {}
-
-    function instance:new(values)
-        local obj = setmetatable(values, self) --[[@as Server.DBSC]]
-                if not obj:insert() then
-            error("Failed to insert new object into the database")
-        end
-        return self:get({ [self:primaryKey().name] = obj[self:primaryKey().name] }) --[[@as Server.DBSC]]
-    end
-
     return instance
 end
 
