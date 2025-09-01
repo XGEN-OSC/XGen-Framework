@@ -7,8 +7,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 jobs:
   build-docs:
@@ -29,19 +27,14 @@ jobs:
           wget https://github.com/java3east/lua-doc-generator/releases/download/LATEST/luadocgen.jar
           java -jar luadocgen.jar $GITHUB_WORKSPACE/
 
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs
-
-  deploy:
-    needs: build-docs
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Deploy to gh-pages branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin gh-pages || true
+          git checkout gh-pages || git checkout --orphan gh-pages
+          rm -rf *
+          cp -r docs/* .
+          git add .
+          git commit -m "Update docs from ${GITHUB_SHA}" || echo "No changes to commit"
+          git push origin gh-pages
