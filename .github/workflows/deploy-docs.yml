@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  build-docs:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,15 +26,24 @@ jobs:
         run: |
           wget https://github.com/java3east/lua-doc-generator/releases/download/LATEST/luadocgen.jar
           java -jar luadocgen.jar $GITHUB_WORKSPACE/
+          # Move generated docs outside so they survive branch switch
+          mv docs ../docs-build
 
       - name: Deploy to gh-pages branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Fetch gh-pages or create new orphan branch
           git fetch origin gh-pages || true
           git checkout gh-pages || git checkout --orphan gh-pages
+
+          # Clean everything
           rm -rf *
-          cp -r docs/* .
+
+          # Copy generated docs into root
+          cp -r ../docs-build/* .
+
           git add .
           git commit -m "Update docs from ${GITHUB_SHA}" || echo "No changes to commit"
           git push origin gh-pages
