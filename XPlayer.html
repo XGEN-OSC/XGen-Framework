@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lua Documentation - Overview</title>
+    <title>Class XPlayer</title>
     <style>body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
@@ -232,48 +232,63 @@ h3 { color: #7f8c8d; }
     <a href="index.html">🏠 Overview</a>
     <a href="globals.html">🌐 Global Elements</a>
 </div>
-<h1>Lua Documentation - Overview</h1>
-<div class="overview-grid">
-<div class="overview-card">
-<h3>Classes</h3>
-<ul class="class-hierarchy">
-<li class="standalone-class"><a href="Database.html">Database</a></li>
-<li class="standalone-class"><a href="Controller.html">Controller</a></li>
-<li class="standalone-class"><a href="HPlayer.html">HPlayer</a></li>
-<li class="standalone-class"><a href="Events.html">Events</a></li>
-<li class="standalone-class"><a href="Test.html">Test</a></li>
-<li>
-<div class="parent-class"><a href="Config.html">Config</a></div>
-<ul class="subclass-list">
-<li><a href="Config_Currency.html">Config.Currency</a></li>
-<li><a href="Config_Currency_format.html">Config.Currency.format</a></li>
-<li><a href="Config_General.html">Config.General</a></li>
-</ul>
-</li>
-<li class="standalone-class"><a href="Core.html">Core</a></li>
-<li class="standalone-class"><a href="XCharacterSystem.html">XCharacterSystem</a></li>
-<li class="standalone-class"><a href="DB.html">DB</a></li>
-<li class="standalone-class"><a href="XAccount.html">XAccount</a></li>
-<li class="standalone-class"><a href="XCharacter.html">XCharacter</a></li>
-<li class="standalone-class"><a href="XPlayer.html">XPlayer</a></li>
-<li class="standalone-class"><a href="XTransaction.html">XTransaction</a></li>
-<li>
-<div class="parent-class"><a href="DBSC.html">DBSC</a></div>
-<ul class="subclass-list">
-<li><a href="DBSC_Meta.html">DBSC.Meta</a></li>
-<li><a href="DBSC_Meta_Column.html">DBSC.Meta.Column</a></li>
-</ul>
-</li>
-<li class="standalone-class"><a href="StringUtils.html">StringUtils</a></li>
-<li class="standalone-class"><a href="Translator.html">Translator</a></li>
-</ul>
+<div class="class-header">
+<h1>Class XPlayer</h1>
 </div>
-<div class="overview-card">
-<h3>Global Elements</h3>
-<ul class="overview-list">
-<li><a href="globals.html">Global Functions and Variables</a></li>
-</ul>
+<div class="inheritance">
+Extends: <a href="DBSC.html" class="class-link">DBSC</a>
 </div>
+<h2>Fields</h2>
+<div class="field">
+<strong>identifier</strong>: <span class="type">string</span>
+<div><strong>Visibility:</strong> public</div>
+<div class="description">the identifier of the player</div>
+</div>
+<div class="field">
+<strong>joined</strong>: <span class="type">string</span>
+<div><strong>Visibility:</strong> public</div>
+<div class="description">the timestamp when the player joined</div>
+</div>
+<div class="field">
+<strong>last_seen</strong>: <span class="type">string</span>
+<div><strong>Visibility:</strong> public</div>
+<div class="description">the timestamp when the player was last seen</div>
+</div>
+<div class="field">
+<strong>current_character</strong>: <span class="type"><a href="XCharacter.html" class="class-link">XCharacter</a>?</span>
+<div><strong>Visibility:</strong> public</div>
+<div class="description">the character this player is currently playing</div>
+</div>
+<div class="field">
+<strong>hPlayer</strong>: <span class="type"><a href="HPlayer.html" class="class-link">HPlayer</a>?</span>
+<div><strong>Visibility:</strong> public</div>
+<div class="description">the connected HELIX player</div>
+</div>
+<h2>Methods</h2>
+<div class="method" id="new">
+<strong>new(<span class="param">identifier: string</span>): <span class="type"><a href="XPlayer.html" class="class-link">XPlayer</a></span></strong>
+<div class="description">Creates a new player instance.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">identifier</span> (<span class="type">string</span>): The identifier of the player.</li>
+</ul></div>
+<div><strong>Returns:</strong> xPlayer The new player instance.</div>
+</div>
+<div class="method" id="connected">
+<strong>connected()</strong>
+<div class="description">This function will be called when a player connected to the server. It will set the last seen timestamp to the current time and call the onJoin function.</div>
+</div>
+<div class="method" id="onJoin">
+<strong>onJoin()</strong>
+<div class="description">This function will be called when a player joins the server, or unloads his current character.</div>
+</div>
+<div class="method" id="loadCharacter">
+<strong>loadCharacter(<span class="param">citizenId: string</span>): <span class="type">boolean</span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Sets the character this player is currently playing.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">citizenId</span> (<span class="type">string</span>): the citizen ID of the character to load</li>
+</ul></div>
+<div><strong>Returns:</strong> success Whether the character was successfully loaded.</div>
 </div>
 </div>
 </body></html>

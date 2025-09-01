@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lua Documentation - Overview</title>
+    <title>Class XCharacterSystem</title>
     <style>body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
@@ -232,48 +232,34 @@ h3 { color: #7f8c8d; }
     <a href="index.html">🏠 Overview</a>
     <a href="globals.html">🌐 Global Elements</a>
 </div>
-<h1>Lua Documentation - Overview</h1>
-<div class="overview-grid">
-<div class="overview-card">
-<h3>Classes</h3>
-<ul class="class-hierarchy">
-<li class="standalone-class"><a href="Database.html">Database</a></li>
-<li class="standalone-class"><a href="Controller.html">Controller</a></li>
-<li class="standalone-class"><a href="HPlayer.html">HPlayer</a></li>
-<li class="standalone-class"><a href="Events.html">Events</a></li>
-<li class="standalone-class"><a href="Test.html">Test</a></li>
-<li>
-<div class="parent-class"><a href="Config.html">Config</a></div>
-<ul class="subclass-list">
-<li><a href="Config_Currency.html">Config.Currency</a></li>
-<li><a href="Config_Currency_format.html">Config.Currency.format</a></li>
-<li><a href="Config_General.html">Config.General</a></li>
-</ul>
-</li>
-<li class="standalone-class"><a href="Core.html">Core</a></li>
-<li class="standalone-class"><a href="XCharacterSystem.html">XCharacterSystem</a></li>
-<li class="standalone-class"><a href="DB.html">DB</a></li>
-<li class="standalone-class"><a href="XAccount.html">XAccount</a></li>
-<li class="standalone-class"><a href="XCharacter.html">XCharacter</a></li>
-<li class="standalone-class"><a href="XPlayer.html">XPlayer</a></li>
-<li class="standalone-class"><a href="XTransaction.html">XTransaction</a></li>
-<li>
-<div class="parent-class"><a href="DBSC.html">DBSC</a></div>
-<ul class="subclass-list">
-<li><a href="DBSC_Meta.html">DBSC.Meta</a></li>
-<li><a href="DBSC_Meta_Column.html">DBSC.Meta.Column</a></li>
-</ul>
-</li>
-<li class="standalone-class"><a href="StringUtils.html">StringUtils</a></li>
-<li class="standalone-class"><a href="Translator.html">Translator</a></li>
-</ul>
+<div class="class-header">
+<h1>Class XCharacterSystem</h1>
 </div>
-<div class="overview-card">
-<h3>Global Elements</h3>
-<ul class="overview-list">
-<li><a href="globals.html">Global Functions and Variables</a></li>
-</ul>
+<h2>Methods</h2>
+<div class="method static" id="startCharacterSelection">
+<strong>startCharacterSelection(<span class="param">xPlayer: <a href="XPlayer.html" class="class-link">XPlayer</a></span>)</strong>
+<div><strong>Modifier:</strong> static</div>
+<div class="description">Starts the character selection process for the given player. This is where you should e.g. fade out the screen, set the players coords, and display the character selection UI.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">xPlayer</span> (<span class="type"><a href="XPlayer.html" class="class-link">XPlayer</a></span>): The player for whom to start character selection.</li>
+</ul></div>
 </div>
+<div class="method static" id="startCreateNewCharacter">
+<strong>startCreateNewCharacter(<span class="param">xPlayer: <a href="XPlayer.html" class="class-link">XPlayer</a></span>)</strong>
+<div><strong>Modifier:</strong> static</div>
+<div class="description">This function should start the creation of a new character. This is where you should e.g. fade out the screen, set the players coords, and display the character creation UI.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">xPlayer</span> (<span class="type"><a href="XPlayer.html" class="class-link">XPlayer</a></span>): The player for whom to start character creation.</li>
+</ul></div>
+</div>
+<div class="method static" id="onCharacterLoaded">
+<strong>onCharacterLoaded(<span class="param">xPlayer: <a href="XPlayer.html" class="class-link">XPlayer</a></span>, <span class="param">xCharacter: <a href="XCharacter.html" class="class-link">XCharacter</a></span>)</strong>
+<div><strong>Modifier:</strong> static</div>
+<div class="description">This function should usually be overwritten by the installed character spawn system (external resource).</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">xPlayer</span> (<span class="type"><a href="XPlayer.html" class="class-link">XPlayer</a></span>): The player for whom the character was loaded.</li>
+<li><span class="param">xCharacter</span> (<span class="type"><a href="XCharacter.html" class="class-link">XCharacter</a></span>): The character that was loaded.</li>
+</ul></div>
 </div>
 </div>
 </body></html>

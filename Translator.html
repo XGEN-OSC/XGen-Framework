@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lua Documentation - Overview</title>
+    <title>Class Translator</title>
     <style>body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
@@ -232,46 +232,39 @@ h3 { color: #7f8c8d; }
     <a href="index.html">🏠 Overview</a>
     <a href="globals.html">🌐 Global Elements</a>
 </div>
-<h1>Lua Documentation - Overview</h1>
-<div class="overview-grid">
-<div class="overview-card">
-<h3>Classes</h3>
-<ul class="class-hierarchy">
-<li class="standalone-class"><a href="Database.html">Database</a></li>
-<li class="standalone-class"><a href="Controller.html">Controller</a></li>
-<li class="standalone-class"><a href="HPlayer.html">HPlayer</a></li>
-<li class="standalone-class"><a href="Events.html">Events</a></li>
-<li class="standalone-class"><a href="Test.html">Test</a></li>
-<li>
-<div class="parent-class"><a href="Config.html">Config</a></div>
-<ul class="subclass-list">
-<li><a href="Config_Currency.html">Config.Currency</a></li>
-<li><a href="Config_Currency_format.html">Config.Currency.format</a></li>
-<li><a href="Config_General.html">Config.General</a></li>
-</ul>
-</li>
-<li class="standalone-class"><a href="Core.html">Core</a></li>
-<li class="standalone-class"><a href="XCharacterSystem.html">XCharacterSystem</a></li>
-<li class="standalone-class"><a href="DB.html">DB</a></li>
-<li class="standalone-class"><a href="XAccount.html">XAccount</a></li>
-<li class="standalone-class"><a href="XCharacter.html">XCharacter</a></li>
-<li class="standalone-class"><a href="XPlayer.html">XPlayer</a></li>
-<li class="standalone-class"><a href="XTransaction.html">XTransaction</a></li>
-<li>
-<div class="parent-class"><a href="DBSC.html">DBSC</a></div>
-<ul class="subclass-list">
-<li><a href="DBSC_Meta.html">DBSC.Meta</a></li>
-<li><a href="DBSC_Meta_Column.html">DBSC.Meta.Column</a></li>
-</ul>
-</li>
-<li class="standalone-class"><a href="StringUtils.html">StringUtils</a></li>
-<li class="standalone-class"><a href="Translator.html">Translator</a></li>
+<div class="class-header">
+<h1>Class Translator</h1>
+</div>
+<h2>Methods</h2>
+<div class="method static" id="setTranslations">
+<strong>setTranslations(<span class="param">language: string</span>, <span class="param">locale: table&lt;string, string&gt;</span>)</strong>
+<div><strong>Modifier:</strong> static</div>
+<div class="description">Sets the translations for the current language. The values are allowed to use placeholders in the form of `$lua_expression$` for Lua expressions and `{key}` for values from a table. for the current language.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">language</span> (<span class="type">string</span>): the name of the language to set the translations for</li>
+<li><span class="param">locale</span> (<span class="type">table&lt;string, string&gt;</span>): A table containing the translations</li>
+</ul></div>
+<div class="see-also">
+<h4>See Also</h4>
+<ul>
+<li>StringUtils.format</li>
 </ul>
 </div>
-<div class="overview-card">
-<h3>Global Elements</h3>
-<ul class="overview-list">
-<li><a href="globals.html">Global Functions and Variables</a></li>
+</div>
+<div class="method static" id="translate">
+<strong>translate(<span class="param">key: string</span>, <span class="param">values: table&lt;string, any&gt;</span>): <span class="type">string</span></strong>
+<div><strong>Modifier:</strong> static</div>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Translates a key to the current language. The key is used to look up the translation in the current language, if the key dosn't exist, the key itself is returned. in the translation. Placeholders can be in the form of `$lua_expression$` for Lua expressions and `{key}` for values from the table.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">key</span> (<span class="type">string</span>): the key of the translation to translate.</li>
+<li><span class="param">values</span> (<span class="type">table&lt;string, any&gt;</span>): replacement values to use for the placeholders</li>
+</ul></div>
+<div><strong>Returns:</strong> translated the translated and formatted string</div>
+<div class="see-also">
+<h4>See Also</h4>
+<ul>
+<li>StringUtils.format</li>
 </ul>
 </div>
 </div>

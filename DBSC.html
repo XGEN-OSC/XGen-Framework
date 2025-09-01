@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lua Documentation - Overview</title>
+    <title>Class DBSC</title>
     <style>body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
@@ -232,48 +232,72 @@ h3 { color: #7f8c8d; }
     <a href="index.html">🏠 Overview</a>
     <a href="globals.html">🌐 Global Elements</a>
 </div>
-<h1>Lua Documentation - Overview</h1>
-<div class="overview-grid">
-<div class="overview-card">
-<h3>Classes</h3>
-<ul class="class-hierarchy">
-<li class="standalone-class"><a href="Database.html">Database</a></li>
-<li class="standalone-class"><a href="Controller.html">Controller</a></li>
-<li class="standalone-class"><a href="HPlayer.html">HPlayer</a></li>
-<li class="standalone-class"><a href="Events.html">Events</a></li>
-<li class="standalone-class"><a href="Test.html">Test</a></li>
-<li>
-<div class="parent-class"><a href="Config.html">Config</a></div>
-<ul class="subclass-list">
-<li><a href="Config_Currency.html">Config.Currency</a></li>
-<li><a href="Config_Currency_format.html">Config.Currency.format</a></li>
-<li><a href="Config_General.html">Config.General</a></li>
-</ul>
-</li>
-<li class="standalone-class"><a href="Core.html">Core</a></li>
-<li class="standalone-class"><a href="XCharacterSystem.html">XCharacterSystem</a></li>
-<li class="standalone-class"><a href="DB.html">DB</a></li>
-<li class="standalone-class"><a href="XAccount.html">XAccount</a></li>
-<li class="standalone-class"><a href="XCharacter.html">XCharacter</a></li>
-<li class="standalone-class"><a href="XPlayer.html">XPlayer</a></li>
-<li class="standalone-class"><a href="XTransaction.html">XTransaction</a></li>
-<li>
-<div class="parent-class"><a href="DBSC.html">DBSC</a></div>
-<ul class="subclass-list">
-<li><a href="DBSC_Meta.html">DBSC.Meta</a></li>
-<li><a href="DBSC_Meta_Column.html">DBSC.Meta.Column</a></li>
-</ul>
-</li>
-<li class="standalone-class"><a href="StringUtils.html">StringUtils</a></li>
-<li class="standalone-class"><a href="Translator.html">Translator</a></li>
-</ul>
+<div class="class-header">
+<h1>Class DBSC</h1>
 </div>
-<div class="overview-card">
-<h3>Global Elements</h3>
-<ul class="overview-list">
-<li><a href="globals.html">Global Functions and Variables</a></li>
-</ul>
+<h2>Fields</h2>
+<div class="field private">
+<strong>__meta</strong>: <span class="type"><a href="DBSC_Meta.html" class="class-link">DBSC.Meta</a></span>
+<div><strong>Visibility:</strong> private</div>
 </div>
+<div class="field private">
+<strong>__cache</strong>: <span class="type">table&lt;string, <a href="DBSC.html" class="class-link">DBSC</a>&gt;</span>
+<div><strong>Visibility:</strong> private</div>
+<div class="description">cached objects</div>
+</div>
+<h2>Methods</h2>
+<div class="method" id="new">
+<strong>new(<span class="param">meta: <a href="DBSC_Meta.html" class="class-link">DBSC.Meta</a></span>): <span class="type"><a href="DBSC.html" class="class-link">DBSC</a></span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Creates a new class extending the DBSC class.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">meta</span> (<span class="type"><a href="DBSC_Meta.html" class="class-link">DBSC.Meta</a></span>): the metadata for the class</li>
+</ul></div>
+<div><strong>Returns:</strong> class a new class extending the DBSC class</div>
+</div>
+<div class="method" id="primaryKey">
+<strong>primaryKey(): <span class="type"><a href="DBSC_Meta_Column.html" class="class-link">DBSC.Meta.Column</a>?</span></strong>
+<div class="description">Returns the column that is the primary key of this table.</div>
+<div><strong>Returns:</strong> column the primary key column or nil if not found</div>
+</div>
+<div class="method" id="init">
+<strong>init()</strong>
+<div class="description">Initializes the DBSC subclass.</div>
+</div>
+<div class="method" id="insert">
+<strong>insert(): <span class="type">boolean</span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Inserts the object into the database.</div>
+<div><strong>Returns:</strong> success whether the insert was successful</div>
+</div>
+<div class="method" id="update">
+<strong>update(): <span class="type">boolean</span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Updates the object in the database.</div>
+<div><strong>Returns:</strong> success whether the update was successful</div>
+</div>
+<div class="method" id="get">
+<strong>get(<span class="param">primary_keys: table&lt;string, any&gt;</span>): <span class="type"><a href="DBSC.html" class="class-link">DBSC</a>?</span></strong>
+<div class="description">Loads an object by its primary keys</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">primary_keys</span> (<span class="type">table&lt;string, any&gt;</span>): the values of the primary keys</li>
+</ul></div>
+<div><strong>Returns:</strong> object The loaded object or nil if not found</div>
+</div>
+<div class="method" id="getWhere">
+<strong>getWhere(<span class="param">conditions: table&lt;string, any&gt;</span>): <span class="type">table&lt;<a href="DBSC.html" class="class-link">DBSC</a>&gt;</span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Returns a list of objects matching the given conditions.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">conditions</span> (<span class="type">table&lt;string, any&gt;</span>): the conditions to match</li>
+</ul></div>
+<div><strong>Returns:</strong> instances a list of matching objects</div>
+</div>
+<div class="method" id="delete">
+<strong>delete(): <span class="type">boolean</span></strong>
+<div><strong>Note:</strong> @nodiscard - Return value should not be ignored</div>
+<div class="description">Deletes the object from the database.</div>
+<div><strong>Returns:</strong> success whether the delete was successful</div>
 </div>
 </div>
 </body></html>
