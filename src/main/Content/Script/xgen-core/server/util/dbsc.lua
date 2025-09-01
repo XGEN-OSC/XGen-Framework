@@ -28,6 +28,7 @@ Server.DBSC.__index = Server.DBSC
 ---@return Server.DBSC class a new class extending the DBSC class
 function Server.DBSC:new(meta)
     local instance = setmetatable({}, self)
+    self.__index = self
     instance.__meta = meta
     instance.__cache = {}
     function instance:new(values)
