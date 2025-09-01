@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-field, need-check-nil, discard-returns
 local Server = ENVIRONMENT_GET_VAR(ENVIRONMENT, "Server") --[[@as Server]]
 
 local DBSC = Server.DBSC
@@ -24,6 +25,7 @@ end)
 
 Test.new("DBSC.insert should insert data into the database", function (self)
     ---@class MyClass : Server.DBSC
+    ---@field id integer
     local MyClass = DBSC:new({
         name = "my_class",
         columns = {
@@ -35,8 +37,8 @@ Test.new("DBSC.insert should insert data into the database", function (self)
 
     MyClass:init()
 
-    local instance = MyClass:new { id = 1, name = "John Doe", age = 30 }
-    return Test.assert(MyClass:get({ id = instance.id }), "DBSC.get should retrieve the inserted data")
+    local instance = MyClass:create({ id = 1, name = "John Doe", age = 30 }) --[[@as MyClass]]
+    return Test.assert(MyClass:get({ id = instance.id }) ~= nil, "DBSC.get should retrieve the inserted data")
 end)
 
 Test.new("DBSC(instance):new should throw error when insertation failed", function (self)
@@ -51,13 +53,16 @@ Test.new("DBSC(instance):new should throw error when insertation failed", functi
 
     MyClass:init()
 
-    MyClass:new { id = 1, name = "John Doe", age = 30 }
+    MyClass:create({ id = 1, name = "John Doe", age = 30 })
     return Test.assertError(function()
-        MyClass:new { id = 1, name = "Jane Doe", age = 25 }
+        MyClass:create({ id = 1, name = "Jane Doe", age = 25 })
     end, "DBSC should throw an error when trying to insert a duplicate primary key")
 end)
 
 Test.new("DBSC:insert should work correctly when using default values", function (self)
+    ---@class MyClass : Server.DBSC
+    ---@field name string
+    ---@field age integer
     local MyClass = DBSC:new({
         name = "my_class3",
         columns = {
@@ -69,12 +74,13 @@ Test.new("DBSC:insert should work correctly when using default values", function
 
     MyClass:init()
 
-    local instance = MyClass:new { id = 1 }
+    local instance = MyClass:create({ id = 1 }) --[[@as MyClass]]
     return Test.assertEqual(instance.name, "Unknown", "DBSC:insert should use default values when not provided")
 end)
 
 Test.new("DBSC:insert should handle foreign keys correctly", function (self)
     local account = XAccount:new()
+    ---@class MyClass : Server.DBSC
     local MyClass = DBSC:new({
         name = "my_class4",
         columns = {
@@ -86,7 +92,7 @@ Test.new("DBSC:insert should handle foreign keys correctly", function (self)
 
     MyClass:init()
 
-    local instance = MyClass:new { id = 1, foreign_object = account, name = "Linked Instance" }
+    local instance = MyClass:create({ id = 1, foreign_object = account, name = "Linked Instance" }) --[[@as MyClass]]
     return Test.assertEqual(instance.foreign_object.bid, account.bid, "DBSC:insert should handle foreign keys correctly")
 end)
 
@@ -104,7 +110,7 @@ Test.new("DBSC:update should update data in the database", function (self)
 
     MyClass:init()
 
-    local instance = MyClass:new { id = 1, name = "John Doe", age = 30, account = account }
+    local instance = MyClass:create({ id = 1, name = "John Doe", age = 30, account = account }) --[[@as MyClass]]
     instance.name = "Jane Doe"
     instance.age = 25
     instance:update()
@@ -129,9 +135,9 @@ Test.new("DBSC:getWhere should retrieve data based on conditions", function (sel
 
     MyClass:init()
 
-    MyClass:new { id = 1, name = "Alice", age = 28, account = shared_account }
-    MyClass:new { id = 3, name = "Bob", age = 28, account = shared_account }
-    MyClass:new { id = 2, name = "Bob", age = 32, account = shared_account }
+    MyClass:create ({ id = 1, name = "Alice", age = 28, account = shared_account })
+    MyClass:create { id = 3, name = "Bob", age = 28, account = shared_account }
+    MyClass:create { id = 2, name = "Bob", age = 32, account = shared_account }
 
     local results = MyClass:getWhere({ age = 32 })
     return Test.assertEqual(#results, 1, "DBSC:getWhere should return the correct number of results") and
