@@ -1,14 +1,17 @@
+---@class Server
+Server = Server or {}
+
 ---@class Server.DBSC (Database Synchronized Class)
----@field private __meta Server.DBSC.Meta
+---@field private __meta DBSC.Meta
 ---@field private __cache table<string, Server.DBSC> cached objects
 Server.DBSC = {}
 Server.DBSC.__index = Server.DBSC
 
----@class Server.DBSC.Meta
+---@class DBSC.Meta
 ---@field name string the name of the table in the database
----@field columns table<Server.DBSC.Meta.Column> a table of columns in the database
+---@field columns table<DBSC.Meta.Column> a table of columns in the database
 
----@class Server.DBSC.Meta.Column
+---@class DBSC.Meta.Column
 ---@field name string the name of the column
 ---@field type string the type of the column
 ---@field primary_key boolean? whether the column is a primary key
@@ -21,17 +24,15 @@ Server.DBSC.__index = Server.DBSC
 
 ---Creates a new class extending the DBSC class.
 ---@nodiscard
----@param meta Server.DBSC.Meta the metadata for the class
+---@param meta DBSC.Meta the metadata for the class
 ---@return Server.DBSC class a new class extending the DBSC class
 function Server.DBSC:new(meta)
     local instance = setmetatable({}, self)
     instance.__meta = meta
     instance.__cache = {}
-    ---@param self Server.DBSC
-    ---@param values table
-    ---@return Server.DBSC
     instance.new = function (self, values)
-        local obj = setmetatable(values, instance)
+        local obj = setmetatable(values, self) --[[@as Server.DBSC]]
+        self.__index = self
         if not obj:insert() then
             error("Failed to insert new object into the database")
         end
@@ -41,7 +42,7 @@ function Server.DBSC:new(meta)
 end
 
 ---Returns the column that is the primary key of this table.
----@return Server.DBSC.Meta.Column? column the primary key column or nil if not found
+---@return DBSC.Meta.Column? column the primary key column or nil if not found
 function Server.DBSC:primaryKey()
     for _, column in ipairs(self.__meta.columns) do
         if column.primary_key then
