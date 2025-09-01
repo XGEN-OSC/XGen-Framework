@@ -1,14 +1,17 @@
----@class Core
-Core = {}
+---@class Server
+Server = Server or {}
 
----@type table<HPlayer, XPlayer>
+---@class Server.Core
+Server.Core = {}
+
+---@type table<HPlayer, Server.XPlayer>
 local players = {}
 
 ---Returns the XPlayer instance associated with the given player.
 ---@nodiscard
 ---@param player HPlayer the helix player object
----@return XPlayer xPlayer The XPlayer instance associated with the player.
-function Core.getXPlayer(player)
+---@return Server.XPlayer xPlayer The XPlayer instance associated with the player.
+function Server.Core.getXPlayer(player)
     if players[player] then
         return players[player]
     end
@@ -17,8 +20,8 @@ function Core.getXPlayer(player)
     -- requires more intel on the HELIX API.
 
     local identifier = "???"
-    local xPlayer = XPlayer:get({identifier = identifier}) --[[@as XPlayer?]]
-    xPlayer = xPlayer or XPlayer:new(identifier)
+    local xPlayer = Server.XPlayer:get({identifier = identifier}) --[[@as Server.XPlayer?]]
+    xPlayer = xPlayer or Server.XPlayer:new(identifier)
     xPlayer.hPlayer = player --[[@as HPlayer]]
     players[player] = xPlayer
     return xPlayer
@@ -26,10 +29,10 @@ end
 
 ---Injects a given object / value into a module
 ---@param obj any
-function Core.inject(name, obj)
+function Server.Core.inject(name, obj)
     local path = StringUtils.split(name, ".")
-    local module = _G
-    
+    local module = Server
+
     for i = 1, #path - 1 do
         local part = path[i]
         if not module[part] then

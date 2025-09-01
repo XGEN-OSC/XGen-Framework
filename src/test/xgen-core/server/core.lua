@@ -1,4 +1,5 @@
-local Core = ENVIRONMENT_GET_VAR(ENVIRONMENT, "Core")
+local Server = ENVIRONMENT_GET_VAR(ENVIRONMENT, "Server") --[[@as Server]]
+local Core = Server.Core
 
 Test.new("Core should exist", function (self)
     return Test.assert(Core ~= nil, "Core should not be nil")
@@ -14,7 +15,7 @@ end)
 
 Test.new("Core.inject should inject an object into a module", function (self)
     Core.inject("TestModule", { testFunction = function() return "Hello, World!" end })
-    local TestModule = ENVIRONMENT_GET_VAR(ENVIRONMENT, "TestModule")
+    local TestModule = Server.TestModule --[[@as table]]
 
     return Test.assert(TestModule ~= nil, "TestModule should not be nil") and
            Test.assert(TestModule.testFunction ~= nil, "TestModule.testFunction should not be nil") and

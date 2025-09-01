@@ -1,5 +1,8 @@
----@class XTransaction : DBSC
-XTransaction = DBSC:new({
+---@class Server
+Server = Server or {}
+
+---@class Server.XTransaction : Server.DBSC
+Server.XTransaction = Server.DBSC:new({
     name = "xgen_transaction",
     columns = {
         { name = "transaction_id", type = "VARCHAR(255)", primary_key = true },
@@ -11,7 +14,7 @@ XTransaction = DBSC:new({
         { name = "timestamp", type = "TIMESTAMP", not_null = true }
     }
 })
-XTransaction.__index = XTransaction
+Server.XTransaction.__index = Server.XTransaction
 
 ---Creates a new Transaction object.
 ---@nodiscard
@@ -20,8 +23,8 @@ XTransaction.__index = XTransaction
 ---@param amount_major number the major amount of the transaction
 ---@param amount_minor number the minor amount of the transaction
 ---@param reason string the reason for the transaction
----@return XTransaction xTransaction the transaction
-function XTransaction:new(from_bid, to_bid, amount_major, amount_minor, reason)
+---@return Server.XTransaction xTransaction the transaction
+function Server.XTransaction:new(from_bid, to_bid, amount_major, amount_minor, reason)
     local instance = {}
     setmetatable(instance, self)
     instance.transaction_id = StringUtils.generate("TX-....-....-....-....")

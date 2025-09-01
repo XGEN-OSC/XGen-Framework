@@ -1,6 +1,9 @@
-local DBSC = ENVIRONMENT_GET_VAR(ENVIRONMENT, "DBSC")
-local DB = ENVIRONMENT_GET_VAR(ENVIRONMENT, "DB")
-local XAccount = ENVIRONMENT_GET_VAR(ENVIRONMENT, "XAccount")
+---@diagnostic disable: missing-fields, discard-returns, undefined-global, undefined-field, need-check-nil, inject-field
+local Server = ENVIRONMENT_GET_VAR(ENVIRONMENT, "Server") --[[@as Server]]
+
+local DBSC = Server.DBSC
+local DB = Server.DB
+local XAccount = Server.XAccount
 DB.init()
 
 Test.new("DBSC should exist", function (self)
@@ -21,6 +24,7 @@ Test.new("DBSC.new should create new DBSC class", function (self)
 end)
 
 Test.new("DBSC.insert should insert data into the database", function (self)
+    ---@class MyClass : Server.DBSC
     local MyClass = DBSC:new({
         name = "my_class",
         columns = {
@@ -33,7 +37,8 @@ Test.new("DBSC.insert should insert data into the database", function (self)
     MyClass:init()
 
     local instance = MyClass:new { id = 1, name = "John Doe", age = 30 }
-    return Test.assert(MyClass:get({ id = instance.id }), "DBSC.get should retrieve the inserted data")
+
+    return Test.assert(MyClass:get({ id = instance.id }) ~= nil, "DBSC.get should retrieve the inserted data")
 end)
 
 Test.new("DBSC(instance):new should throw error when insertation failed", function (self)

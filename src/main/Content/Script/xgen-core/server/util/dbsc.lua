@@ -1,8 +1,11 @@
----@class DBSC (Database Synchronized Class)
+---@class Server
+Server = Server or {}
+
+---@class Server.DBSC (Database Synchronized Class)
 ---@field private __meta DBSC.Meta
----@field private __cache table<string, DBSC> cached objects
-DBSC = {}
-DBSC.__index = DBSC
+---@field private __cache table<string, Server.DBSC> cached objects
+Server.DBSC = {}
+Server.DBSC.__index = Server.DBSC
 
 ---@class DBSC.Meta
 ---@field name string the name of the table in the database
@@ -13,7 +16,7 @@ DBSC.__index = DBSC
 ---@field type string the type of the column
 ---@field primary_key boolean? whether the column is a primary key
 ---@field foreign_key string? the foreign key reference if applicable
----@field foreign_key_class DBSC? the class of the foreign key reference
+---@field foreign_key_class Server.DBSC? the class of the foreign key reference
 ---@field auto_increment boolean? whether the column should auto-increment
 ---@field default string? the default value for the column
 ---@field not_null boolean? whether the column cannot be null
@@ -22,28 +25,26 @@ DBSC.__index = DBSC
 ---Creates a new class extending the DBSC class.
 ---@nodiscard
 ---@param meta DBSC.Meta the metadata for the class
----@return DBSC class a new class extending the DBSC class
-function DBSC:new(meta)
+---@return Server.DBSC class a new class extending the DBSC class
+function Server.DBSC:new(meta)
     local instance = setmetatable({}, self)
+    self.__index = self
     instance.__meta = meta
     instance.__cache = {}
-    instance.new = function (self, values)
-        local obj = setmetatable({}, self)
+    function instance:new(values)
+        local obj = setmetatable(values, self) --[[@as Server.DBSC]]
         self.__index = self
-        for k, v in pairs(values) do
-            obj[k] = v
-        end
         if not obj:insert() then
             error("Failed to insert new object into the database")
         end
-        return self:get({ [self:primaryKey().name] = obj[self:primaryKey().name] }) --[[@as DBSC]]
+        return self:get({ [self:primaryKey().name] = obj[self:primaryKey().name] }) --[[@as Server.DBSC]]
     end
     return instance
 end
 
 ---Returns the column that is the primary key of this table.
 ---@return DBSC.Meta.Column? column the primary key column or nil if not found
-function DBSC:primaryKey()
+function Server.DBSC:primaryKey()
     for _, column in ipairs(self.__meta.columns) do
         if column.primary_key then
             return column
@@ -52,12 +53,12 @@ function DBSC:primaryKey()
 end
 
 ---Initializes the DBSC subclass.
-function DBSC:init()
+function Server.DBSC:init()
     local sql = "CREATE TABLE IF NOT EXISTS " .. self.__meta.name .. " ("
     for i, key in ipairs(self.__meta.columns) do
 
-        if _G[key.type] then
-            local dbsc_class = _G[key.type]
+        if Server[key.type] then
+            local dbsc_class = Server[key.type]
             local class_table = dbsc_class.__meta.name
             local reference = dbsc_class:primaryKey()
             key.type = reference.type
@@ -101,7 +102,7 @@ end
 ---Inserts the object into the database.
 ---@nodiscard
 ---@return boolean success whether the insert was successful
-function DBSC:insert()
+function Server.DBSC:insert()
     local pks = {}
     local pksString = ""
     local sql = "INSERT INTO " .. self.__meta.name .. " ("
@@ -153,7 +154,7 @@ end
 ---Updates the object in the database.
 ---@nodiscard
 ---@return boolean success whether the update was successful
-function DBSC:update()
+function Server.DBSC:update()
     local sql = "UPDATE " .. self.__meta.name .. " SET "
     local values = {}
     local conditions = {}
@@ -188,8 +189,8 @@ end
 
 ---Loads an object by its primary keys
 ---@param primary_keys table<string, any> the values of the primary keys
----@return DBSC? object The loaded object or nil if not found
-function DBSC:get(primary_keys)
+---@return Server.DBSC? object The loaded object or nil if not found
+function Server.DBSC:get(primary_keys)
     local pksString = ""
     for _, value in pairs(primary_keys) do
         pksString = pksString .. ":" .. tostring(value)
@@ -239,8 +240,8 @@ end
 ---Returns a list of objects matching the given conditions.
 ---@nodiscard
 ---@param conditions table<string, any> the conditions to match
----@return table<DBSC> instances a list of matching objects
-function DBSC:getWhere(conditions)
+---@return table<Server.DBSC> instances a list of matching objects
+function Server.DBSC:getWhere(conditions)
     local sql = "SELECT * FROM " .. self.__meta.name .. " WHERE "
     local values = {}
     local conds = {}
@@ -277,7 +278,7 @@ end
 ---Deletes the object from the database.
 ---@nodiscard
 ---@return boolean success whether the delete was successful
-function DBSC:delete()
+function Server.DBSC:delete()
     local pksString = ""
     for _, key in ipairs(self.__meta.columns) do
         if key.primary_key then

@@ -1,11 +1,14 @@
----@class DB
-DB = {}
+---@class Server
+Server = Server or {}
+
+---@class Server.DB
+Server.DB = {}
 
 --- Initializes the database.
-function DB.init()
+function Server.DB.init()
     Database.Initialize('xgen/core/database.db')
-    XPlayer:init()
-    XAccount:init()
-    XCharacter:init()
-    XTransaction:init()
+    Server.XPlayer:init()
+    Server.XAccount:init()
+    Server.XCharacter:init()
+    Server.XTransaction:init()
 end

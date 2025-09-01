@@ -1,4 +1,4 @@
----@type Core
+---@type Server.Core
 XCore = nil
 Events.Call("xgen:core:get", function (core)
     XCore = core

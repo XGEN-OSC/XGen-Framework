@@ -1,2 +1,0 @@
-# XGen - Framework
-XGen - Framework is an open source project providing a framework and basic resources for the HELIX platform. The main goal is a well documented, bug free and easy to adapt framework for developers to build on.
