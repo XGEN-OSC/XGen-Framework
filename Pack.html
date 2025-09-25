@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lua Documentation - Overview</title>
+    <title>Class Pack</title>
     <style>body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
@@ -232,45 +232,19 @@ h3 { color: #7f8c8d; }
     <a href="index.html">🏠 Overview</a>
     <a href="globals.html">🌐 Global Elements</a>
 </div>
-<h1>Lua Documentation - Overview</h1>
-<div class="overview-grid">
-<div class="overview-card">
-<h3>Classes</h3>
-<ul class="class-hierarchy">
-<li>
-<div class="parent-class"><a href="Config.html">Config</a></div>
-<ul class="subclass-list">
-<li><a href="Config_Currency.html">Config.Currency</a></li>
-<li><a href="Config_Currency_format.html">Config.Currency.format</a></li>
-<li><a href="Config_General.html">Config.General</a></li>
-</ul>
-</li>
-<li>
-<div class="parent-class"><a href="Server.html">Server</a></div>
-<ul class="subclass-list">
-<li><a href="Server_Core.html">Server.Core</a></li>
-<li><a href="Server_XCharacterSystem.html">Server.XCharacterSystem</a></li>
-<li><a href="Server_DB.html">Server.DB</a></li>
-<li><a href="Server_XAccount.html">Server.XAccount</a></li>
-<li><a href="Server_XCharacter.html">Server.XCharacter</a></li>
-<li><a href="Server_XPlayer.html">Server.XPlayer</a></li>
-<li><a href="Server_XTransaction.html">Server.XTransaction</a></li>
-<li><a href="Server_DBSC.html">Server.DBSC</a></li>
-<li><a href="Server_DBSC_Meta.html">Server.DBSC.Meta</a></li>
-<li><a href="Server_DBSC_Meta_Column.html">Server.DBSC.Meta.Column</a></li>
-</ul>
-</li>
-<li class="standalone-class"><a href="Pack.html">Pack</a></li>
-<li class="standalone-class"><a href="StringUtils.html">StringUtils</a></li>
-<li class="standalone-class"><a href="Translator.html">Translator</a></li>
-</ul>
+<div class="class-header">
+<h1>Class Pack</h1>
 </div>
-<div class="overview-card">
-<h3>Global Elements</h3>
-<ul class="overview-list">
-<li><a href="globals.html">Global Functions and Variables</a></li>
-</ul>
-</div>
+<h2>Methods</h2>
+<div class="method static" id="Pack">
+<strong>Pack(<span class="param">obj: table</span>, <span class="param">clazz: table</span>): <span class="type">table</span></strong>
+<div><strong>Modifier:</strong> static</div>
+<div class="description">Packs all the functions of the given class into the given object. The object will also be returned for convenience (chaining). Packing is required, when you want to make an object available for outside resources, since metatables are not shared between different resources.</div>
+<div class="param-list"><strong>Parameters:</strong><ul>
+<li><span class="param">obj</span> (<span class="type">table</span>): The object to pack the functions into.</li>
+<li><span class="param">clazz</span> (<span class="type">table</span>): The class containing the functions to pack.</li>
+</ul></div>
+<div><strong>Returns:</strong> obj The object with the packed functions.</div>
 </div>
 </div>
 </body></html>
