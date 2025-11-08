@@ -1,0 +1,1 @@
+Database.Initialize('xcore.db')
