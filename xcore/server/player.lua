@@ -1,12 +1,25 @@
----@diagnostic disable: inject-field
+---@diagnostic disable: inject-field, invisible, cast-type-mismatch
 ---@class XCore
 XCore = XCore or {}
 
 ---@type table<string, XCore.Player>
 local players = {}
 
+---@type table<string, fun(xPlayer: XCore.Player): fun(...: any) : any>
+local functionFactory = {}
+functionFactory.getHPlayer = function(xPlayer)
+    return function()
+        return xPlayer.hPlayer
+    end
+end
+functionFactory.hasPermission = function(xPlayer)
+    return function(permission)
+        return xPlayer.permissions[permission] == true
+    end
+end
+
 ---@class XPlayerData
----@field permissions table<string> the player's permissions
+---@field permissions table<string, boolean> the player's permissions
 
 ---Loads player data from the database based on their license ID.
 ---@param license string the player's license ID
@@ -22,8 +35,13 @@ local function load_player_data(license)
     if not row then return nil end
     local data = row.Columns:ToTable()
     if not data then return nil end
+    local permissionList = JSON.parse(data.permissions)
+    local permissionTable = {}
+    for _, perm in ipairs(permissionList) do
+        permissionTable[perm] = true
+    end
     local playerData = {
-        permissions = JSON.parse(data.permissions)
+        permissions = permissionTable
     }
     return playerData
 end
@@ -38,14 +56,8 @@ end
 
 ---@class XCore.Player
 ---@field private hPlayer HPlayer the helix player object
+---@field private permissions table<string, boolean> the player's permissions
 XCore.Player = {}
-
----Returns the HPlayer object associated with this XPlayer.
----@nodiscard
----@return HPlayer hPlayer the helix player object
-function XCore.Player:GetHPlayer()
-    return self.hPlayer
-end
 
 ---Returns the XPlayer object for the given HPlayer.
 ---@nodiscard
@@ -60,11 +72,14 @@ function XCore.GetPlayer(hPlayer)
     local data = load_player_data(licenseId) or default_player_data()
     data.hPlayer = hPlayer
 
-    -- add all functions to the xPlayer object
-    for k, v in pairs(XCore.Player) do
-        xPlayer[k] = v
+    ---@cast data XCore.Player
+
+    for key, factory in pairs(functionFactory) do
+        data[key] = factory(data)
     end
 
     players[licenseId] = xPlayer
     return xPlayer
 end
+
+exports('xcore', 'GetPlayer', XCore.GetPlayer)
