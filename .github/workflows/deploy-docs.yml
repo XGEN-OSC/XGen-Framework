@@ -14,8 +14,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      CONFIG_JSON: package.json         # Path to your input project config
-      OUTPUT_JSON: output.json                 # Output JSON file name
+      CONFIG_JSON: ./xcore/package.json         # Path to your input project config
+      OUTPUT_JSON: xcore.json                 # Output JSON file name
       JAR_URL: https://github.com/XGEN-OSC/LuaDocGenerator/releases/download/alpha-1.0/LuaDocGenerator-1.0-SNAPSHOT.jar
       JAR_FILE: LuaDocGenerator-1.0-SNAPSHOT.jar
 
