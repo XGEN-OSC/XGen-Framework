@@ -1,0 +1,8 @@
+{
+    "shared": [],
+    "client": [],
+    "server": [
+        "server/database.lua",
+        "server/player.lua"
+    ]
+}

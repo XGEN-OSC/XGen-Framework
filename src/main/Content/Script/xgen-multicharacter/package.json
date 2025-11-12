@@ -1,5 +1,0 @@
-{
-    "shared": [ "config/**/*.lua", "shared/**/*.lua", "locale/**/*.lua" ],
-    "server": [ "server/util/**/*.lua", "server/src/**/*.lua", "server/main.lua" ],
-    "client": [ "client/util/**/*.lua", "client/src/**/*.lua", "client/main.lua" ]
-}

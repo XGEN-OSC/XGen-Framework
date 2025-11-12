@@ -1,32 +1,51 @@
 ---@meta HELIX
 
+---@param package string
+---@param name string
+---@param callback fun(...) : ...
+function exports(package, name, callback) end
+
+---@class HPlayerState
+local HPlayerState = {}
+
+---Returns the unique Helix license id for the player.
+---@nodiscard
+---@return string license the helix license id
+function HPlayerState:GetHelixUserId() end
+
+---@class HPlayer
+HPlayer = {}
+
+---returns the helix player state
+---@nodiscard
+---@return HPlayerState hPlayerState the helix player state for the HPlayer
+function HPlayer:GetLyraPlayerState() end
+
 ---@class Database
 Database = {}
 
----Initializes the database at the specified path.
----@param path string The path to the database.
-function Database.Initialize(path) end
+---Initializes the database with the given database name.
+---@param dbName string the name of the database file
+function Database.Initialize(dbName) end
 
----Executes a SQL statement.
+---Executes the given SQL query with optional data parameters.
 ---@nodiscard
----@param sql string The SQL statement to execute.
----@param values table<any> The values to bind to the SQL statement.
----@return boolean success
-function Database.Execute(sql, values) end
+---@param sql string the SQL query to execute
+---@param data table<any> the optional data parameters for the query
+---@return table<{Columns: { ToTable: fun() : table<string, any> }}> results the results of the query
+function Database.Execute(sql, data) end
 
----Selects data from the database.
+---@class JSON
+JSON = {}
+
+---Converts the given data table to a JSON string.
 ---@nodiscard
----@param sql string The SQL statement to select data.
----@param values table<any> The values to bind to the SQL statement.
----@return table<{Column: table<string, any>}> results The results of the query.
-function Database.Select(sql, values) end
+---@param data table<any>|table<string, any> the data to convert to JSON
+---@return string json the resulting JSON string
+function JSON.stringify(data) end
 
----@class Controller
-
----@class HPlayer : Controller
-HPlayer = {}
-
----@class Events
-Events = {}
-function Events.Call(eventName, ...) end
-function Events.Subscribe(eventName, ...) end
+---Parses the given JSON string into a data table.
+---@nodiscard
+---@param json string the JSON string to parse
+---@return table<any>|table<string, any> data the resulting data table
+function JSON.parse(json) end
