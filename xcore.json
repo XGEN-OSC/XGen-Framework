@@ -1,0 +1,114 @@
+{
+  "namespaces": [
+    {
+      "name": "server",
+      "classes": [
+        {
+          "name": "XCore",
+          "description": null,
+          "fields": [
+
+          ],
+          "functions": [
+            {
+              "name": "GetPlayer",
+              "isStatic": true,
+              "description": "Returns the XPlayer object for the given HPlayer.",
+              "parameters": [
+                {
+                  "name": "hPlayer",
+                  "type": "HPlayer",
+                  "optional": false,
+                  "description": "the helix player object"
+                }
+              ],
+              "returns": [
+                {
+                  "type": "XCore.Player",
+                  "name": "xPlayer",
+                  "description": "the xcore player object"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "XPlayerData",
+          "description": null,
+          "fields": [
+            {
+              "name": "permissions",
+              "type": "table<string, boolean>",
+              "isStatic": false,
+              "description": "the player's permissions"
+            }
+          ],
+          "functions": [
+
+          ]
+        },
+        {
+          "name": "XCore.Player",
+          "description": null,
+          "fields": [
+            {
+              "name": "hPlayer",
+              "type": "HPlayer",
+              "isStatic": false,
+              "description": "the helix player object"
+            },
+            {
+              "name": "permissions",
+              "type": "table<string, boolean>",
+              "isStatic": false,
+              "description": "the player's permissions"
+            }
+          ],
+          "functions": [
+            {
+              "name": "GetHPlayer",
+              "isStatic": false,
+              "description": "Returns the HPlayer object this XCore.Player belongs to.",
+              "parameters": [
+
+              ],
+              "returns": [
+                {
+                  "type": "HPlayer",
+                  "name": "hPlayer",
+                  "description": "the hHplayer object"
+                }
+              ]
+            },
+            {
+              "name": "HasPermission",
+              "isStatic": false,
+              "description": "Checks if the player has the specified permission.",
+              "parameters": [
+                {
+                  "name": "permission",
+                  "type": "string",
+                  "optional": false,
+                  "description": "the permission to check"
+                }
+              ],
+              "returns": [
+                {
+                  "type": "boolean",
+                  "name": "hasPermission",
+                  "description": "whether the player has the permission"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "functions": [
+
+      ],
+      "fields": [
+
+      ]
+    }
+  ]
+}

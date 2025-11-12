@@ -1,0 +1,1 @@
+const WEB_URL = "./xcore.json";
