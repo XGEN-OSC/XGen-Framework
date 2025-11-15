@@ -10,30 +10,11 @@
 
           ],
           "functions": [
-            {
-              "name": "GetPlayer",
-              "isStatic": true,
-              "description": "Returns the XPlayer object for the given HPlayer.",
-              "parameters": [
-                {
-                  "name": "hPlayer",
-                  "type": "HPlayer",
-                  "optional": false,
-                  "description": "the helix player object"
-                }
-              ],
-              "returns": [
-                {
-                  "type": "XCore.Player",
-                  "name": "xPlayer",
-                  "description": "the xcore player object"
-                }
-              ]
-            }
+
           ]
         },
         {
-          "name": "XPlayerData",
+          "name": "XCore.PlayerData",
           "description": null,
           "fields": [
             {
@@ -97,6 +78,91 @@
                   "type": "boolean",
                   "name": "hasPermission",
                   "description": "whether the player has the permission"
+                }
+              ]
+            },
+            {
+              "name": "GetName",
+              "isStatic": false,
+              "description": "Returns the name of the player.",
+              "parameters": [
+
+              ],
+              "returns": [
+                {
+                  "type": "string",
+                  "name": "name",
+                  "description": "the name of the player"
+                }
+              ]
+            },
+            {
+              "name": "GetIdentifier",
+              "isStatic": false,
+              "description": "Returns the unique identifier (license ID) of the player.",
+              "parameters": [
+
+              ],
+              "returns": [
+                {
+                  "type": "string",
+                  "name": "identifier",
+                  "description": "the player's license ID"
+                }
+              ]
+            },
+            {
+              "name": "GetAllCharacters",
+              "isStatic": false,
+              "description": "Returns all characters owned by the player.",
+              "parameters": [
+
+              ],
+              "returns": [
+                {
+                  "type": "table<XCore.Character>",
+                  "name": "xCharacters",
+                  "description": "the list of characters owned by the player"
+                }
+              ]
+            },
+            {
+              "name": "ByIdentifier",
+              "isStatic": true,
+              "description": "Returns the XPlayer object for the given license ID.",
+              "parameters": [
+                {
+                  "name": "license",
+                  "type": "string",
+                  "optional": false,
+                  "description": "the player's license ID"
+                }
+              ],
+              "returns": [
+                {
+                  "type": "XCore.Player",
+                  "name": "xPlayer",
+                  "description": "the xcore player object, or nil if not found"
+                }
+              ]
+            },
+            {
+              "name": "BySource",
+              "isStatic": true,
+              "description": "Returns the XPlayer object for the given HPlayer.",
+              "parameters": [
+                {
+                  "name": "hPlayer",
+                  "type": "HPlayer",
+                  "optional": false,
+                  "description": "the helix player object"
+                }
+              ],
+              "returns": [
+                {
+                  "type": "XCore.Player",
+                  "name": "xPlayer",
+                  "description": "the xcore player object"
                 }
               ]
             }
