@@ -2,8 +2,8 @@
 
 ---@param package string
 ---@param name string
----@param callback fun(...) : ...
-function exports(package, name, callback) end
+---@param obj any
+function exports(package, name, obj) end
 
 ---@class HPlayerState
 local HPlayerState = {}
@@ -12,6 +12,11 @@ local HPlayerState = {}
 ---@nodiscard
 ---@return string license the helix license id
 function HPlayerState:GetHelixUserId() end
+
+---Returns the name of the player.
+---@nodiscard
+---@return string name the name of the player
+function HPlayerState:GetName() end
 
 ---@class HPlayer
 HPlayer = {}
@@ -29,11 +34,16 @@ Database = {}
 function Database.Initialize(dbName) end
 
 ---Executes the given SQL query with optional data parameters.
----@nodiscard
 ---@param sql string the SQL query to execute
 ---@param data table<any> the optional data parameters for the query
 ---@return table<{Columns: { ToTable: fun() : table<string, any> }}> results the results of the query
 function Database.Execute(sql, data) end
+
+---Executes the given SQL query asynchronously with optional data parameters.
+---@param sql string the SQL query to execute
+---@param data table<any>? the optional data parameters for the query
+---@param callback fun(results: table<{Columns: { ToTable: fun() : table<string, any> }}>)? results the results of the query) the callback function to handle the results
+function Database.ExecuteAsync(sql, data, callback) end
 
 ---@class JSON
 JSON = {}
@@ -49,3 +59,5 @@ function JSON.stringify(data) end
 ---@param json string the JSON string to parse
 ---@return table<any>|table<string, any> data the resulting data table
 function JSON.parse(json) end
+
+---@class void : nil the void type representing no value (mostly for documentation purposes)

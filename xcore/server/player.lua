@@ -1,33 +1,22 @@
----@diagnostic disable: inject-field, invisible, cast-type-mismatch
 ---@class XCore
 XCore = XCore or {}
 
 ---@type table<string, XCore.Player>
 local players = {}
 
----@type table<string, fun(xPlayer: XCore.Player): fun(...: any) : any>
-local functionFactory = {}
-functionFactory.getHPlayer = function(xPlayer)
-    return function()
-        return xPlayer.hPlayer
-    end
-end
-functionFactory.hasPermission = function(xPlayer)
-    return function(permission)
-        return xPlayer.permissions[permission] == true
-    end
-end
+---@type FunctionFactory
+local functionFactory = nil
 
----@class XPlayerData
+---@class XCore.PlayerData
 ---@field permissions table<string, boolean> the player's permissions
 
 ---Loads player data from the database based on their license ID.
 ---@param license string the player's license ID
----@return XPlayerData? playerData the loaded player data
+---@return XCore.PlayerData? playerData the loaded player data
 local function load_player_data(license)
     local result = Database.Execute([[
         SELECT *
-        FROM player_data
+        FROM players
         WHERE license = ?
     ]], { license })
     local row = result[1]
@@ -47,7 +36,7 @@ local function load_player_data(license)
 end
 
 ---Returns the default player data structure.
----@return XPlayerData defaultData the default player data
+---@return XCore.PlayerData defaultData the default player data
 local function default_player_data()
     return {
         permissions = {}
@@ -61,24 +50,60 @@ XCore.Player = {}
 
 ---Returns the HPlayer object this XCore.Player belongs to.
 ---@nodiscard
+---@non-static
 ---@return HPlayer hPlayer the hHplayer object
-function XCore.Player:GetHPlayer()
+function XCore.Player.GetHPlayer()
     error("function factory not properly working")
 end
 
 ---Checks if the player has the specified permission.
 ---@nodiscard
+---@non-static
 ---@param permission string the permission to check
 ---@return boolean hasPermission whether the player has the permission
-function XCore.Player:HasPermission(permission)
+function XCore.Player.HasPermission(permission)
     error("function factory not properly working")
 end
+
+---Returns the name of the player.
+---@nodiscard
+---@non-static
+---@return string name the name of the player
+function XCore.Player.GetName()
+    error("function factory not properly working")
+end
+
+---Returns the unique identifier (license ID) of the player.
+---@nodiscard
+---@non-static
+---@return string identifier the player's license ID
+function XCore.Player.GetIdentifier()
+    error("function factory not properly working")
+end
+
+---Returns all characters owned by the player.
+---@nodiscard
+---@non-static
+---@return table<XCore.Character> xCharacters the list of characters owned by the player
+function XCore.Player.GetAllCharacters()
+    error("function factory not properly working")
+end
+
+---Returns the XPlayer object for the given license ID.
+---@nodiscard
+---@param license string the player's license ID
+---@return XCore.Player? xPlayer the xcore player object, or nil if not found
+function XCore.Player.ByIdentifier(license)
+    return players[license]
+end
+
+functionFactory = functionFactory.ForXClass(XCore.Player)
 
 ---Returns the XPlayer object for the given HPlayer.
 ---@nodiscard
 ---@param hPlayer HPlayer the helix player object
 ---@return XCore.Player xPlayer the xcore player object
-function XCore.GetPlayer(hPlayer)
+function XCore.Player.BySource(hPlayer)
     local hPlayerState = hPlayer:GetLyraPlayerState()
     local licenseId = hPlayerState:GetHelixUserId()
     local xPlayer = players[licenseId]
@@ -89,12 +114,10 @@ function XCore.GetPlayer(hPlayer)
 
     ---@cast data XCore.Player
 
-    for key, factory in pairs(functionFactory) do
-        data[key] = factory(data)
-    end
+    functionFactory:Apply(data)
 
     players[licenseId] = xPlayer
     return xPlayer
 end
 
-exports('xcore', 'GetPlayer', XCore.GetPlayer)
+exports('xcore', 'Player', XCore.Player)
