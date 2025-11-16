@@ -97,6 +97,28 @@
               ]
             },
             {
+              "name": "TriggerEvent",
+              "isStatic": false,
+              "description": "Triggers the given event with the given arguments for this player.",
+              "parameters": [
+                {
+                  "name": "eventName",
+                  "type": "string",
+                  "optional": false,
+                  "description": "the name of the event to trigger"
+                },
+                {
+                  "name": "...",
+                  "type": "any",
+                  "optional": false,
+                  "description": null
+                }
+              ],
+              "returns": [
+
+              ]
+            },
+            {
               "name": "GetAllCharacters",
               "isStatic": false,
               "description": "Returns all characters owned by the player.",
