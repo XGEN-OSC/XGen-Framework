@@ -60,4 +60,11 @@ function JSON.stringify(data) end
 ---@return table<any>|table<string, any> data the resulting data table
 function JSON.parse(json) end
 
----@class void : nil the void type representing no value (mostly for documentation purposes)
+---@param eventName string
+---@param ... any
+function TriggerLocalServerEvent(eventName, ...) end
+
+---@param hPlayer HPlayer
+---@param eventName string
+---@param ... any
+function TriggerClientEvent(hPlayer, eventName, ...) end

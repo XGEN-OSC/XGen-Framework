@@ -101,6 +101,21 @@
               ]
             },
             {
+              "name": "GetOwnerType",
+              "isStatic": false,
+              "description": "Checks the type of owner of the account.\nThe owner type is the prefix of the owner identifier (e.g., 'citizen' or 'business').",
+              "parameters": [
+
+              ],
+              "returns": [
+                {
+                  "type": "'citizen'|'business'|string",
+                  "name": "ownerType",
+                  "description": "the type of owner of the account"
+                }
+              ]
+            },
+            {
               "name": "GetOwner",
               "isStatic": false,
               "description": "Returns the owner of the account.",
@@ -216,6 +231,36 @@
               "type": "string",
               "isStatic": false,
               "description": "the account ID associated with this character"
+            },
+            {
+              "name": "firstname",
+              "type": "string",
+              "isStatic": false,
+              "description": "the first name of the character"
+            },
+            {
+              "name": "lastname",
+              "type": "string",
+              "isStatic": false,
+              "description": "the last name of the character"
+            },
+            {
+              "name": "dateOfBirth",
+              "type": "string",
+              "isStatic": false,
+              "description": "the date of birth of the character (YYYY-MM-DD)"
+            },
+            {
+              "name": "bloodType",
+              "type": "BloodType",
+              "isStatic": false,
+              "description": "the blood type of the character"
+            },
+            {
+              "name": "fingerPrint",
+              "type": "string",
+              "isStatic": false,
+              "description": "the finger print of the character"
             }
           ],
           "functions": [
@@ -250,6 +295,21 @@
               ]
             },
             {
+              "name": "GetFullName",
+              "isStatic": false,
+              "description": "Returns the full name of the character.\nThat is \"firstname lastname\".",
+              "parameters": [
+
+              ],
+              "returns": [
+                {
+                  "type": "string",
+                  "name": "fullName",
+                  "description": "the full name of the character"
+                }
+              ]
+            },
+            {
               "name": "Save",
               "isStatic": false,
               "description": "Saves the character data to the database.",
@@ -270,6 +330,24 @@
                   "type": "XCore.Player",
                   "optional": false,
                   "description": "the player who will own the character."
+                },
+                {
+                  "name": "firstname",
+                  "type": "string",
+                  "optional": false,
+                  "description": "the first name of the character."
+                },
+                {
+                  "name": "lastname",
+                  "type": "string",
+                  "optional": false,
+                  "description": "the last name of the character."
+                },
+                {
+                  "name": "dateOfBirth",
+                  "type": "string",
+                  "optional": false,
+                  "description": "the date of birth of the character (YYYY-MM-DD)."
                 }
               ],
               "returns": [
@@ -451,6 +529,28 @@
               ]
             },
             {
+              "name": "TriggerEvent",
+              "isStatic": false,
+              "description": "Triggers the given event with the given arguments for this player.",
+              "parameters": [
+                {
+                  "name": "eventName",
+                  "type": "string",
+                  "optional": false,
+                  "description": "the name of the event to trigger"
+                },
+                {
+                  "name": "...",
+                  "type": "any",
+                  "optional": false,
+                  "description": null
+                }
+              ],
+              "returns": [
+
+              ]
+            },
+            {
               "name": "GetAllCharacters",
               "isStatic": false,
               "description": "Returns all characters owned by the player.",
@@ -506,6 +606,78 @@
               ]
             }
           ]
+        },
+        {
+          "name": "BloodType",
+          "description": null,
+          "fields": [
+            {
+              "name": "A_POSITIVE",
+              "type": "string",
+              "isStatic": true,
+              "description": "A+"
+            },
+            {
+              "name": "A_NEGATIVE",
+              "type": "string",
+              "isStatic": true,
+              "description": "A-"
+            },
+            {
+              "name": "B_POSITIVE",
+              "type": "string",
+              "isStatic": true,
+              "description": "B+"
+            },
+            {
+              "name": "B_NEGATIVE",
+              "type": "string",
+              "isStatic": true,
+              "description": "B-"
+            },
+            {
+              "name": "AB_POSITIVE",
+              "type": "string",
+              "isStatic": true,
+              "description": "AB+"
+            },
+            {
+              "name": "AB_NEGATIVE",
+              "type": "string",
+              "isStatic": true,
+              "description": "AB-"
+            },
+            {
+              "name": "O_POSITIVE",
+              "type": "string",
+              "isStatic": true,
+              "description": "O+"
+            },
+            {
+              "name": "O_NEGATIVE",
+              "type": "string",
+              "isStatic": true,
+              "description": "O-"
+            }
+          ],
+          "functions": [
+
+          ]
+        },
+        {
+          "name": "Event",
+          "description": null,
+          "fields": [
+            {
+              "name": "ACCOUNT_BALANCE_CHANGED",
+              "type": "string",
+              "isStatic": true,
+              "description": "the event that will be triggered, when an account's balance changes."
+            }
+          ],
+          "functions": [
+
+          ]
         }
       ],
       "functions": [
@@ -555,6 +727,78 @@
     {
       "name": "client",
       "classes": [
+        {
+          "name": "BloodType",
+          "description": null,
+          "fields": [
+            {
+              "name": "A_POSITIVE",
+              "type": "string",
+              "isStatic": true,
+              "description": "A+"
+            },
+            {
+              "name": "A_NEGATIVE",
+              "type": "string",
+              "isStatic": true,
+              "description": "A-"
+            },
+            {
+              "name": "B_POSITIVE",
+              "type": "string",
+              "isStatic": true,
+              "description": "B+"
+            },
+            {
+              "name": "B_NEGATIVE",
+              "type": "string",
+              "isStatic": true,
+              "description": "B-"
+            },
+            {
+              "name": "AB_POSITIVE",
+              "type": "string",
+              "isStatic": true,
+              "description": "AB+"
+            },
+            {
+              "name": "AB_NEGATIVE",
+              "type": "string",
+              "isStatic": true,
+              "description": "AB-"
+            },
+            {
+              "name": "O_POSITIVE",
+              "type": "string",
+              "isStatic": true,
+              "description": "O+"
+            },
+            {
+              "name": "O_NEGATIVE",
+              "type": "string",
+              "isStatic": true,
+              "description": "O-"
+            }
+          ],
+          "functions": [
+
+          ]
+        },
+        {
+          "name": "Event",
+          "description": null,
+          "fields": [
+            {
+              "name": "ACCOUNT_BALANCE_CHANGED",
+              "type": "string",
+              "isStatic": true,
+              "description": "the event that will be triggered, when an account's balance changes."
+            }
+          ],
+          "functions": [
+
+          ]
+        },
         {
           "name": "FunctionFactory",
           "description": "a function factory allowes to create functions producing\nfunctions for xObjects. By trapping the given xObject inside the produced function,\nthe self reference problem when calling a function on a referenced object from another\nresource is solved.",

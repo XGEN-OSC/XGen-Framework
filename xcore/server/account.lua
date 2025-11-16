@@ -36,18 +36,50 @@ end
 ---@param amount number the new account balance
 function XCore.Account:SetBalance(amount)
     self.balance = amount
+
+    -- notify all server scripts about the balance change
+    -- probably not required, but who knows, right?
+    TriggerLocalServerEvent(Event.ACCOUNT_BALANCE_CHANGED, self.accountId, self.balance)
+
+    -- if this account is owned by a character,
+    -- we want to share this event with the player too
+    if self:GetOwnerType() == "citizen" then
+        local character = self:GetOwner() ---@as XCore.Character
+        local player = character:GetOwner()
+        if player then
+            -- notify the player about their balance change
+            -- if the player is nil, that means they're offline
+            -- meaning we don't need to notify them, so no handler for
+            -- that case
+            player:TriggerEvent(Event.ACCOUNT_BALANCE_CHANGED, self.accountId, self.balance)
+        end
+    end
 end
 
 ---Adds the given amount to the account balance.
 ---@param amount number the amount to add
 function XCore.Account:AddBalance(amount)
-    self.balance = self.balance + amount
+    self:SetBalance(self.balance + amount)
 end
 
 ---Removes the given amount from the account balance.
 ---@param amount number the amount to remove
 function XCore.Account:RemoveBalance(amount)
-    self.balance = self.balance - amount
+    self:SetBalance(self.balance - amount)
+    -- I did think about adding a cap to prevent negative
+    -- balances, but some systems might want that, and it
+    -- also prevents money glitches in some cases, if a
+    -- script wouldn't properly check for sufficient funds,
+    -- so therefore: no cap here.
+end
+
+---Checks the type of owner of the account.
+---The owner type is the prefix of the owner identifier (e.g., 'citizen' or 'business').
+---@nodiscard
+---@return 'citizen'|'business'|string ownerType the type of owner of the account
+function XCore.Account:GetOwnerType()
+    local ownerType = self.owner:sub(1, self.owner:find(":") - 1)
+    return ownerType
 end
 
 ---Returns the owner of the account.

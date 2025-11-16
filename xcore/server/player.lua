@@ -73,6 +73,13 @@ function XCore.Player:GetIdentifier()
     return self.hPlayer:GetLyraPlayerState():GetHelixUserId()
 end
 
+---Triggers the given event with the given arguments for this player.
+---@param eventName string the name of the event to trigger
+---@param ... any the arguments to pass to the event
+function XCore.Player:TriggerEvent(eventName, ...)
+    TriggerClientEvent(self.hPlayer, eventName, ...)
+end
+
 ---Returns all characters owned by the player.
 ---@nodiscard
 ---@non-static
