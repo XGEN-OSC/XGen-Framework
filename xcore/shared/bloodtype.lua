@@ -1,26 +1,26 @@
 ---@enum BloodType
 BloodType = {
-    ---@type string A+
+    ---@type 'A+'
     A_POSITIVE = "A+",
 
-    ---@type string A-
+    ---@type 'A-'
     A_NEGATIVE = "A-",
 
-    ---@type string B+
+    ---@type 'B+'
     B_POSITIVE = "B+",
 
-    ---@type string B-
+    ---@type 'B-'
     B_NEGATIVE = "B-",
 
-    ---@type string AB+
+    ---@type 'AB+'
     AB_POSITIVE = "AB+",
 
-    ---@type string AB-
+    ---@type 'AB-'
     AB_NEGATIVE = "AB-",
 
-    ---@type string O+
+    ---@type 'O+'
     O_POSITIVE = "O+",
 
-    ---@type string O-
+    ---@type 'O-'
     O_NEGATIVE = "O-",
 }

@@ -33,7 +33,7 @@
               "name": "owner",
               "type": "string",
               "isStatic": false,
-              "description": "the identifier of the owner (for players: 'citizen:<citizen_id>', for businesses: 'business:<business_id>')"
+              "description": "the identifier of the owner (for players: 'citizen:<citizen_id>', for organizations: 'organization:<organization_id>')"
             }
           ],
           "functions": [
@@ -124,7 +124,7 @@
               ],
               "returns": [
                 {
-                  "type": "XCore.Character",
+                  "type": "XCore.Character|XCore.Organization",
                   "name": "owner",
                   "description": "the owner of the account"
                 }
@@ -148,9 +148,9 @@
               "parameters": [
                 {
                   "name": "owner",
-                  "type": "XCore.Player",
+                  "type": "XCore.Player|XCore.Organization",
                   "optional": false,
-                  "description": "the player who will own the account"
+                  "description": "the player or organization who will own the account"
                 }
               ],
               "returns": [
@@ -355,6 +355,21 @@
               ]
             },
             {
+              "name": "GetXId",
+              "isStatic": false,
+              "description": "Returns the XCore.XId of the character.",
+              "parameters": [
+
+              ],
+              "returns": [
+                {
+                  "type": "string",
+                  "name": "xId",
+                  "description": "the character's XId"
+                }
+              ]
+            },
+            {
               "name": "Save",
               "isStatic": false,
               "description": "Saves the character data to the database.",
@@ -486,6 +501,91 @@
               ],
               "returns": [
 
+              ]
+            }
+          ]
+        },
+        {
+          "name": "XCore.Organization",
+          "description": null,
+          "fields": [
+            {
+              "name": "organizationId",
+              "type": "string",
+              "isStatic": false,
+              "description": "the unique organization ID"
+            },
+            {
+              "name": "accountId",
+              "type": "string",
+              "isStatic": false,
+              "description": "the account ID associated with this organization"
+            }
+          ],
+          "functions": [
+            {
+              "name": "GetAccount",
+              "isStatic": false,
+              "description": "Returns the account associated with this organization.",
+              "parameters": [
+
+              ],
+              "returns": [
+                {
+                  "type": "XCore.Account",
+                  "name": "account",
+                  "description": "the organization's account"
+                }
+              ]
+            },
+            {
+              "name": "GetIdentifier",
+              "isStatic": false,
+              "description": "Returns the unique identifier of the organization.",
+              "parameters": [
+
+              ],
+              "returns": [
+                {
+                  "type": "string",
+                  "name": "identifier",
+                  "description": "the organization's unique ID"
+                }
+              ]
+            },
+            {
+              "name": "GetXId",
+              "isStatic": false,
+              "description": "Returns the XCore.XId of the organization.",
+              "parameters": [
+
+              ],
+              "returns": [
+                {
+                  "type": "string",
+                  "name": "xId",
+                  "description": "the organization's XId"
+                }
+              ]
+            },
+            {
+              "name": "ById",
+              "isStatic": true,
+              "description": "Retrieves an organization by its organization ID.",
+              "parameters": [
+                {
+                  "name": "organizationId",
+                  "type": "string",
+                  "optional": false,
+                  "description": "the unique organization ID"
+                }
+              ],
+              "returns": [
+                {
+                  "type": "XCore.Organization",
+                  "name": "organization",
+                  "description": "the retrieved organization"
+                }
               ]
             }
           ]
@@ -680,51 +780,51 @@
           "fields": [
             {
               "name": "A_POSITIVE",
-              "type": "string",
+              "type": "'A+'",
               "isStatic": true,
-              "description": "A+"
+              "description": null
             },
             {
               "name": "A_NEGATIVE",
-              "type": "string",
+              "type": "'A-'",
               "isStatic": true,
-              "description": "A-"
+              "description": null
             },
             {
               "name": "B_POSITIVE",
-              "type": "string",
+              "type": "'B+'",
               "isStatic": true,
-              "description": "B+"
+              "description": null
             },
             {
               "name": "B_NEGATIVE",
-              "type": "string",
+              "type": "'B-'",
               "isStatic": true,
-              "description": "B-"
+              "description": null
             },
             {
               "name": "AB_POSITIVE",
-              "type": "string",
+              "type": "'AB+'",
               "isStatic": true,
-              "description": "AB+"
+              "description": null
             },
             {
               "name": "AB_NEGATIVE",
-              "type": "string",
+              "type": "'AB-'",
               "isStatic": true,
-              "description": "AB-"
+              "description": null
             },
             {
               "name": "O_POSITIVE",
-              "type": "string",
+              "type": "'O+'",
               "isStatic": true,
-              "description": "O+"
+              "description": null
             },
             {
               "name": "O_NEGATIVE",
-              "type": "string",
+              "type": "'O-'",
               "isStatic": true,
-              "description": "O-"
+              "description": null
             }
           ],
           "functions": [
@@ -812,51 +912,51 @@
           "fields": [
             {
               "name": "A_POSITIVE",
-              "type": "string",
+              "type": "'A+'",
               "isStatic": true,
-              "description": "A+"
+              "description": null
             },
             {
               "name": "A_NEGATIVE",
-              "type": "string",
+              "type": "'A-'",
               "isStatic": true,
-              "description": "A-"
+              "description": null
             },
             {
               "name": "B_POSITIVE",
-              "type": "string",
+              "type": "'B+'",
               "isStatic": true,
-              "description": "B+"
+              "description": null
             },
             {
               "name": "B_NEGATIVE",
-              "type": "string",
+              "type": "'B-'",
               "isStatic": true,
-              "description": "B-"
+              "description": null
             },
             {
               "name": "AB_POSITIVE",
-              "type": "string",
+              "type": "'AB+'",
               "isStatic": true,
-              "description": "AB+"
+              "description": null
             },
             {
               "name": "AB_NEGATIVE",
-              "type": "string",
+              "type": "'AB-'",
               "isStatic": true,
-              "description": "AB-"
+              "description": null
             },
             {
               "name": "O_POSITIVE",
-              "type": "string",
+              "type": "'O+'",
               "isStatic": true,
-              "description": "O+"
+              "description": null
             },
             {
               "name": "O_NEGATIVE",
-              "type": "string",
+              "type": "'O-'",
               "isStatic": true,
-              "description": "O-"
+              "description": null
             }
           ],
           "functions": [
