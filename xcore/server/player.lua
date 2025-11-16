@@ -46,6 +46,7 @@ end
 ---@class XCore.Player
 ---@field public hPlayer HPlayer the helix player object
 ---@field public permissions table<string,boolean> the player's permissions
+---@field public character XCore.Character? the currently selected character of the player
 XCore.Player = {}
 
 ---Checks if the player has the specified permission.
@@ -78,6 +79,21 @@ end
 ---@param ... any the arguments to pass to the event
 function XCore.Player:TriggerEvent(eventName, ...)
     TriggerClientEvent(self.hPlayer, eventName, ...)
+end
+
+---Loads the character with the given citizen ID for the player.
+---This will throw an error if the character is not found.
+---@param citizenId string the citizen ID of the character to load
+function XCore.Player:LoadCharacter(citizenId)
+    local xCharacter = XCore.Character.ByCitizenID(citizenId)
+    if xCharacter then
+        self.character = xCharacter
+        self:TriggerEvent(Event.CLIENT_CHARACTER_LOADED, xCharacter:GetCharacterData())
+        TriggerLocalServerEvent(Event.SERVER_CHARACTER_LOADED, self, xCharacter)
+    else
+        error("Character with citizen ID '" .. citizenId ..
+            "' not found for player '" .. self:GetIdentifier() .. "'.")
+    end
 end
 
 ---Returns all characters owned by the player.

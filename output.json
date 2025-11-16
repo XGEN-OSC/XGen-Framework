@@ -204,6 +204,36 @@
               "type": "string",
               "isStatic": false,
               "description": "the account ID associated with this character"
+            },
+            {
+              "name": "firstname",
+              "type": "string",
+              "isStatic": false,
+              "description": "the first name of the character"
+            },
+            {
+              "name": "lastname",
+              "type": "string",
+              "isStatic": false,
+              "description": "the last name of the character"
+            },
+            {
+              "name": "dateOfBirth",
+              "type": "string",
+              "isStatic": false,
+              "description": "the date of birth of the character (YYYY-MM-DD)"
+            },
+            {
+              "name": "bloodType",
+              "type": "BloodType",
+              "isStatic": false,
+              "description": "the blood type of the character"
+            },
+            {
+              "name": "fingerPrint",
+              "type": "string",
+              "isStatic": false,
+              "description": "the finger print of the character"
             }
           ],
           "functions": [
@@ -306,6 +336,21 @@
                   "type": "string",
                   "name": "fullName",
                   "description": "the full name of the character"
+                }
+              ]
+            },
+            {
+              "name": "GetCharacterData",
+              "isStatic": false,
+              "description": "Returns the character data as a table.",
+              "parameters": [
+
+              ],
+              "returns": [
+                {
+                  "type": "XCore.CharacterData",
+                  "name": "characterData",
+                  "description": "the character data"
                 }
               ]
             },
@@ -475,6 +520,12 @@
               "type": "table<string,boolean>",
               "isStatic": false,
               "description": "the player's permissions"
+            },
+            {
+              "name": "character",
+              "type": "XCore.Character?",
+              "isStatic": false,
+              "description": "the currently selected character of the player"
             }
           ],
           "functions": [
@@ -544,6 +595,22 @@
                   "type": "any",
                   "optional": false,
                   "description": null
+                }
+              ],
+              "returns": [
+
+              ]
+            },
+            {
+              "name": "LoadCharacter",
+              "isStatic": false,
+              "description": "Loads the character with the given citizen ID for the player.\nThis will throw an error if the character is not found.",
+              "parameters": [
+                {
+                  "name": "citizenId",
+                  "type": "string",
+                  "optional": false,
+                  "description": "the citizen ID of the character to load"
                 }
               ],
               "returns": [
@@ -670,9 +737,21 @@
           "fields": [
             {
               "name": "ACCOUNT_BALANCE_CHANGED",
-              "type": "string",
+              "type": "'xcore:account:balance:changed'",
               "isStatic": true,
-              "description": "the event that will be triggered, when an account's balance changes."
+              "description": "(accountId: string, newBalance: number) triggered when an account's balance changes."
+            },
+            {
+              "name": "SERVER_CHARACTER_LOADED",
+              "type": "'xcore:character:loaded'",
+              "isStatic": true,
+              "description": "(xPlayer: XCore.Player, xCharacter: XCore.Character) triggered when a character is loaded for a player."
+            },
+            {
+              "name": "CLIENT_CHARACTER_LOADED",
+              "type": "'xcore:character:loaded'",
+              "isStatic": true,
+              "description": "(xCharacter: XCore.CharacterData) triggered on the client, when a character is loaded."
             }
           ],
           "functions": [
@@ -790,9 +869,21 @@
           "fields": [
             {
               "name": "ACCOUNT_BALANCE_CHANGED",
-              "type": "string",
+              "type": "'xcore:account:balance:changed'",
               "isStatic": true,
-              "description": "the event that will be triggered, when an account's balance changes."
+              "description": "(accountId: string, newBalance: number) triggered when an account's balance changes."
+            },
+            {
+              "name": "SERVER_CHARACTER_LOADED",
+              "type": "'xcore:character:loaded'",
+              "isStatic": true,
+              "description": "(xPlayer: XCore.Player, xCharacter: XCore.Character) triggered when a character is loaded for a player."
+            },
+            {
+              "name": "CLIENT_CHARACTER_LOADED",
+              "type": "'xcore:character:loaded'",
+              "isStatic": true,
+              "description": "(xCharacter: XCore.CharacterData) triggered on the client, when a character is loaded."
             }
           ],
           "functions": [

@@ -2,9 +2,14 @@
 XCore = XCore or {}
 
 ---@class XCore.CharacterData
----@field citizenID string the unique citizen ID of this character
----@field ownerID string the license ID of the player who owns this character
----@field accountID string the account ID associated with this character
+---@field public citizenID string the unique citizen ID of this character
+---@field public ownerID string the license ID of the player who owns this character
+---@field public accountID string the account ID associated with this character
+---@field public firstname string the first name of the character
+---@field public lastname string the last name of the character
+---@field public dateOfBirth string the date of birth of the character (YYYY-MM-DD)
+---@field public bloodType BloodType the blood type of the character
+---@field public fingerPrint string the finger print of the character
 
 ---@class XCore.Character : XCore.CharacterData
 ---@field public citizenID string the unique citizen ID of this character
@@ -85,6 +90,22 @@ end
 ---@return string fullName the full name of the character
 function XCore.Character:GetFullName()
     return string.format("%s %s", self.firstname, self.lastname)
+end
+
+---Returns the character data as a table.
+---@nodiscard
+---@return XCore.CharacterData characterData the character data
+function XCore.Character:GetCharacterData()
+    return {
+        citizenID = self.citizenID,
+        ownerID = self.ownerID,
+        accountID = self.accountID,
+        firstname = self.firstname,
+        lastname = self.lastname,
+        dateOfBirth = self.dateOfBirth,
+        bloodType = self.bloodType,
+        fingerPrint = self.fingerPrint
+    }
 end
 
 ---Saves the character data to the database.
