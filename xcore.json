@@ -19,7 +19,7 @@
           "fields": [
             {
               "name": "permissions",
-              "type": "table<string, boolean>",
+              "type": "table<string,boolean>",
               "isStatic": false,
               "description": "the player's permissions"
             }
@@ -40,27 +40,12 @@
             },
             {
               "name": "permissions",
-              "type": "table<string, boolean>",
+              "type": "table<string,boolean>",
               "isStatic": false,
               "description": "the player's permissions"
             }
           ],
           "functions": [
-            {
-              "name": "GetHPlayer",
-              "isStatic": false,
-              "description": "Returns the HPlayer object this XCore.Player belongs to.",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "HPlayer",
-                  "name": "hPlayer",
-                  "description": "the hHplayer object"
-                }
-              ]
-            },
             {
               "name": "HasPermission",
               "isStatic": false,
