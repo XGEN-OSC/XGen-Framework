@@ -4,7 +4,7 @@ XCore = XCore or {}
 ---@class XCore.Account
 ---@field public accountId string the unique account ID
 ---@field public balance number the account balance
----@field public owner string the identifier of the owner (for players: 'citizen:<citizen_id>', for businesses: 'business:<business_id>')
+---@field public owner string the identifier of the owner (for players: 'citizen:<citizen_id>', for organizations: 'organization:<organization_id>')
 XCore.Account = {}
 
 ---@type FunctionFactory
@@ -45,6 +45,7 @@ function XCore.Account:SetBalance(amount)
     -- we want to share this event with the player too
     if self:GetOwnerType() == "citizen" then
         local character = self:GetOwner() ---@as XCore.Character
+        ---@cast character XCore.Character
         local player = character:GetOwner()
         if player then
             -- notify the player about their balance change
@@ -84,7 +85,7 @@ end
 
 ---Returns the owner of the account.
 ---@nodiscard
----@return XCore.Character owner the owner of the account
+---@return XCore.Character|XCore.Organization owner the owner of the account
 function XCore.Account:GetOwner()
     if self.owner:sub(1, 8) == "citizen" then
         local citizenId = self.owner:sub(10)
@@ -94,6 +95,15 @@ function XCore.Account:GetOwner()
         else
             error("Character with citizen ID '" ..
                 citizenId .. "' not found for account '" .. self.accountId .. "'. Manually deleted?")
+        end
+    elseif self.owner:sub(1, 12) == "organization" then
+        local organizationId = self.owner:sub(14)
+        local organization = XCore.Organization.ById(organizationId)
+        if organization then
+            return organization
+        else
+            error("Organization with ID '" ..
+                organizationId .. "' not found for account '" .. self.accountId .. "'. Manually deleted?")
         end
     else
         error("Owner type for owner identifier '" ..
@@ -114,14 +124,16 @@ functionFactory = FunctionFactory.ForXClass(XCore.Account)
 
 ---Creates a new account for the given owner.
 ---@nodiscard
----@param owner XCore.Player the player who will own the account
+---@param owner XCore.Player|XCore.Organization the player or organization who will own the account
 ---@return XCore.Account account the newly created account
 function XCore.Account.Create(owner)
     local account = {}
 
+    ---@cast owner XCore.Organization
+
     account.accountId = createAccountId()
     account.balance = 0
-    account.owner = "citizen:" .. owner:GetIdentifier()
+    account.owner = owner:GetXId()
     functionFactory:Apply(account)
     account:Save()
 

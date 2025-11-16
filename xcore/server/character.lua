@@ -108,6 +108,13 @@ function XCore.Character:GetCharacterData()
     }
 end
 
+---Returns the XCore.XId of the character.
+---@nodiscard
+---@return string xId the character's XId
+function XCore.Character:GetXId()
+    return "citizen:" .. self.citizenID
+end
+
 ---Saves the character data to the database.
 function XCore.Character:Save()
     Database.Execute([[
