@@ -22,7 +22,7 @@ end
 
 ---Creates a function factory for all functions in the given xClass.
 ---@nodiscard
----@param xClass table<string, any> the xClass containing functions
+---@param xClass table<string,any> the xClass containing functions
 ---@return FunctionFactory factory the function factory for the xClass
 function FunctionFactory.ForXClass(xClass)
     local factory = {}

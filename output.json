@@ -14,6 +14,161 @@
           ]
         },
         {
+          "name": "XCore.Account",
+          "description": null,
+          "fields": [
+            {
+              "name": "accountId",
+              "type": "string",
+              "isStatic": false,
+              "description": "the unique account ID"
+            },
+            {
+              "name": "balance",
+              "type": "number",
+              "isStatic": false,
+              "description": "the account balance"
+            },
+            {
+              "name": "owner",
+              "type": "string",
+              "isStatic": false,
+              "description": "the identifier of the owner (for players: 'citizen:<citizen_id>', for businesses: 'business:<business_id>')"
+            }
+          ],
+          "functions": [
+            {
+              "name": "GetBalance",
+              "isStatic": false,
+              "description": "Returns the account balance.",
+              "parameters": [
+
+              ],
+              "returns": [
+                {
+                  "type": "number",
+                  "name": "balance",
+                  "description": "the account balance"
+                }
+              ]
+            },
+            {
+              "name": "SetBalance",
+              "isStatic": false,
+              "description": "Sets the account balance to the given amount.",
+              "parameters": [
+                {
+                  "name": "amount",
+                  "type": "number",
+                  "optional": false,
+                  "description": "the new account balance"
+                }
+              ],
+              "returns": [
+
+              ]
+            },
+            {
+              "name": "AddBalance",
+              "isStatic": false,
+              "description": "Adds the given amount to the account balance.",
+              "parameters": [
+                {
+                  "name": "amount",
+                  "type": "number",
+                  "optional": false,
+                  "description": "the amount to add"
+                }
+              ],
+              "returns": [
+
+              ]
+            },
+            {
+              "name": "RemoveBalance",
+              "isStatic": false,
+              "description": "Removes the given amount from the account balance.",
+              "parameters": [
+                {
+                  "name": "amount",
+                  "type": "number",
+                  "optional": false,
+                  "description": "the amount to remove"
+                }
+              ],
+              "returns": [
+
+              ]
+            },
+            {
+              "name": "GetOwner",
+              "isStatic": false,
+              "description": "Returns the owner of the account.",
+              "parameters": [
+
+              ],
+              "returns": [
+                {
+                  "type": "XCore.Character",
+                  "name": "owner",
+                  "description": "the owner of the account"
+                }
+              ]
+            },
+            {
+              "name": "Save",
+              "isStatic": false,
+              "description": "Saves the account data to the database.",
+              "parameters": [
+
+              ],
+              "returns": [
+
+              ]
+            },
+            {
+              "name": "Create",
+              "isStatic": true,
+              "description": "Creates a new account for the given owner.",
+              "parameters": [
+                {
+                  "name": "owner",
+                  "type": "XCore.Player",
+                  "optional": false,
+                  "description": "the player who will own the account"
+                }
+              ],
+              "returns": [
+                {
+                  "type": "XCore.Account",
+                  "name": "account",
+                  "description": "the newly created account"
+                }
+              ]
+            },
+            {
+              "name": "ById",
+              "isStatic": true,
+              "description": "Retrieves an account by its account ID.",
+              "parameters": [
+                {
+                  "name": "accountId",
+                  "type": "string",
+                  "optional": false,
+                  "description": "the unique account ID"
+                }
+              ],
+              "returns": [
+                {
+                  "type": "XCore.Account?",
+                  "name": "account",
+                  "description": "the retrieved account or nil if not found"
+                }
+              ]
+            }
+          ]
+        },
+        {
           "name": "XCore.CharacterData",
           "description": null,
           "fields": [
@@ -28,6 +183,12 @@
               "type": "string",
               "isStatic": false,
               "description": "the license ID of the player who owns this character"
+            },
+            {
+              "name": "accountID",
+              "type": "string",
+              "isStatic": false,
+              "description": "the account ID associated with this character"
             }
           ],
           "functions": [
@@ -49,6 +210,12 @@
               "type": "string",
               "isStatic": false,
               "description": "the license ID of the player who owns this character"
+            },
+            {
+              "name": "accountID",
+              "type": "string",
+              "isStatic": false,
+              "description": "the account ID associated with this character"
             }
           ],
           "functions": [
@@ -64,6 +231,21 @@
                   "type": "XCore.Player?",
                   "name": "owner",
                   "description": "the player who owns this character or nil if the player is not online"
+                }
+              ]
+            },
+            {
+              "name": "GetAccount",
+              "isStatic": false,
+              "description": "Returns the XCore.Account associated with this character.",
+              "parameters": [
+
+              ],
+              "returns": [
+                {
+                  "type": "XCore.Account?",
+                  "name": "account",
+                  "description": "the account associated with this character"
                 }
               ]
             },
@@ -137,31 +319,50 @@
                   "description": "the list of characters owned by the owner."
                 }
               ]
-            },
+            }
+          ]
+        },
+        {
+          "name": "FunctionFactory",
+          "description": "a function factory allowes to create functions producing\nfunctions for xObjects. By trapping the given xObject inside the produced function,\nthe self reference problem when calling a function on a referenced object from another\nresource is solved.",
+          "fields": [
+
+          ],
+          "functions": [
             {
-              "name": "AddFunction",
+              "name": "ForXClass",
               "isStatic": true,
-              "description": "Adds a new function to all character objects.",
+              "description": "Creates a function factory for all functions in the given xClass.",
               "parameters": [
                 {
-                  "name": "name",
-                  "type": "string",
+                  "name": "xClass",
+                  "type": "table<string,any>",
                   "optional": false,
-                  "description": "the name of the function."
-                },
-                {
-                  "name": "func",
-                  "type": "fun(xCharacter: XCore.Character, ... : any) : any",
-                  "optional": false,
-                  "description": "the function to add."
+                  "description": "the xClass containing functions"
                 }
               ],
               "returns": [
                 {
-                  "type": "any",
-                  "name": "",
-                  "description": null
+                  "type": "FunctionFactory",
+                  "name": "factory",
+                  "description": "the function factory for the xClass"
                 }
+              ]
+            },
+            {
+              "name": "Apply",
+              "isStatic": false,
+              "description": "Applies all functions from the function factory to the given xObject.",
+              "parameters": [
+                {
+                  "name": "xObject",
+                  "type": "table",
+                  "optional": false,
+                  "description": "the xObject to which the functions should be applied"
+                }
+              ],
+              "returns": [
+
               ]
             }
           ]
@@ -172,9 +373,9 @@
           "fields": [
             {
               "name": "permissions",
-              "type": "table<string,",
+              "type": "table<string,boolean>",
               "isStatic": false,
-              "description": "boolean> the player's permissions"
+              "description": "the player's permissions"
             }
           ],
           "functions": [
@@ -193,27 +394,12 @@
             },
             {
               "name": "permissions",
-              "type": "table<string,",
+              "type": "table<string,boolean>",
               "isStatic": false,
-              "description": "boolean> the player's permissions"
+              "description": "the player's permissions"
             }
           ],
           "functions": [
-            {
-              "name": "GetHPlayer",
-              "isStatic": false,
-              "description": "Returns the HPlayer object this XCore.Player belongs to.",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "HPlayer",
-                  "name": "hPlayer",
-                  "description": "the hHplayer object"
-                }
-              ]
-            },
             {
               "name": "HasPermission",
               "isStatic": false,
@@ -318,38 +504,49 @@
                   "description": "the xcore player object"
                 }
               ]
-            },
-            {
-              "name": "AddFunction",
-              "isStatic": true,
-              "description": "Adds a new function to all existing and future XCore.Player objects.",
-              "parameters": [
-                {
-                  "name": "name",
-                  "type": "string",
-                  "optional": false,
-                  "description": "the name of the function to add"
-                },
-                {
-                  "name": "func",
-                  "type": "fun(xPlayer: XCore.Player, ...: any) : any",
-                  "optional": false,
-                  "description": "the function that should be addeded"
-                }
-              ],
-              "returns": [
-                {
-                  "type": "any",
-                  "name": "",
-                  "description": null
-                }
-              ]
             }
           ]
         }
       ],
       "functions": [
+        {
+          "name": "print",
+          "isStatic": true,
+          "description": null,
+          "parameters": [
+            {
+              "name": "...",
+              "type": "any",
+              "optional": false,
+              "description": null
+            }
+          ],
+          "returns": [
 
+          ]
+        },
+        {
+          "name": "printf",
+          "isStatic": true,
+          "description": "Prints a formatted string to the console.",
+          "parameters": [
+            {
+              "name": "msg",
+              "type": "string",
+              "optional": false,
+              "description": "the message to format"
+            },
+            {
+              "name": "args",
+              "type": "table<string,any>",
+              "optional": false,
+              "description": "the arguments to replace in the message. Use {key} in the message to denote where to replace."
+            }
+          ],
+          "returns": [
+
+          ]
+        }
       ],
       "fields": [
 
@@ -358,64 +555,91 @@
     {
       "name": "client",
       "classes": [
-
-      ],
-      "functions": [
-
-      ],
-      "fields": [
-
-      ]
-    },
-    {
-      "name": "shared",
-      "classes": [
-
-      ],
-      "functions": [
-
-      ],
-      "fields": [
-
-      ]
-    },
-    {
-      "name": "exports",
-      "classes": [
         {
-          "name": "exports",
-          "description": null,
+          "name": "FunctionFactory",
+          "description": "a function factory allowes to create functions producing\nfunctions for xObjects. By trapping the given xObject inside the produced function,\nthe self reference problem when calling a function on a referenced object from another\nresource is solved.",
           "fields": [
 
           ],
           "functions": [
-
-          ]
-        },
-        {
-          "name": "exports.xcore",
-          "description": null,
-          "fields": [
             {
-              "name": "Player",
-              "type": "XCore.Player",
-              "isStatic": false,
-              "description": "the XCore Player class\n---```\n---exports.xcore.Player:BySource(hPlayer: HPlayer) : XCore.Player\n---```"
+              "name": "ForXClass",
+              "isStatic": true,
+              "description": "Creates a function factory for all functions in the given xClass.",
+              "parameters": [
+                {
+                  "name": "xClass",
+                  "type": "table<string,any>",
+                  "optional": false,
+                  "description": "the xClass containing functions"
+                }
+              ],
+              "returns": [
+                {
+                  "type": "FunctionFactory",
+                  "name": "factory",
+                  "description": "the function factory for the xClass"
+                }
+              ]
             },
             {
-              "name": "Character",
-              "type": "XCore.Character",
+              "name": "Apply",
               "isStatic": false,
-              "description": "the XCore Character class"
-            }
-          ],
-          "functions": [
+              "description": "Applies all functions from the function factory to the given xObject.",
+              "parameters": [
+                {
+                  "name": "xObject",
+                  "type": "table",
+                  "optional": false,
+                  "description": "the xObject to which the functions should be applied"
+                }
+              ],
+              "returns": [
 
+              ]
+            }
           ]
         }
       ],
       "functions": [
+        {
+          "name": "print",
+          "isStatic": true,
+          "description": null,
+          "parameters": [
+            {
+              "name": "...",
+              "type": "any",
+              "optional": false,
+              "description": null
+            }
+          ],
+          "returns": [
 
+          ]
+        },
+        {
+          "name": "printf",
+          "isStatic": true,
+          "description": "Prints a formatted string to the console.",
+          "parameters": [
+            {
+              "name": "msg",
+              "type": "string",
+              "optional": false,
+              "description": "the message to format"
+            },
+            {
+              "name": "args",
+              "type": "table<string,any>",
+              "optional": false,
+              "description": "the arguments to replace in the message. Use {key} in the message to denote where to replace."
+            }
+          ],
+          "returns": [
+
+          ]
+        }
       ],
       "fields": [
 

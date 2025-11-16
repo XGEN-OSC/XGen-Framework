@@ -1,11 +1,10 @@
 {
     "server": [
-        "xcore/server/**/*.lua"
+        "xcore/server/**/*.lua",
+        "xcore/shared/**/*.lua"
     ],
     "client": [
-        "xcore/client/**/*.lua"
-    ],
-    "shared": [
+        "xcore/client/**/*.lua",
         "xcore/shared/**/*.lua"
     ]
 }

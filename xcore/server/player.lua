@@ -8,7 +8,7 @@ local players = {}
 local functionFactory = nil
 
 ---@class XCore.PlayerData
----@field permissions table<string, boolean> the player's permissions
+---@field permissions table<string,boolean> the player's permissions
 
 ---Loads player data from the database based on their license ID.
 ---@param license string the player's license ID
@@ -44,50 +44,44 @@ local function default_player_data()
 end
 
 ---@class XCore.Player
----@field private hPlayer HPlayer the helix player object
----@field private permissions table<string, boolean> the player's permissions
+---@field public hPlayer HPlayer the helix player object
+---@field public permissions table<string,boolean> the player's permissions
 XCore.Player = {}
-
----Returns the HPlayer object this XCore.Player belongs to.
----@nodiscard
----@non-static
----@return HPlayer hPlayer the hHplayer object
-function XCore.Player.GetHPlayer()
-    error("function factory not properly working")
-end
 
 ---Checks if the player has the specified permission.
 ---@nodiscard
 ---@non-static
 ---@param permission string the permission to check
 ---@return boolean hasPermission whether the player has the permission
-function XCore.Player.HasPermission(permission)
-    error("function factory not properly working")
+function XCore.Player:HasPermission(permission)
+    return self.permissions[permission] == true
 end
 
 ---Returns the name of the player.
 ---@nodiscard
 ---@non-static
 ---@return string name the name of the player
-function XCore.Player.GetName()
-    error("function factory not properly working")
+function XCore.Player:GetName()
+    return self.hPlayer:GetLyraPlayerState():GetName()
 end
 
 ---Returns the unique identifier (license ID) of the player.
 ---@nodiscard
 ---@non-static
 ---@return string identifier the player's license ID
-function XCore.Player.GetIdentifier()
-    error("function factory not properly working")
+function XCore.Player:GetIdentifier()
+    return self.hPlayer:GetLyraPlayerState():GetHelixUserId()
 end
 
 ---Returns all characters owned by the player.
 ---@nodiscard
 ---@non-static
 ---@return table<XCore.Character> xCharacters the list of characters owned by the player
-function XCore.Player.GetAllCharacters()
-    error("function factory not properly working")
+function XCore.Player:GetAllCharacters()
+    return XCore.Character.ByOwnerID(self:GetIdentifier())
 end
+
+functionFactory = functionFactory.ForXClass(XCore.Player)
 
 ---Returns the XPlayer object for the given license ID.
 ---@nodiscard
@@ -96,8 +90,6 @@ end
 function XCore.Player.ByIdentifier(license)
     return players[license]
 end
-
-functionFactory = functionFactory.ForXClass(XCore.Player)
 
 ---Returns the XPlayer object for the given HPlayer.
 ---@nodiscard
