@@ -43,6 +43,12 @@
               "type": "table<string,boolean>",
               "isStatic": false,
               "description": "the player's permissions"
+            },
+            {
+              "name": "character",
+              "type": "XCore.Character?",
+              "isStatic": false,
+              "description": "the currently selected character of the player"
             }
           ],
           "functions": [
@@ -112,6 +118,22 @@
                   "type": "any",
                   "optional": false,
                   "description": null
+                }
+              ],
+              "returns": [
+
+              ]
+            },
+            {
+              "name": "LoadCharacter",
+              "isStatic": false,
+              "description": "Loads the character with the given citizen ID for the player.\nThis will throw an error if the character is not found.",
+              "parameters": [
+                {
+                  "name": "citizenId",
+                  "type": "string",
+                  "optional": false,
+                  "description": "the citizen ID of the character to load"
                 }
               ],
               "returns": [
