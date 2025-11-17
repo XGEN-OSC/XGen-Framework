@@ -234,6 +234,12 @@
               "type": "string",
               "isStatic": false,
               "description": "the finger print of the character"
+            },
+            {
+              "name": "inventories",
+              "type": "table<string,",
+              "isStatic": false,
+              "description": "string> a table mapping inventory names to their IDs"
             }
           ],
           "functions": [
@@ -291,6 +297,12 @@
               "type": "string",
               "isStatic": false,
               "description": "the finger print of the character"
+            },
+            {
+              "name": "inventories",
+              "type": "table<string,",
+              "isStatic": false,
+              "description": "string> a table mapping inventory names to their IDs"
             }
           ],
           "functions": [
@@ -336,6 +348,26 @@
                   "type": "string",
                   "name": "fullName",
                   "description": "the full name of the character"
+                }
+              ]
+            },
+            {
+              "name": "GetInventory",
+              "isStatic": false,
+              "description": "Returns the inventory associated with this character by name.",
+              "parameters": [
+                {
+                  "name": "name",
+                  "type": "any",
+                  "optional": false,
+                  "description": null
+                }
+              ],
+              "returns": [
+                {
+                  "type": "XCore.Inventory?",
+                  "name": "inventory",
+                  "description": "the inventory object, or nil if not found."
                 }
               ]
             },
@@ -501,6 +533,55 @@
               ],
               "returns": [
 
+              ]
+            }
+          ]
+        },
+        {
+          "name": "XCore.Inventory",
+          "description": null,
+          "fields": [
+            {
+              "name": "id",
+              "type": "string",
+              "isStatic": false,
+              "description": "the unique identifier of the inventory"
+            }
+          ],
+          "functions": [
+            {
+              "name": "Create",
+              "isStatic": true,
+              "description": "Creates a new inventory.",
+              "parameters": [
+
+              ],
+              "returns": [
+                {
+                  "type": "XCore.Inventory",
+                  "name": "inventory",
+                  "description": "the created inventory"
+                }
+              ]
+            },
+            {
+              "name": "ById",
+              "isStatic": true,
+              "description": "Returns the inventory by its ID.",
+              "parameters": [
+                {
+                  "name": "id",
+                  "type": "string",
+                  "optional": false,
+                  "description": "the ID of the inventory."
+                }
+              ],
+              "returns": [
+                {
+                  "type": "XCore.Inventory?",
+                  "name": "inventory",
+                  "description": "the inventory object, or nil if not found."
+                }
               ]
             }
           ]

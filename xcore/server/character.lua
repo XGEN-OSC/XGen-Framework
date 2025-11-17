@@ -10,6 +10,7 @@ XCore = XCore or {}
 ---@field public dateOfBirth string the date of birth of the character (YYYY-MM-DD)
 ---@field public bloodType BloodType the blood type of the character
 ---@field public fingerPrint string the finger print of the character
+---@field public inventories table<string,string> a table mapping inventory names to their IDs
 
 ---@class XCore.Character : XCore.CharacterData
 ---@field public citizenID string the unique citizen ID of this character
@@ -20,6 +21,7 @@ XCore = XCore or {}
 ---@field public dateOfBirth string the date of birth of the character (YYYY-MM-DD)
 ---@field public bloodType BloodType the blood type of the character
 ---@field public fingerPrint string the finger print of the character
+---@field public inventories table<string,string> a table mapping inventory names to their IDs
 XCore.Character = {}
 
 ---Generates a random citizen ID.
@@ -92,6 +94,19 @@ function XCore.Character:GetFullName()
     return string.format("%s %s", self.firstname, self.lastname)
 end
 
+---Returns the inventory associated with this character by name.
+---@nodiscard
+---@param name? string the name of the inventory (default: "main")
+---@return XCore.Inventory? inventory the inventory object, or nil if not found.
+function XCore.Character:GetInventory(name)
+    name = name or "main"
+    local inventoryId = self.inventories[name]
+    if not inventoryId then
+        return nil
+    end
+    return XCore.Inventory.ById(inventoryId)
+end
+
 ---Returns the character data as a table.
 ---@nodiscard
 ---@return XCore.CharacterData characterData the character data
@@ -150,6 +165,8 @@ function XCore.Character.Create(owner, firstname, lastname, dateOfBirth)
     xCharacter.dateOfBirth = dateOfBirth
     xCharacter.bloodType = random_blood_type()
     xCharacter.fingerPrint = random_finger_print()
+    xCharacter.inventories = {}
+    xCharacter.inventories["main"] = XCore.Inventory.Create().id
 
     functionFactory:Apply(xCharacter)
     xCharacter:Save()
