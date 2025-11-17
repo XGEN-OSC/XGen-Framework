@@ -4,14 +4,14 @@ XCore = XCore or {}
 ---@class XCore.ItemStack
 ---@field public itemType string the type of the item
 ---@field public count number the count of the item
----@field public metadata table<string, any>? optional metadata associated with the item
+---@field public metadata table<string,any>? optional metadata associated with the item
 
 ---@class XCore.Inventory
 ---@field public id string the unique identifier of the inventory
----@field public items table<number, XCore.ItemStack> the items contained in the inventory
+---@field public items table<number,XCore.ItemStack> the items contained in the inventory
 XCore.Inventory = {}
 
----@type table<string, XCore.Inventory> the loaded inventories by their ID
+---@type table<string,XCore.Inventory> the loaded inventories by their ID
 local inventories = {}
 
 ---@type FunctionFactory
@@ -65,7 +65,7 @@ end
 
 ---Returns all items in the inventory.
 ---@nodiscard
----@return table<number, XCore.ItemStack> items the items in the inventory
+---@return table<number,XCore.ItemStack> items the items in the inventory
 function XCore.Inventory:GetItems()
     return self.items
 end
@@ -73,8 +73,8 @@ end
 ---Finds all items of the given type in the inventory.
 ---@nodiscard
 ---@param itemType string the type of the item to find
----@param metadata table<string, any>? optional metadata to match
----@return table<number, XCore.ItemStack> foundItems a table mapping slots to item stacks
+---@param metadata table<string,any>? optional metadata to match
+---@return table<number,XCore.ItemStack> foundItems a table mapping slots to item stacks
 function XCore.Inventory:FindByType(itemType, metadata)
     local foundItems = {}
     for slot, item in pairs(self.items) do

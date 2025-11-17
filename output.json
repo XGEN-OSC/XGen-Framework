@@ -237,9 +237,9 @@
             },
             {
               "name": "inventories",
-              "type": "table<string,",
+              "type": "table<string,string>",
               "isStatic": false,
-              "description": "string> a table mapping inventory names to their IDs"
+              "description": "a table mapping inventory names to their IDs"
             }
           ],
           "functions": [
@@ -300,9 +300,9 @@
             },
             {
               "name": "inventories",
-              "type": "table<string,",
+              "type": "table<string,string>",
               "isStatic": false,
-              "description": "string> a table mapping inventory names to their IDs"
+              "description": "a table mapping inventory names to their IDs"
             }
           ],
           "functions": [
@@ -538,6 +538,33 @@
           ]
         },
         {
+          "name": "XCore.ItemStack",
+          "description": null,
+          "fields": [
+            {
+              "name": "itemType",
+              "type": "string",
+              "isStatic": false,
+              "description": "the type of the item"
+            },
+            {
+              "name": "count",
+              "type": "number",
+              "isStatic": false,
+              "description": "the count of the item"
+            },
+            {
+              "name": "metadata",
+              "type": "table<string,any>?",
+              "isStatic": false,
+              "description": "optional metadata associated with the item"
+            }
+          ],
+          "functions": [
+
+          ]
+        },
+        {
           "name": "XCore.Inventory",
           "description": null,
           "fields": [
@@ -546,9 +573,114 @@
               "type": "string",
               "isStatic": false,
               "description": "the unique identifier of the inventory"
+            },
+            {
+              "name": "items",
+              "type": "table<number,XCore.ItemStack>",
+              "isStatic": false,
+              "description": "the items contained in the inventory"
             }
           ],
           "functions": [
+            {
+              "name": "SetItem",
+              "isStatic": false,
+              "description": "Adds an item stack to the inventory.",
+              "parameters": [
+                {
+                  "name": "slot",
+                  "type": "number",
+                  "optional": false,
+                  "description": "the slot to set the item in"
+                },
+                {
+                  "name": "item",
+                  "type": "XCore.ItemStack",
+                  "optional": false,
+                  "description": "the item stack to add"
+                }
+              ],
+              "returns": [
+
+              ]
+            },
+            {
+              "name": "ClearSlot",
+              "isStatic": false,
+              "description": "Clears the item in the given slot.",
+              "parameters": [
+                {
+                  "name": "slot",
+                  "type": "number",
+                  "optional": false,
+                  "description": "the slot to clear"
+                }
+              ],
+              "returns": [
+
+              ]
+            },
+            {
+              "name": "GetSlot",
+              "isStatic": false,
+              "description": "Returns the item stack in the given slot.",
+              "parameters": [
+                {
+                  "name": "slot",
+                  "type": "number",
+                  "optional": false,
+                  "description": "the slot to get the item from"
+                }
+              ],
+              "returns": [
+                {
+                  "type": "XCore.ItemStack?",
+                  "name": "item",
+                  "description": "the item stack in the slot, or nil if empty"
+                }
+              ]
+            },
+            {
+              "name": "GetItems",
+              "isStatic": false,
+              "description": "Returns all items in the inventory.",
+              "parameters": [
+
+              ],
+              "returns": [
+                {
+                  "type": "table<number,XCore.ItemStack>",
+                  "name": "items",
+                  "description": "the items in the inventory"
+                }
+              ]
+            },
+            {
+              "name": "FindByType",
+              "isStatic": false,
+              "description": "Finds all items of the given type in the inventory.",
+              "parameters": [
+                {
+                  "name": "itemType",
+                  "type": "string",
+                  "optional": false,
+                  "description": "the type of the item to find"
+                },
+                {
+                  "name": "metadata",
+                  "type": "table<string,any>?",
+                  "optional": false,
+                  "description": "optional metadata to match"
+                }
+              ],
+              "returns": [
+                {
+                  "type": "table<number,XCore.ItemStack>",
+                  "name": "foundItems",
+                  "description": "a table mapping slots to item stacks"
+                }
+              ]
+            },
             {
               "name": "Create",
               "isStatic": true,
@@ -938,6 +1070,61 @@
           "functions": [
 
           ]
+        },
+        {
+          "name": "table",
+          "description": null,
+          "fields": [
+
+          ],
+          "functions": [
+            {
+              "name": "deepcopy",
+              "isStatic": true,
+              "description": "Copies the given value. If it's a table, performs a deep copy.",
+              "parameters": [
+                {
+                  "name": "orig",
+                  "type": "T",
+                  "optional": false,
+                  "description": "the value to copy"
+                }
+              ],
+              "returns": [
+                {
+                  "type": "T",
+                  "name": "copy",
+                  "description": "the copied value"
+                }
+              ]
+            },
+            {
+              "name": "equal",
+              "isStatic": true,
+              "description": "Compares two tables for equality. Performs a deep comparison.",
+              "parameters": [
+                {
+                  "name": "t1",
+                  "type": "table",
+                  "optional": false,
+                  "description": "the first table"
+                },
+                {
+                  "name": "t2",
+                  "type": "table",
+                  "optional": false,
+                  "description": "the second table"
+                }
+              ],
+              "returns": [
+                {
+                  "type": "boolean",
+                  "name": "equal",
+                  "description": "whether the tables are equal"
+                }
+              ]
+            }
+          ]
         }
       ],
       "functions": [
@@ -1112,6 +1299,61 @@
               ],
               "returns": [
 
+              ]
+            }
+          ]
+        },
+        {
+          "name": "table",
+          "description": null,
+          "fields": [
+
+          ],
+          "functions": [
+            {
+              "name": "deepcopy",
+              "isStatic": true,
+              "description": "Copies the given value. If it's a table, performs a deep copy.",
+              "parameters": [
+                {
+                  "name": "orig",
+                  "type": "T",
+                  "optional": false,
+                  "description": "the value to copy"
+                }
+              ],
+              "returns": [
+                {
+                  "type": "T",
+                  "name": "copy",
+                  "description": "the copied value"
+                }
+              ]
+            },
+            {
+              "name": "equal",
+              "isStatic": true,
+              "description": "Compares two tables for equality. Performs a deep comparison.",
+              "parameters": [
+                {
+                  "name": "t1",
+                  "type": "table",
+                  "optional": false,
+                  "description": "the first table"
+                },
+                {
+                  "name": "t2",
+                  "type": "table",
+                  "optional": false,
+                  "description": "the second table"
+                }
+              ],
+              "returns": [
+                {
+                  "type": "boolean",
+                  "name": "equal",
+                  "description": "whether the tables are equal"
+                }
               ]
             }
           ]
