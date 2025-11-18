@@ -1,8 +1,18 @@
 {
-    "shared": [],
+    "shared": [
+        "shared/bloodtype.lua",
+        "shared/event.lua",
+        "shared/functionfactory.lua",
+        "shared/prettyprint.lua",
+        "shared/table.lua"
+    ],
     "client": [],
     "server": [
         "server/database.lua",
-        "server/player.lua"
+        "server/player.lua",
+        "server/account.lua",
+        "server/character.lua",
+        "server/inventory.lua",
+        "server/organization.lua"
     ]
 }
