@@ -9,7 +9,7 @@ FunctionFactory.__index = FunctionFactory
 ---@nodiscard
 ---@param func fun(xObject: any, ...: any) : any the function for which to create a factory
 ---@return fun(xObject: any) : fun(...: any) : any factoryFunction the function factory
-local function createFactory(func)
+function FunctionFactory.ForFunction(func)
     return function(xObject)
         return function(_, ...)
             -- ignore the first parameter since it is the
@@ -20,6 +20,16 @@ local function createFactory(func)
     end
 end
 
+---Injects the given function into the given object for the given name.
+---@generic T
+---@param obj T the object to inject the function into
+---@param name string the name of the function to inject
+---@param func fun(xObject: T, ...: any) : any the function to inject
+function FunctionFactory.Inject(obj, name, func)
+    local factoryFunc = FunctionFactory.ForFunction(func)
+    obj[name] = factoryFunc(obj)
+end
+
 ---Creates a function factory for all functions in the given xClass.
 ---@nodiscard
 ---@param xClass table<string,any> the xClass containing functions
@@ -28,7 +38,7 @@ function FunctionFactory.ForXClass(xClass)
     local factory = {}
     for name, func in pairs(xClass) do
         if type(func) == "function" then
-            factory[name] = createFactory(func)
+            factory[name] = FunctionFactory.ForFunction(func)
         end
     end
     setmetatable(factory, FunctionFactory)

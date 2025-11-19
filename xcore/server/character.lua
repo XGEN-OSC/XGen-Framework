@@ -107,6 +107,59 @@ function XCore.Character:GetInventory(name)
     return XCore.Inventory.ById(inventoryId)
 end
 
+---Returns the amount of money the player has on the given account.
+---Account in this case is not the XCore.Account, but the account type like "cash" or "bank".
+---@nodiscard
+---@param account 'cash'|'bank' the account type
+---@return number amount the amount of money in the given account
+function XCore.Character:GetAccountMoney(account)
+    if account == 'cash' then
+        local inventory = self:GetInventory("wallet")
+        if not inventory then return 0 end
+        return table.sum(inventory:FindByType('cash'), function(value)
+            ---@cast value XCore.ItemStack
+            return value.count
+        end)
+    end
+
+    if account == 'bank' then
+        local bankAccount = self:GetAccount()
+        if not bankAccount then return 0 end
+        return bankAccount:GetBalance()
+    end
+
+    return 0
+end
+
+---Adds the given amount of money to the given account.
+---@param account 'cash'|'bank' the account to add the mone to.
+---@param amount number the amount of money to add.
+function XCore.Character:AddAccountMoney(account, amount)
+    if account == 'cash' then
+        local inventory = self:GetInventory("wallet")
+        if not inventory then return 0 end
+        local moneyStacks = inventory:FindByType('cash')
+        local found = false
+        for _, stack in pairs(moneyStacks) do
+            stack.count = stack.count + amount
+            found = true
+            break
+        end
+        if not found then
+            inventory:SetItem(1, { itemType = 'cash', count = amount })
+        end
+        return
+    end
+
+    if account == 'bank' then
+        local xAccount = self:GetAccount()
+        if not xAccount then
+            error("failed to find account for character " .. tostring(self.citizenID))
+        end
+        xAccount:AddBalance(amount)
+    end
+end
+
 ---Returns the character data as a table.
 ---@nodiscard
 ---@return XCore.CharacterData characterData the character data
@@ -159,7 +212,15 @@ function XCore.Character.Create(owner, firstname, lastname, dateOfBirth)
 
     xCharacter.citizenID = generate_citizen_id()
     xCharacter.ownerID = owner:GetIdentifier()
-    xCharacter.accountID = XCore.Account.Create(xCharacter).accountId
+
+    local account = XCore.Account.Create(owner)
+    FunctionFactory.Inject(account, "OnUpdate", function(xAccount)
+        ---@cast xAccount XCore.Account
+        local balance = xAccount:GetBalance()
+        TriggerClientEvent(owner.hPlayer, Event.ACCOUNT_BALANCE_CHANGED, xAccount.accountId, balance)
+    end)
+
+    xCharacter.accountID = account.accountId
     xCharacter.firstname = firstname
     xCharacter.lastname = lastname
     xCharacter.dateOfBirth = dateOfBirth
@@ -167,6 +228,7 @@ function XCore.Character.Create(owner, firstname, lastname, dateOfBirth)
     xCharacter.fingerPrint = random_finger_print()
     xCharacter.inventories = {}
     xCharacter.inventories["main"] = XCore.Inventory.Create().id
+    xCharacter.inventories["wallet"] = XCore.Inventory.Create().id
 
     functionFactory:Apply(xCharacter)
     xCharacter:Save()
@@ -225,6 +287,16 @@ function XCore.Character.ByOwnerID(ownerId)
         end
     end
     return xCharacters
+end
+
+---Overrides the function with the given name to the function given in this function.
+---@param name string the name of the function to add / replace.
+---@param func fun(xCharacter: XCore.Character, ...:any) : any the function for the given name
+function XCore.Character.SetFunction(name, func)
+    for _, character in pairs(characters) do
+        FunctionFactory.Inject(character, name, func)
+    end
+    functionFactory[name] = FunctionFactory.ForFunction(func)
 end
 
 exports('xcore', 'Character', XCore.Character)

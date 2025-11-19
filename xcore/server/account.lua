@@ -25,6 +25,10 @@ local function createAccountId()
     return accountId
 end
 
+---This function is called, when the account has been updated.
+---It should be overwritten by the owner of the account instance, e.g. the character.
+function XCore.Account:OnUpdate() end
+
 ---Returns the account balance.
 ---@nodiscard
 ---@return number balance the account balance
@@ -41,20 +45,7 @@ function XCore.Account:SetBalance(amount)
     -- probably not required, but who knows, right?
     TriggerLocalServerEvent(Event.ACCOUNT_BALANCE_CHANGED, self.accountId, self.balance)
 
-    -- if this account is owned by a character,
-    -- we want to share this event with the player too
-    if self:GetOwnerType() == "citizen" then
-        local character = self:GetOwner() ---@as XCore.Character
-        ---@cast character XCore.Character
-        local player = character:GetOwner()
-        if player then
-            -- notify the player about their balance change
-            -- if the player is nil, that means they're offline
-            -- meaning we don't need to notify them, so no handler for
-            -- that case
-            player:TriggerEvent(Event.ACCOUNT_BALANCE_CHANGED, self.accountId, self.balance)
-        end
-    end
+    self:OnUpdate()
 end
 
 ---Adds the given amount to the account balance.

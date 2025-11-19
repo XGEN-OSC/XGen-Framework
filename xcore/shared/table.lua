@@ -42,3 +42,17 @@ function table.equal(t1, t2)
 
     return true
 end
+
+---Sums the values in the table. If a function is provided, it applies the function to each value before summing.
+---@nodiscard
+---@param tbl table<any> the table containing values to sum
+---@param func fun(value: any) : number? the optional function to apply to each value
+---@return number sum the sum of the values
+function table.sum(tbl, func)
+    func = func or function(value) return value end
+    local count = 0
+    for _, value in pairs(tbl) do
+        count = count + (func(value) or 0)
+    end
+    return count
+end
