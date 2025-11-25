@@ -9,50 +9,50 @@
           "fields": [
             {
               "name": "A_POSITIVE",
-              "type": "any",
-              "isStatic": false,
+              "type": "'A+'",
+              "isStatic": true,
               "description": null
             },
             {
               "name": "A_NEGATIVE",
-              "type": "any",
-              "isStatic": false,
+              "type": "'A-'",
+              "isStatic": true,
               "description": null
             },
             {
               "name": "B_POSITIVE",
-              "type": "any",
-              "isStatic": false,
+              "type": "'B+'",
+              "isStatic": true,
               "description": null
             },
             {
               "name": "B_NEGATIVE",
-              "type": "any",
-              "isStatic": false,
+              "type": "'B-'",
+              "isStatic": true,
               "description": null
             },
             {
               "name": "AB_POSITIVE",
-              "type": "any",
-              "isStatic": false,
+              "type": "'AB+'",
+              "isStatic": true,
               "description": null
             },
             {
               "name": "AB_NEGATIVE",
-              "type": "any",
-              "isStatic": false,
+              "type": "'AB-'",
+              "isStatic": true,
               "description": null
             },
             {
               "name": "O_POSITIVE",
-              "type": "any",
-              "isStatic": false,
+              "type": "'O+'",
+              "isStatic": true,
               "description": null
             },
             {
               "name": "O_NEGATIVE",
-              "type": "any",
-              "isStatic": false,
+              "type": "'O-'",
+              "isStatic": true,
               "description": null
             }
           ],
@@ -66,21 +66,21 @@
           "fields": [
             {
               "name": "ACCOUNT_BALANCE_CHANGED",
-              "type": "any",
-              "isStatic": false,
-              "description": null
+              "type": "'xcore:account:balance:changed'",
+              "isStatic": true,
+              "description": "(accountId: string, newBalance: number) triggered when an account's balance changes."
             },
             {
               "name": "SERVER_CHARACTER_LOADED",
-              "type": "any",
-              "isStatic": false,
-              "description": null
+              "type": "'xcore:character:loaded'",
+              "isStatic": true,
+              "description": "(xPlayer: XCore.Player, xCharacter: XCore.Character) triggered when a character is loaded for a player."
             },
             {
               "name": "CLIENT_CHARACTER_LOADED",
-              "type": "any",
-              "isStatic": false,
-              "description": null
+              "type": "'xcore:character:loaded'",
+              "isStatic": true,
+              "description": "(xCharacter: XCore.CharacterData) triggered on the client, when a character is loaded."
             }
           ],
           "functions": [
@@ -94,6 +94,54 @@
 
           ],
           "functions": [
+            {
+              "name": "ForFunction",
+              "isStatic": true,
+              "description": "Creates a new function to generate functions for given xobjects.",
+              "parameters": [
+                {
+                  "name": "func",
+                  "type": "fun(xObject: any, ...: any) : any",
+                  "optional": false,
+                  "description": "the function for which to create a factory"
+                }
+              ],
+              "returns": [
+                {
+                  "type": "fun(xObject: any) : fun(...:",
+                  "name": "any",
+                  "description": null
+                }
+              ]
+            },
+            {
+              "name": "Inject",
+              "isStatic": true,
+              "description": "Injects the given function into the given object for the given name.",
+              "parameters": [
+                {
+                  "name": "obj",
+                  "type": "T",
+                  "optional": false,
+                  "description": "the object to inject the function into"
+                },
+                {
+                  "name": "name",
+                  "type": "string",
+                  "optional": false,
+                  "description": "the name of the function to inject"
+                },
+                {
+                  "name": "func",
+                  "type": "fun(xObject: T, ...: any) : any",
+                  "optional": false,
+                  "description": "the function to inject"
+                }
+              ],
+              "returns": [
+
+              ]
+            },
             {
               "name": "ForXClass",
               "isStatic": true,
@@ -184,6 +232,32 @@
                   "description": "whether the tables are equal"
                 }
               ]
+            },
+            {
+              "name": "sum",
+              "isStatic": true,
+              "description": "Sums the values in the table. If a function is provided, it applies the function to each value before summing.",
+              "parameters": [
+                {
+                  "name": "tbl",
+                  "type": "table<any>",
+                  "optional": false,
+                  "description": "the table containing values to sum"
+                },
+                {
+                  "name": "func",
+                  "type": "fun(value: any) : number?",
+                  "optional": false,
+                  "description": "the optional function to apply to each value"
+                }
+              ],
+              "returns": [
+                {
+                  "type": "number",
+                  "name": "sum",
+                  "description": "the sum of the values"
+                }
+              ]
             }
           ]
         }
@@ -226,6 +300,56 @@
           "returns": [
 
           ]
+        },
+        {
+          "name": "error",
+          "isStatic": true,
+          "description": null,
+          "parameters": [
+            {
+              "name": "msg",
+              "type": "any",
+              "optional": false,
+              "description": null
+            },
+            {
+              "name": "level",
+              "type": "any",
+              "optional": false,
+              "description": null
+            }
+          ],
+          "returns": [
+
+          ]
+        },
+        {
+          "name": "errorf",
+          "isStatic": true,
+          "description": "Raises a formatted error.",
+          "parameters": [
+            {
+              "name": "msg",
+              "type": "string",
+              "optional": false,
+              "description": "the message to format"
+            },
+            {
+              "name": "args",
+              "type": "table<string,any>",
+              "optional": false,
+              "description": "the arguments to replace in the message. Use {key} in the message to denote where to replace."
+            },
+            {
+              "name": "level",
+              "type": "number?",
+              "optional": false,
+              "description": null
+            }
+          ],
+          "returns": [
+
+          ]
         }
       ],
       "fields": [
@@ -235,955 +359,7 @@
     {
       "name": "server",
       "classes": [
-        {
-          "name": "XCore",
-          "description": null,
-          "fields": [
 
-          ],
-          "functions": [
-
-          ]
-        },
-        {
-          "name": "XCore.PlayerData",
-          "description": null,
-          "fields": [
-            {
-              "name": "permissions",
-              "type": "table<string,boolean>",
-              "isStatic": false,
-              "description": "the player's permissions"
-            }
-          ],
-          "functions": [
-
-          ]
-        },
-        {
-          "name": "XCore.Player",
-          "description": null,
-          "fields": [
-            {
-              "name": "hPlayer",
-              "type": "HPlayer",
-              "isStatic": false,
-              "description": "the helix player object"
-            },
-            {
-              "name": "permissions",
-              "type": "table<string,boolean>",
-              "isStatic": false,
-              "description": "the player's permissions"
-            },
-            {
-              "name": "character",
-              "type": "XCore.Character?",
-              "isStatic": false,
-              "description": "the currently selected character of the player"
-            }
-          ],
-          "functions": [
-            {
-              "name": "HasPermission",
-              "isStatic": false,
-              "description": "Checks if the player has the specified permission.",
-              "parameters": [
-                {
-                  "name": "permission",
-                  "type": "string",
-                  "optional": false,
-                  "description": "the permission to check"
-                }
-              ],
-              "returns": [
-                {
-                  "type": "boolean",
-                  "name": "hasPermission",
-                  "description": "whether the player has the permission"
-                }
-              ]
-            },
-            {
-              "name": "GetName",
-              "isStatic": false,
-              "description": "Returns the name of the player.",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "string",
-                  "name": "name",
-                  "description": "the name of the player"
-                }
-              ]
-            },
-            {
-              "name": "GetIdentifier",
-              "isStatic": false,
-              "description": "Returns the unique identifier (license ID) of the player.",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "string",
-                  "name": "identifier",
-                  "description": "the player's license ID"
-                }
-              ]
-            },
-            {
-              "name": "TriggerEvent",
-              "isStatic": false,
-              "description": "Triggers the given event with the given arguments for this player.",
-              "parameters": [
-                {
-                  "name": "eventName",
-                  "type": "string",
-                  "optional": false,
-                  "description": "the name of the event to trigger"
-                },
-                {
-                  "name": "...",
-                  "type": "any",
-                  "optional": false,
-                  "description": null
-                }
-              ],
-              "returns": [
-
-              ]
-            },
-            {
-              "name": "LoadCharacter",
-              "isStatic": false,
-              "description": "Loads the character with the given citizen ID for the player.\nThis will throw an error if the character is not found.",
-              "parameters": [
-                {
-                  "name": "citizenId",
-                  "type": "string",
-                  "optional": false,
-                  "description": "the citizen ID of the character to load"
-                }
-              ],
-              "returns": [
-
-              ]
-            },
-            {
-              "name": "GetAllCharacters",
-              "isStatic": false,
-              "description": "Returns all characters owned by the player.",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "table<XCore.Character>",
-                  "name": "xCharacters",
-                  "description": "the list of characters owned by the player"
-                }
-              ]
-            },
-            {
-              "name": "ByIdentifier",
-              "isStatic": true,
-              "description": "Returns the XPlayer object for the given license ID.",
-              "parameters": [
-                {
-                  "name": "license",
-                  "type": "string",
-                  "optional": false,
-                  "description": "the player's license ID"
-                }
-              ],
-              "returns": [
-                {
-                  "type": "XCore.Player",
-                  "name": "xPlayer",
-                  "description": "the xcore player object, or nil if not found"
-                }
-              ]
-            },
-            {
-              "name": "BySource",
-              "isStatic": true,
-              "description": "Returns the XPlayer object for the given HPlayer.",
-              "parameters": [
-                {
-                  "name": "hPlayer",
-                  "type": "HPlayer",
-                  "optional": false,
-                  "description": "the helix player object"
-                }
-              ],
-              "returns": [
-                {
-                  "type": "XCore.Player",
-                  "name": "xPlayer",
-                  "description": "the xcore player object"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "XCore.Account",
-          "description": null,
-          "fields": [
-            {
-              "name": "accountId",
-              "type": "string",
-              "isStatic": false,
-              "description": "the unique account ID"
-            },
-            {
-              "name": "balance",
-              "type": "number",
-              "isStatic": false,
-              "description": "the account balance"
-            },
-            {
-              "name": "owner",
-              "type": "string",
-              "isStatic": false,
-              "description": "the identifier of the owner (for players: 'citizen:<citizen_id>', for organizations: 'organization:<organization_id>')"
-            }
-          ],
-          "functions": [
-            {
-              "name": "GetBalance",
-              "isStatic": false,
-              "description": "Returns the account balance.",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "number",
-                  "name": "balance",
-                  "description": "the account balance"
-                }
-              ]
-            },
-            {
-              "name": "SetBalance",
-              "isStatic": false,
-              "description": "Sets the account balance to the given amount.",
-              "parameters": [
-                {
-                  "name": "amount",
-                  "type": "number",
-                  "optional": false,
-                  "description": "the new account balance"
-                }
-              ],
-              "returns": [
-
-              ]
-            },
-            {
-              "name": "AddBalance",
-              "isStatic": false,
-              "description": "Adds the given amount to the account balance.",
-              "parameters": [
-                {
-                  "name": "amount",
-                  "type": "number",
-                  "optional": false,
-                  "description": "the amount to add"
-                }
-              ],
-              "returns": [
-
-              ]
-            },
-            {
-              "name": "RemoveBalance",
-              "isStatic": false,
-              "description": "Removes the given amount from the account balance.",
-              "parameters": [
-                {
-                  "name": "amount",
-                  "type": "number",
-                  "optional": false,
-                  "description": "the amount to remove"
-                }
-              ],
-              "returns": [
-
-              ]
-            },
-            {
-              "name": "GetOwnerType",
-              "isStatic": false,
-              "description": "Checks the type of owner of the account.\nThe owner type is the prefix of the owner identifier (e.g., 'citizen' or 'business').",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "any",
-                  "name": "",
-                  "description": null
-                }
-              ]
-            },
-            {
-              "name": "GetOwner",
-              "isStatic": false,
-              "description": "Returns the owner of the account.",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "XCore.Character|XCore.Organization",
-                  "name": "owner",
-                  "description": "the owner of the account"
-                }
-              ]
-            },
-            {
-              "name": "Save",
-              "isStatic": false,
-              "description": "Saves the account data to the database.",
-              "parameters": [
-
-              ],
-              "returns": [
-
-              ]
-            },
-            {
-              "name": "Create",
-              "isStatic": true,
-              "description": "Creates a new account for the given owner.",
-              "parameters": [
-                {
-                  "name": "owner",
-                  "type": "XCore.Player|XCore.Organization",
-                  "optional": false,
-                  "description": "the player or organization who will own the account"
-                }
-              ],
-              "returns": [
-                {
-                  "type": "XCore.Account",
-                  "name": "account",
-                  "description": "the newly created account"
-                }
-              ]
-            },
-            {
-              "name": "ById",
-              "isStatic": true,
-              "description": "Retrieves an account by its account ID.",
-              "parameters": [
-                {
-                  "name": "accountId",
-                  "type": "string",
-                  "optional": false,
-                  "description": "the unique account ID"
-                }
-              ],
-              "returns": [
-                {
-                  "type": "XCore.Account",
-                  "name": "account",
-                  "description": "the retrieved account or nil if not found"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "XCore.CharacterData",
-          "description": null,
-          "fields": [
-            {
-              "name": "citizenID",
-              "type": "string",
-              "isStatic": false,
-              "description": "the unique citizen ID of this character"
-            },
-            {
-              "name": "ownerID",
-              "type": "string",
-              "isStatic": false,
-              "description": "the license ID of the player who owns this character"
-            },
-            {
-              "name": "accountID",
-              "type": "string",
-              "isStatic": false,
-              "description": "the account ID associated with this character"
-            },
-            {
-              "name": "firstname",
-              "type": "string",
-              "isStatic": false,
-              "description": "the first name of the character"
-            },
-            {
-              "name": "lastname",
-              "type": "string",
-              "isStatic": false,
-              "description": "the last name of the character"
-            },
-            {
-              "name": "dateOfBirth",
-              "type": "string",
-              "isStatic": false,
-              "description": "the date of birth of the character (YYYY-MM-DD)"
-            },
-            {
-              "name": "bloodType",
-              "type": "BloodType",
-              "isStatic": false,
-              "description": "the blood type of the character"
-            },
-            {
-              "name": "fingerPrint",
-              "type": "string",
-              "isStatic": false,
-              "description": "the finger print of the character"
-            },
-            {
-              "name": "inventories",
-              "type": "table<string,string>",
-              "isStatic": false,
-              "description": "a table mapping inventory names to their IDs"
-            }
-          ],
-          "functions": [
-
-          ]
-        },
-        {
-          "name": "XCore.Character",
-          "description": null,
-          "fields": [
-            {
-              "name": "citizenID",
-              "type": "string",
-              "isStatic": false,
-              "description": "the unique citizen ID of this character"
-            },
-            {
-              "name": "ownerID",
-              "type": "string",
-              "isStatic": false,
-              "description": "the license ID of the player who owns this character"
-            },
-            {
-              "name": "accountID",
-              "type": "string",
-              "isStatic": false,
-              "description": "the account ID associated with this character"
-            },
-            {
-              "name": "firstname",
-              "type": "string",
-              "isStatic": false,
-              "description": "the first name of the character"
-            },
-            {
-              "name": "lastname",
-              "type": "string",
-              "isStatic": false,
-              "description": "the last name of the character"
-            },
-            {
-              "name": "dateOfBirth",
-              "type": "string",
-              "isStatic": false,
-              "description": "the date of birth of the character (YYYY-MM-DD)"
-            },
-            {
-              "name": "bloodType",
-              "type": "BloodType",
-              "isStatic": false,
-              "description": "the blood type of the character"
-            },
-            {
-              "name": "fingerPrint",
-              "type": "string",
-              "isStatic": false,
-              "description": "the finger print of the character"
-            },
-            {
-              "name": "inventories",
-              "type": "table<string,string>",
-              "isStatic": false,
-              "description": "a table mapping inventory names to their IDs"
-            }
-          ],
-          "functions": [
-            {
-              "name": "GetOwner",
-              "isStatic": false,
-              "description": "Returns the XCore.Player who owns this character.",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "XCore.Player",
-                  "name": "owner",
-                  "description": "the player who owns this character or nil if the player is not online"
-                }
-              ]
-            },
-            {
-              "name": "GetAccount",
-              "isStatic": false,
-              "description": "Returns the XCore.Account associated with this character.",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "XCore.Account",
-                  "name": "account",
-                  "description": "the account associated with this character"
-                }
-              ]
-            },
-            {
-              "name": "GetFullName",
-              "isStatic": false,
-              "description": "Returns the full name of the character.\nThat is \"firstname lastname\".",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "string",
-                  "name": "fullName",
-                  "description": "the full name of the character"
-                }
-              ]
-            },
-            {
-              "name": "GetInventory",
-              "isStatic": false,
-              "description": "Returns the inventory associated with this character by name.",
-              "parameters": [
-                {
-                  "name": "name",
-                  "type": "any",
-                  "optional": false,
-                  "description": null
-                }
-              ],
-              "returns": [
-                {
-                  "type": "XCore.Inventory",
-                  "name": "inventory",
-                  "description": "the inventory object, or nil if not found."
-                }
-              ]
-            },
-            {
-              "name": "GetCharacterData",
-              "isStatic": false,
-              "description": "Returns the character data as a table.",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "XCore.CharacterData",
-                  "name": "characterData",
-                  "description": "the character data"
-                }
-              ]
-            },
-            {
-              "name": "GetXId",
-              "isStatic": false,
-              "description": "Returns the XCore.XId of the character.",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "string",
-                  "name": "xId",
-                  "description": "the character's XId"
-                }
-              ]
-            },
-            {
-              "name": "Save",
-              "isStatic": false,
-              "description": "Saves the character data to the database.",
-              "parameters": [
-
-              ],
-              "returns": [
-
-              ]
-            },
-            {
-              "name": "Create",
-              "isStatic": true,
-              "description": "Creates a new Character.",
-              "parameters": [
-                {
-                  "name": "owner",
-                  "type": "XCore.Player",
-                  "optional": false,
-                  "description": "the player who will own the character."
-                },
-                {
-                  "name": "firstname",
-                  "type": "string",
-                  "optional": false,
-                  "description": "the first name of the character."
-                },
-                {
-                  "name": "lastname",
-                  "type": "string",
-                  "optional": false,
-                  "description": "the last name of the character."
-                },
-                {
-                  "name": "dateOfBirth",
-                  "type": "string",
-                  "optional": false,
-                  "description": "the date of birth of the character (YYYY-MM-DD)."
-                }
-              ],
-              "returns": [
-                {
-                  "type": "XCore.Character",
-                  "name": "xCharacter",
-                  "description": "the created character."
-                }
-              ]
-            },
-            {
-              "name": "ByCitizenID",
-              "isStatic": true,
-              "description": "Returns the character by its citizen ID.",
-              "parameters": [
-                {
-                  "name": "citizenID",
-                  "type": "string",
-                  "optional": false,
-                  "description": "the citizen ID of the character."
-                }
-              ],
-              "returns": [
-                {
-                  "type": "XCore.Character",
-                  "name": "xCharacter",
-                  "description": "the character object, or nil if not found."
-                }
-              ]
-            },
-            {
-              "name": "ByOwnerID",
-              "isStatic": true,
-              "description": "Loads all characters owned by the given owner ID.",
-              "parameters": [
-                {
-                  "name": "ownerId",
-                  "type": "string",
-                  "optional": false,
-                  "description": "the license ID of the owner."
-                }
-              ],
-              "returns": [
-                {
-                  "type": "table<XCore.Character>",
-                  "name": "xCharacters",
-                  "description": "the list of characters owned by the owner."
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "FunctionFactory",
-          "description": null,
-          "fields": [
-
-          ],
-          "functions": [
-
-          ]
-        },
-        {
-          "name": "XCore.ItemStack",
-          "description": null,
-          "fields": [
-            {
-              "name": "itemType",
-              "type": "string",
-              "isStatic": false,
-              "description": "the type of the item"
-            },
-            {
-              "name": "count",
-              "type": "number",
-              "isStatic": false,
-              "description": "the count of the item"
-            },
-            {
-              "name": "metadata",
-              "type": "table<string,any>?",
-              "isStatic": false,
-              "description": "optional metadata associated with the item"
-            }
-          ],
-          "functions": [
-
-          ]
-        },
-        {
-          "name": "XCore.Inventory",
-          "description": null,
-          "fields": [
-            {
-              "name": "id",
-              "type": "string",
-              "isStatic": false,
-              "description": "the unique identifier of the inventory"
-            },
-            {
-              "name": "items",
-              "type": "table<number,XCore.ItemStack>",
-              "isStatic": false,
-              "description": "the items contained in the inventory"
-            }
-          ],
-          "functions": [
-            {
-              "name": "SetItem",
-              "isStatic": false,
-              "description": "Adds an item stack to the inventory.",
-              "parameters": [
-                {
-                  "name": "slot",
-                  "type": "number",
-                  "optional": false,
-                  "description": "the slot to set the item in"
-                },
-                {
-                  "name": "item",
-                  "type": "XCore.ItemStack",
-                  "optional": false,
-                  "description": "the item stack to add"
-                }
-              ],
-              "returns": [
-
-              ]
-            },
-            {
-              "name": "ClearSlot",
-              "isStatic": false,
-              "description": "Clears the item in the given slot.",
-              "parameters": [
-                {
-                  "name": "slot",
-                  "type": "number",
-                  "optional": false,
-                  "description": "the slot to clear"
-                }
-              ],
-              "returns": [
-
-              ]
-            },
-            {
-              "name": "GetSlot",
-              "isStatic": false,
-              "description": "Returns the item stack in the given slot.",
-              "parameters": [
-                {
-                  "name": "slot",
-                  "type": "number",
-                  "optional": false,
-                  "description": "the slot to get the item from"
-                }
-              ],
-              "returns": [
-                {
-                  "type": "XCore.ItemStack",
-                  "name": "item",
-                  "description": "the item stack in the slot, or nil if empty"
-                }
-              ]
-            },
-            {
-              "name": "GetItems",
-              "isStatic": false,
-              "description": "Returns all items in the inventory.",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "table<number,XCore.ItemStack>",
-                  "name": "items",
-                  "description": "the items in the inventory"
-                }
-              ]
-            },
-            {
-              "name": "FindByType",
-              "isStatic": false,
-              "description": "Finds all items of the given type in the inventory.",
-              "parameters": [
-                {
-                  "name": "itemType",
-                  "type": "string",
-                  "optional": false,
-                  "description": "the type of the item to find"
-                },
-                {
-                  "name": "metadata",
-                  "type": "table<string,any>",
-                  "optional": true,
-                  "description": "optional metadata to match"
-                }
-              ],
-              "returns": [
-                {
-                  "type": "table<number,XCore.ItemStack>",
-                  "name": "foundItems",
-                  "description": "a table mapping slots to item stacks"
-                }
-              ]
-            },
-            {
-              "name": "Create",
-              "isStatic": true,
-              "description": "Creates a new inventory.",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "XCore.Inventory",
-                  "name": "inventory",
-                  "description": "the created inventory"
-                }
-              ]
-            },
-            {
-              "name": "ById",
-              "isStatic": true,
-              "description": "Returns the inventory by its ID.",
-              "parameters": [
-                {
-                  "name": "id",
-                  "type": "string",
-                  "optional": false,
-                  "description": "the ID of the inventory."
-                }
-              ],
-              "returns": [
-                {
-                  "type": "XCore.Inventory",
-                  "name": "inventory",
-                  "description": "the inventory object, or nil if not found."
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "XCore.Organization",
-          "description": null,
-          "fields": [
-            {
-              "name": "organizationId",
-              "type": "string",
-              "isStatic": false,
-              "description": "the unique organization ID"
-            },
-            {
-              "name": "accountId",
-              "type": "string",
-              "isStatic": false,
-              "description": "the account ID associated with this organization"
-            }
-          ],
-          "functions": [
-            {
-              "name": "GetAccount",
-              "isStatic": false,
-              "description": "Returns the account associated with this organization.",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "XCore.Account",
-                  "name": "account",
-                  "description": "the organization's account"
-                }
-              ]
-            },
-            {
-              "name": "GetIdentifier",
-              "isStatic": false,
-              "description": "Returns the unique identifier of the organization.",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "string",
-                  "name": "identifier",
-                  "description": "the organization's unique ID"
-                }
-              ]
-            },
-            {
-              "name": "GetXId",
-              "isStatic": false,
-              "description": "Returns the XCore.XId of the organization.",
-              "parameters": [
-
-              ],
-              "returns": [
-                {
-                  "type": "string",
-                  "name": "xId",
-                  "description": "the organization's XId"
-                }
-              ]
-            },
-            {
-              "name": "ById",
-              "isStatic": true,
-              "description": "Retrieves an organization by its organization ID.",
-              "parameters": [
-                {
-                  "name": "organizationId",
-                  "type": "string",
-                  "optional": false,
-                  "description": "the unique organization ID"
-                }
-              ],
-              "returns": [
-                {
-                  "type": "XCore.Organization",
-                  "name": "organization",
-                  "description": "the retrieved organization"
-                }
-              ]
-            }
-          ]
-        }
       ],
       "functions": [
 
