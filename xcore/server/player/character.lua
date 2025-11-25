@@ -11,6 +11,8 @@ XCore = XCore or {}
 ---@field public bloodType BloodType the blood type of the character
 ---@field public fingerPrint string the finger print of the character
 ---@field public inventories table<string,string> a table mapping inventory names to their IDs
+---@field public jobs table<string, number> a mapping of job to job grade the player has
+---@field public onDuty string? if the player is on duty, the name of the job they are on duty for
 
 ---@class XCore.Character : XCore.CharacterData
 ---@field public citizenID string the unique citizen ID of this character
@@ -22,6 +24,7 @@ XCore = XCore or {}
 ---@field public bloodType BloodType the blood type of the character
 ---@field public fingerPrint string the finger print of the character
 ---@field public inventories table<string,string> a table mapping inventory names to their IDs
+---@field public jobs table<string, number> a mapping of job to job grade the player has
 XCore.Character = {}
 
 ---Generates a random citizen ID.
@@ -66,7 +69,7 @@ local function random_blood_type()
     return BloodType[math.random(1, #BloodType)]
 end
 
----@type table<string, XCore.Character> the loaded characters by their citizen ID
+---@type table<string,XCore.Character> the loaded characters by their citizen ID
 local characters = {}
 
 ---@class FunctionFactory
@@ -160,6 +163,48 @@ function XCore.Character:AddAccountMoney(account, amount)
     end
 end
 
+---Returns the organization the character is currently on duty for.
+---@nodiscard
+---@return XCore.Organization? organization the organization the character is on duty for, or nil if not on duty
+function XCore.Character:GetOnDutyOrganization()
+    if not self.onDuty then
+        return nil
+    end
+    return XCore.Organization.ById(self.onDuty)
+end
+
+---Returns whether the character is currently on duty.
+---@nodiscard
+---@return boolean isOnDuty whether the character is on duty
+function XCore.Character:IsOnDuty()
+    return self.onDuty ~= nil
+end
+
+---Sets the character's on duty status for the given organization.
+---@param organizationName string the name of the organization to set the character on duty for
+function XCore.Character:SetOnDuty(organizationName)
+    self.onDuty = organizationName
+end
+
+---Gives the character their paycheck for their on duty organization.
+---If the player is not actively on duty, this function does nothing.
+function XCore.Character:PayPaycheck()
+    local org = self:GetOnDutyOrganization()
+    if not org then
+        return
+    end
+    local grade = self.jobs[org.organizationId]
+    if not grade then
+        errorf("Character {citizenID} has no job '{organizationId}' but is on duty for it", {
+            citizenID = self.citizenID,
+            organizationId = org.organizationId
+        })
+    end
+    local paycheckAccount = org.jobData.paycheckAccount or "bank"
+    local salary = org.jobData.grades[grade].salary
+    self:AddAccountMoney(paycheckAccount, salary)
+end
+
 ---Returns the character data as a table.
 ---@nodiscard
 ---@return XCore.CharacterData characterData the character data
@@ -172,7 +217,8 @@ function XCore.Character:GetCharacterData()
         lastname = self.lastname,
         dateOfBirth = self.dateOfBirth,
         bloodType = self.bloodType,
-        fingerPrint = self.fingerPrint
+        fingerPrint = self.fingerPrint,
+        jobs = self.jobs,
     }
 end
 
@@ -181,6 +227,14 @@ end
 ---@return string xId the character's XId
 function XCore.Character:GetXId()
     return "citizen:" .. self.citizenID
+end
+
+---Returns whether the character has the given job.
+---@nodiscard
+---@param jobName string the name of the job to check if the player has
+---@return boolean hasJob whether the character has the given job
+function XCore.Character:HasJob(jobName)
+    return self.jobs[jobName] ~= nil
 end
 
 ---Saves the character data to the database.
@@ -229,11 +283,23 @@ function XCore.Character.Create(owner, firstname, lastname, dateOfBirth)
     xCharacter.inventories = {}
     xCharacter.inventories["main"] = XCore.Inventory.Create().id
     xCharacter.inventories["wallet"] = XCore.Inventory.Create().id
+    xCharacter.jobs = {}
 
     functionFactory:Apply(xCharacter)
     xCharacter:Save()
     characters[xCharacter.citizenID] = xCharacter
     return xCharacter
+end
+
+---Returns all active loaded characters.
+---@nodiscard
+---@return table<XCore.Character> active the list of all active characters.
+function XCore.Character.AllActive()
+    local active = {}
+    for _, character in pairs(characters) do
+        table.insert(active, character)
+    end
+    return active
 end
 
 ---Returns the character by its citizen ID.

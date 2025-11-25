@@ -36,13 +36,19 @@ function Database.Initialize(dbName) end
 ---Executes the given SQL query with optional data parameters.
 ---@param sql string the SQL query to execute
 ---@param data table<any> the optional data parameters for the query
----@return table<{Columns: { ToTable: fun() : table<string, any> }}> results the results of the query
+---@return boolean success whether the query was executed successfully
 function Database.Execute(sql, data) end
+
+---Executes the given SQL SELECT query with optional data parameters.
+---@param sql string the SQL SELECT query to execute
+---@param data table<any>? the optional data parameters for the query
+---@return table<{Columns: { ToTable: fun() : table<string, any> }}>
+function Database.Select(sql, data) end
 
 ---Executes the given SQL query asynchronously with optional data parameters.
 ---@param sql string the SQL query to execute
 ---@param data table<any>? the optional data parameters for the query
----@param callback fun(results: table<{Columns: { ToTable: fun() : table<string, any> }}>)? results the results of the query) the callback function to handle the results
+---@param callback fun(success: boolean)? results the results of the query) the callback function to handle the results
 function Database.ExecuteAsync(sql, data, callback) end
 
 ---@class JSON
@@ -68,3 +74,11 @@ function TriggerLocalServerEvent(eventName, ...) end
 ---@param eventName string
 ---@param ... any
 function TriggerClientEvent(hPlayer, eventName, ...) end
+
+---@class Timer
+Timer = {}
+
+---Sets an interval to call the given callback function at the specified interval.
+---@param callback fun() the callback function to be called at each interval
+---@param interval number the interval in milliseconds
+function Timer.SetInterval(callback, interval) end
